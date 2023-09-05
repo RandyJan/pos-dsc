@@ -51,7 +51,7 @@
             font-size: 12px;
             text-align: center;
             background-color: #ccc;
-            border: 1px solid #999;
+            border: 1px solid black;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -75,6 +75,10 @@
             cursor: pointer;
             margin-right: 10px;
         }
+        .btn{
+            border: 1px solid black;
+        }
+
 
         .my-button:hover {
             background-color: #0056b3;
@@ -141,29 +145,29 @@
                     <div class="calculator-display-top">
                         <input type="text" id="calculator-display" readonly>
                     </div>
-                    <div class="calculator-buttons">
-                        <button class="calculator-button" onclick="appendToDisplay('7')">7</button>
-                        <button class="calculator-button" onclick="appendToDisplay('8')">8</button>
-                        <button class="calculator-button" onclick="appendToDisplay('9')">9</button>
-                        <button class="calculator-button" onclick="clearDisplay()">Clear</button>
-                        <button class="calculator-button">void</button>
-                        <button class="calculator-button">preset</button>
-                        <button class="calculator-button" onclick="appendToDisplay('4')">4</button>
-                        <button class="calculator-button" onclick="appendToDisplay('5')">5</button>
-                        <button class="calculator-button" onclick="appendToDisplay('6')">6</button>
-                        <button class="calculator-button">Open Drawer</button>
-                        <button class="calculator-button">Sub ttl</button>
-                        <button class="calculator-button">Void All</button>
-                        <button class="calculator-button" onclick="appendToDisplay('1')">1</button>
-                        <button class="calculator-button" onclick="appendToDisplay('2')">2</button>
-                        <button class="calculator-button" onclick="appendToDisplay('3')">3</button>
-                        <button class="calculator-button">Print Receipt</button>
+                    <div class="calculator-buttons text-dark">
+                        <button class="btn btn-warning " onclick="appendToDisplay('7')">7</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('8')">8</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('9')">9</button>
+                        <button class="btn btn-danger text-dark" onclick="clearDisplay()">Clear</button>
+                        <button class="btn btn-success text-dark">void</button>
+                        <button class="btn btn-danger text-dark">preset</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('4')">4</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('5')">5</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('6')">6</button>
+                        <button class="calculator-button" style="background-color:darkgray;color:black">Open Drawer</button>
+                        <button class="calculator-button text-dark" style="">Sub ttl</button>
+                        <button class="btn btn-success text-dark">Void All</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('1')">1</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('2')">2</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('3')">3</button>
+                        <button class="calculator-button" style="background-color:darkgray">Print Receipt</button>
                         <button class="calculator-button">User</button>
-                        <button class="calculator-button">Puregold Disc</button>
-                        <button class="calculator-button" onclick="appendToDisplay('0')">0</button>
-                        <button class="calculator-button" onclick="appendToDisplay('00')">00</button>
-                        <button class="calculator-button" onclick="appendToDisplay('.')">.</button>
-                        <button class="calculator-button">Safe Drop</button>
+                        <button class="calculator-button" style="background-color: darkgreen;color:black">Puregold Disc</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('0')">0</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('00')">00</button>
+                        <button class="btn btn-warning" onclick="appendToDisplay('.')">.</button>
+                        <button class="btn btn-info">Safe Drop</button>
                         <button class="calculator-button">All Stop</button>
                         <button class="calculator-button">All Auth</button>
                     </div>
