@@ -1,11 +1,4 @@
 <x-app-layout>
-    <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Point of Sale</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -127,9 +120,7 @@
             box-shadow: rgb(231, 238, 236) 0px 0px 0px 3px;
         }
     </style>
-</head>
 
-<body>
     <div class="pos-container">
         <div class="column left-column">
             <div class="item-display-container">
@@ -251,7 +242,5 @@
             }
         }
     </script>
-</body>
-</html>
 
 </x-app-layout>
