@@ -1,5 +1,27 @@
 <x-app-layout>
     <style>
+        @media screen and (min-width: 768px) and (max-width: 1024px) {
+            .calculator-button{
+                height: 80px;
+                width: 70px;
+            }
+            .btn{
+                height: 80px;
+                width: 70px;
+            }
+
+}
+@media (min-width: 768px) {
+            .calculator-button{
+                height: 80px;
+                width: 70px;
+            }
+            .btn{
+                height: 80px;
+                width: 70px;
+            }
+
+}
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -118,6 +140,7 @@
             color: rgb(33, 49, 60);
             background-color: rgb(255, 255, 255);
             padding-right: -30px;
+            text-align: right;
         }
 
         input:hover {
@@ -143,7 +166,7 @@
             <div class="calculator-container">
                 <div class="calculator">
                     <div class="calculator-display-top">
-                        <input type="text" id="calculator-display" readonly>
+                        <input type="text" id="calculator-display" placeholder="0" readonly>
                     </div>
                     <div class="calculator-buttons text-dark">
                         <button class="btn btn-warning " onclick="appendToDisplay('7')">7</button>
