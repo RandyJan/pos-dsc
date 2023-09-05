@@ -179,7 +179,7 @@
                         <button class="btn btn-warning" onclick="appendToDisplay('5')">5</button>
                         <button class="btn btn-warning" onclick="appendToDisplay('6')">6</button>
                         <button class="calculator-button" style="background-color:darkgray;color:black">Open Drawer</button>
-                        <button class="calculator-button text-dark" style="">Sub ttl</button>
+                        <button class="calculator-button text-dark">Sub ttl</button>
                         <button class="btn btn-success text-dark">Void All</button>
                         <button class="btn btn-warning" onclick="appendToDisplay('1')">1</button>
                         <button class="btn btn-warning" onclick="appendToDisplay('2')">2</button>
