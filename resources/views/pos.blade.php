@@ -1,35 +1,45 @@
 <x-app-layout>
     <style>
         @media screen and (min-width: 768px) and (max-width: 1024px) {
-            .calculator-button{
+            .calculator-button {
                 height: 80px;
                 width: 70px;
             }
-            .btn{
+
+            .btn {
                 height: 80px;
                 width: 70px;
             }
+<<<<<<< Updated upstream
             #items-info {
   max-height: 200px;
   overflow-y: auto;
 }
+=======
+>>>>>>> Stashed changes
 
-}
-@media (min-width: 768px) {
-            .calculator-button{
+        }
+
+        @media (min-width: 768px) {
+            .calculator-button {
                 height: 80px;
                 width: 70px;
             }
-            .btn{
+
+            .btn {
                 height: 80px;
                 width: 70px;
             }
+<<<<<<< Updated upstream
             #items-info {
   max-height: 200px;
   overflow-y: auto;
 }
+=======
+>>>>>>> Stashed changes
 
-}
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -105,7 +115,8 @@
             cursor: pointer;
             margin-right: 10px;
         }
-        .btn{
+
+        .btn {
             border: 1px solid black;
         }
 
@@ -154,6 +165,8 @@
         input:hover {
             box-shadow: rgb(231, 238, 236) 0px 0px 0px 3px;
         }
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
         #items-info {
   max-height: 10px;
   overflow-y: auto;
@@ -170,6 +183,32 @@
             border-radius: 5px;
             padding: 20px;
     }
+=======
+=======
+>>>>>>> Stashed changes
+
+        .pump-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .pump-item img {
+            width: 32px;
+            /* Adjust the size of the icon or image */
+            height: 32px;
+            margin-right: 10px;
+        }
+
+        .pump-item input {
+            width: 60px;
+            /* Adjust the input field width as needed */
+            padding: 5px;
+        }
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     </style>
 
     <div class="pos-container">
@@ -226,8 +265,40 @@
         <div class="column right-column" id="pumps-column">
             <h2>Pumps Display</h2>
             <div id="pumps-info">
-                <div class="pump-item" id="pump-item-1" onclick="addItemToDisplay('Item 1', 10.00)">Item 1 - $10.00</div>
-                <div class="pump-item" id="pump-item-2" onclick="addItemToDisplay('Item 2', 15.00)">Item 2 - $15.00</div>
+                <div class="pump-item" id="pump-item-1" onclick="addItemToDisplay('Item 1', 10.00, 5.0)">
+                    <div class="pump-icon">
+                        <img src="pump.svg" alt="Pump Icon">
+                    </div>
+                    <div class="pump-details">
+                        <div class="text-center">
+                            <div class="input-group mb-2">
+                                <input type="number" id="pump-price-1" placeholder="Price" class="form-control">
+                                <span class="input-group-addon">PHP/L</span>
+                            </div>
+                            <div class="input-group mb-2">
+                                <input type="number" id="pump-liters-1" placeholder="Liters" class="form-control">
+                                <span class="input-group-addon">L</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pump-item" id="pump-item-2" onclick="addItemToDisplay('Item 2', 15.00, 7.5)">
+                    <div class="pump-icon">
+                        <img src="pump.svg" alt="Pump Icon">
+                    </div>
+                    <div class="pump-details">
+                        <div class="text-center">
+                            <div class="input-group mb-2">
+                                <input type="number" id="pump-price-2" placeholder="Price" class="form-control">
+                                <span class="input-group-addon">PHP/L</span>
+                            </div>
+                            <div class="input-group mb-2">
+                                <input type="number" id="pump-liters-2" placeholder="Liters" class="form-control">
+                                <span class="input-group-addon">L</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- Add more pump items as needed -->
             </div>
 
@@ -291,6 +362,8 @@
 
 
     <script>
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 var pumpdiv = document.getElementById("pumps-column");
 var mopdiv = document.getElementById("mop-column");
 var reportsdiv = document.getElementById("reports-column");
@@ -336,6 +409,12 @@ var manualdiv = document.getElementById("manual-column")
     }
 
         document.addEventListener('DOMContentLoaded', function () {
+=======
+        document.addEventListener('DOMContentLoaded', function() {
+>>>>>>> Stashed changes
+=======
+        document.addEventListener('DOMContentLoaded', function() {
+>>>>>>> Stashed changes
             clearDisplay();
         });
 
