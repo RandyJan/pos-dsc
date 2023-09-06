@@ -300,6 +300,7 @@ var manualdiv = document.getElementById("manual-column")
  reportsdiv.style.display = "none";
   pumpdiv.style.display = "none";
   nonfueldiv.style.display = "none";
+  manualdiv.style.display = "none"
   mopdiv.style.display = "block";
     }
     function reports(){
