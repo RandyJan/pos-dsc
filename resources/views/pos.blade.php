@@ -10,13 +10,11 @@
                 height: 80px;
                 width: 70px;
             }
-<<<<<<< Updated upstream
+
             #items-info {
-  max-height: 200px;
-  overflow-y: auto;
-}
-=======
->>>>>>> Stashed changes
+                max-height: 200px;
+                overflow-y: auto;
+            }
 
         }
 
@@ -30,14 +28,11 @@
                 height: 80px;
                 width: 70px;
             }
-<<<<<<< Updated upstream
-            #items-info {
-  max-height: 200px;
-  overflow-y: auto;
-}
-=======
->>>>>>> Stashed changes
 
+            #items-info {
+                max-height: 200px;
+                overflow-y: auto;
+            }
         }
 
         body {
@@ -165,50 +160,39 @@
         input:hover {
             box-shadow: rgb(231, 238, 236) 0px 0px 0px 3px;
         }
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         #items-info {
-  max-height: 10px;
-  overflow-y: auto;
-}
-    .items{
-        max-height: 10px;
-    overflow-y: auto;
-    }
-    .mop-column{
-        display: none;
-        flex: 1;
+            max-height: 10px;
+            overflow-y: auto;
+        }
+
+        .items {
+            max-height: 10px;
+            overflow-y: auto;
+        }
+
+        .mop-column {
+            display: none;
+            flex: 1;
             background-color: #f0f0f0;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 20px;
-    }
-=======
-=======
->>>>>>> Stashed changes
+        }
 
         .pump-item {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .pump-item img {
-            width: 32px;
-            /* Adjust the size of the icon or image */
-            height: 32px;
-            margin-right: 10px;
+            width: 200px;
+            height: 100px;
+            background-color: lightgray;
+            padding: 10px;
+            margin: 10px;
         }
 
         .pump-item input {
-            width: 60px;
-            /* Adjust the input field width as needed */
-            padding: 5px;
+            padding: 2px;
         }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     </style>
 
     <div class="pos-container">
@@ -224,7 +208,7 @@
                         </tr>
                     </thead>
                     <tbody id="items-info" class="items">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
             <div class="calculator-container">
@@ -261,57 +245,67 @@
                 </div>
             </div>
         </div>
-        {{-- PUMPS --}}
+        <!-- PUMPS -->
         <div class="column right-column" id="pumps-column">
-            <h2>Pumps Display</h2>
             <div id="pumps-info">
-                <div class="pump-item" id="pump-item-1" onclick="addItemToDisplay('Item 1', 10.00, 5.0)">
-                    <div class="pump-icon">
-                        <img src="pump.svg" alt="Pump Icon">
-                    </div>
-                    <div class="pump-details">
-                        <div class="text-center">
-                            <div class="input-group mb-2">
-                                <input type="number" id="pump-price-1" placeholder="Price" class="form-control">
-                                <span class="input-group-addon">PHP/L</span>
+                <div class="pump-container">
+                    <div class="pump-container">
+                        <h2>Pump 1</h2>
+                        <div class="pump-item" id="pump-item-1">
+                            <div class="pump-label">Regular Gas</div>
+                            <div class="pump-details">
+                                <div class="text-center">
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="pump-price-1" placeholder="Liter" class="form-control pump-input">
+                                    </div>
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="pump-liters-1" placeholder="Price" class="form-control pump-input">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="input-group mb-2">
-                                <input type="number" id="pump-liters-1" placeholder="Liters" class="form-control">
-                                <span class="input-group-addon">L</span>
+                        </div>
+                        <div class="pump-item" id="pump-item-2">
+                            <div class="pump-label">Mid-Grade Gas</div>
+                            <div class="pump-details">
+                                <div class="text-center">
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="pump-price-2" placeholder="Liter" class="form-control pump-input">
+                                    </div>
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="pump-liters-2" placeholder="Price" class="form-control pump-input">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pump-item" id="pump-item-3">
+                            <div class="pump-label">Premium Gas</div>
+                            <div class="pump-details">
+                                <div class="text-center">
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="pump-price-3" placeholder="Liter" class="form-control pump-input">
+                                    </div>
+                                    <div class="input-group mb-2">
+                                        <input type="number" id="pump-liters-3" placeholder="Price" class="form-control pump-input">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="pump-item" id="pump-item-2" onclick="addItemToDisplay('Item 2', 15.00, 7.5)">
-                    <div class="pump-icon">
-                        <img src="pump.svg" alt="Pump Icon">
-                    </div>
-                    <div class="pump-details">
-                        <div class="text-center">
-                            <div class="input-group mb-2">
-                                <input type="number" id="pump-price-2" placeholder="Price" class="form-control">
-                                <span class="input-group-addon">PHP/L</span>
-                            </div>
-                            <div class="input-group mb-2">
-                                <input type="number" id="pump-liters-2" placeholder="Liters" class="form-control">
-                                <span class="input-group-addon">L</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Add more pump items as needed -->
             </div>
-
         </div>
+
+
+
+
         {{-- MOP --}}
-         <div class="mop-column" id="mop-column">
+        <div class="mop-column" id="mop-column">
             <h2>Mode of Payment</h2>
             <div id="pumps-info">
                 <button class="btn btn-light " onclick="appendToDisplay('7')">GCASH</button>
                 <button class="btn btn-light" onclick="appendToDisplay('8')">BDO</button>
                 <button class="btn btn-light" onclick="appendToDisplay('9')">BPI</button>
                 <button class="btn btn-light text-dark" onclick="clearDisplay()">PAY<br>MAYA</button>
-
             </div>
         </div>
         {{-- REPORTS --}}
@@ -324,8 +318,6 @@
                 <button class="btn btn-light text-dark" onclick="clearDisplay()">Close shift</button>
                 <button class="btn btn-light " onclick="appendToDisplay('7')">Print shift</button>
                 <button class="btn btn-light" onclick="appendToDisplay('8')">Commulative shift </button>
-
-
             </div>
         </div>
         {{-- NON-FUEL --}}
@@ -338,134 +330,90 @@
                 <button class="btn btn-light text-dark" onclick="clearDisplay()">LOREM IPSUM</button>
                 <button class="btn btn-light " onclick="appendToDisplay('7')">LOREM IPSUM</button>
                 <button class="btn btn-light" onclick="appendToDisplay('8')">LOREM IPSUM </button>
-
-
             </div>
         </div>
         {{-- MANUAL --}}
         <div class="mop-column" id="manual-column">
             <h2>Manual</h2>
             <div id="pumps-info">
-               <h1>Under Development</h1>
+                <h1>Under Development</h1>
 
             </div>
         </div>
     </div>
     <div class="button-container">
         <button class="my-button" onclick="pumps()">Pumps</button>
-        <button class="my-button" onclick="manual()" >Manual</button>
+        <button class="my-button" onclick="manual()">Manual</button>
         <button class="my-button" onclick="mop()">MOP</button>
-        <button class="my-button"  onclick="nonfuel()">Non-Fuel</button>
+        <button class="my-button" onclick="nonfuel()">Non-Fuel</button>
         <button class="my-button" onclick="reports()">Reports</button>
         <button class="my-button">Config</button>
     </div>
-
-
     <script>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-var pumpdiv = document.getElementById("pumps-column");
-var mopdiv = document.getElementById("mop-column");
-var reportsdiv = document.getElementById("reports-column");
-var nonfueldiv = document.getElementById("nonfuel-column");
-var manualdiv = document.getElementById("manual-column")
-        function mop(){
- reportsdiv.style.display = "none";
-  pumpdiv.style.display = "none";
-  nonfueldiv.style.display = "none";
-  manualdiv.style.display = "none"
-  mopdiv.style.display = "block";
-    }
-    function reports(){
-        pumpdiv.style.display = "none";
-        mopdiv.style.display = "none";
-        nonfueldiv.style.display = "none";
-        manualdiv.style.display = "none"
-        reportsdiv.style.display = "block";
+        var pumpdiv = document.getElementById("pumps-column");
+        var mopdiv = document.getElementById("mop-column");
+        var reportsdiv = document.getElementById("reports-column");
+        var nonfueldiv = document.getElementById("nonfuel-column");
+        var manualdiv = document.getElementById("manual-column")
 
-    }
-    function nonfuel(){
-        pumpdiv.style.display = "none";
-        mopdiv.style.display = "none";
-        reportsdiv.style.display = "none";
-        manualdiv.style.display = "none"
-        nonfueldiv.style.display = "block";
-    }
-    function pumps(){
+        function mop() {
+            reportsdiv.style.display = "none";
+            pumpdiv.style.display = "none";
+            nonfueldiv.style.display = "none";
+            manualdiv.style.display = "none"
+            mopdiv.style.display = "block";
+        }
 
-        mopdiv.style.display = "none";
-        reportsdiv.style.display = "none";
-        nonfueldiv.style.display = "none";
-        manualdiv.style.display = "none"
-        pumpdiv.style.display = "block";
-    }
-    function manual(){
-        mopdiv.style.display = "none";
-        reportsdiv.style.display = "none";
-        nonfueldiv.style.display = "none";
-        pumpdiv.style.display = "none";
-        manualdiv.style.display = "block"
+        function reports() {
+            pumpdiv.style.display = "none";
+            mopdiv.style.display = "none";
+            nonfueldiv.style.display = "none";
+            manualdiv.style.display = "none"
+            reportsdiv.style.display = "block";
+        }
 
-    }
+        function nonfuel() {
+            pumpdiv.style.display = "none";
+            mopdiv.style.display = "none";
+            reportsdiv.style.display = "none";
+            manualdiv.style.display = "none"
+            nonfueldiv.style.display = "block";
+        }
 
-        document.addEventListener('DOMContentLoaded', function () {
-=======
+        function pumps() {
+            mopdiv.style.display = "none";
+            reportsdiv.style.display = "none";
+            nonfueldiv.style.display = "none";
+            manualdiv.style.display = "none"
+            pumpdiv.style.display = "block";
+        }
+
+        function manual() {
+            mopdiv.style.display = "none";
+            reportsdiv.style.display = "none";
+            nonfueldiv.style.display = "none";
+            pumpdiv.style.display = "none";
+            manualdiv.style.display = "block"
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
->>>>>>> Stashed changes
-=======
-        document.addEventListener('DOMContentLoaded', function() {
->>>>>>> Stashed changes
-            clearDisplay();
+
+            document.addEventListener('DOMContentLoaded', function() {
+
+                clearDisplay();
+            });
+
+            function appendToDisplay(value) {
+                const display = document.getElementById('calculator-display');
+                display.value += value;
+            }
+
+            function clearDisplay() {
+                const display = document.getElementById('calculator-display');
+                display.value = '';
+            }
+
         });
-
-        function appendToDisplay(value) {
-            const display = document.getElementById('calculator-display');
-            display.value += value;
-        }
-
-        function clearDisplay() {
-            const display = document.getElementById('calculator-display');
-            display.value = '';
-        }
-
-        function addItemToDisplay(itemName, itemPrice) {
-            const itemsTableBody = document.getElementById('items-info');
-            let existingRow = null;
-
-            // Check if the item already exists in the table
-            for (let i = 0; i < itemsTableBody.rows.length; i++) {
-                if (itemsTableBody.rows[i].cells[0].textContent === itemName) {
-                    existingRow = itemsTableBody.rows[i];
-                    break;
-                }
-            }
-
-            if (existingRow) {
-                // If the item already exists, update quantity and total
-                const itemQuantityCell = existingRow.cells[2];
-                const itemTotalCell = existingRow.cells[3];
-
-                let currentQuantity = parseInt(itemQuantityCell.textContent);
-                currentQuantity++;
-                itemQuantityCell.textContent = currentQuantity;
-
-                let currentTotal = parseFloat(itemTotalCell.textContent);
-                currentTotal += itemPrice;
-                itemTotalCell.textContent = currentTotal.toFixed(2);
-            } else {
-                // If it's a new item, add a new row
-                const newRow = itemsTableBody.insertRow();
-                const itemNameCell = newRow.insertCell(0);
-                const itemPriceCell = newRow.insertCell(1);
-                const itemQuantityCell = newRow.insertCell(2);
-                const itemTotalCell = newRow.insertCell(3);
-
-                itemNameCell.textContent = itemName;
-                itemPriceCell.textContent = itemPrice.toFixed(2);
-                itemQuantityCell.textContent = '1';
-                itemTotalCell.textContent = itemPrice.toFixed(2);
-            }
-        }
     </script>
 
 </x-app-layout>
