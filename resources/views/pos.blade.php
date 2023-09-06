@@ -9,6 +9,10 @@
                 height: 80px;
                 width: 70px;
             }
+            #items-info {
+  max-height: 200px;
+  overflow-y: auto;
+}
 
 }
 @media (min-width: 768px) {
@@ -20,6 +24,10 @@
                 height: 80px;
                 width: 70px;
             }
+            #items-info {
+  max-height: 200px;
+  overflow-y: auto;
+}
 
 }
         body {
@@ -146,6 +154,22 @@
         input:hover {
             box-shadow: rgb(231, 238, 236) 0px 0px 0px 3px;
         }
+        #items-info {
+  max-height: 10px;
+  overflow-y: auto;
+}
+    .items{
+        max-height: 10px;
+    overflow-y: auto;
+    }
+    .mop-column{
+        display: none;
+        flex: 1;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+    }
     </style>
 
     <div class="pos-container">
@@ -160,7 +184,8 @@
                             <th>Total</th>
                         </tr>
                     </thead>
-                    <tbody id="items-info">
+                    <tbody id="items-info" class="items">
+                        </tbody>
                 </table>
             </div>
             <div class="calculator-container">
@@ -197,25 +222,118 @@
                 </div>
             </div>
         </div>
-        <div class="column right-column">
+        {{-- PUMPS --}}
+        <div class="column right-column" id="pumps-column">
             <h2>Pumps Display</h2>
             <div id="pumps-info">
                 <div class="pump-item" id="pump-item-1" onclick="addItemToDisplay('Item 1', 10.00)">Item 1 - $10.00</div>
                 <div class="pump-item" id="pump-item-2" onclick="addItemToDisplay('Item 2', 15.00)">Item 2 - $15.00</div>
                 <!-- Add more pump items as needed -->
             </div>
+
+        </div>
+        {{-- MOP --}}
+         <div class="mop-column" id="mop-column">
+            <h2>Mode of Payment</h2>
+            <div id="pumps-info">
+                <button class="btn btn-light " onclick="appendToDisplay('7')">GCASH</button>
+                <button class="btn btn-light" onclick="appendToDisplay('8')">BDO</button>
+                <button class="btn btn-light" onclick="appendToDisplay('9')">BPI</button>
+                <button class="btn btn-light text-dark" onclick="clearDisplay()">PAY<br>MAYA</button>
+
+            </div>
+        </div>
+        {{-- REPORTS --}}
+        <div class="mop-column" id="reports-column">
+            <h2>Reports</h2>
+            <div id="pumps-info">
+                <button class="btn btn-light " onclick="appendToDisplay('7')">Close Cashdraw</button>
+                <button class="btn btn-light" onclick="appendToDisplay('8')">Print Cashdraw</button>
+                <button class="btn btn-light" onclick="appendToDisplay('9')">Att print shift</button>
+                <button class="btn btn-light text-dark" onclick="clearDisplay()">Close shift</button>
+                <button class="btn btn-light " onclick="appendToDisplay('7')">Print shift</button>
+                <button class="btn btn-light" onclick="appendToDisplay('8')">Commulative shift </button>
+
+
+            </div>
+        </div>
+        {{-- NON-FUEL --}}
+        <div class="mop-column" id="nonfuel-column">
+            <h2>None-Fuel</h2>
+            <div id="pumps-info">
+                <button class="btn btn-light " onclick="appendToDisplay('7')">LOREM IPSUM</button>
+                <button class="btn btn-light" onclick="appendToDisplay('8')">LOREM IPSUM</button>
+                <button class="btn btn-light" onclick="appendToDisplay('9')">LOREM IPSUM</button>
+                <button class="btn btn-light text-dark" onclick="clearDisplay()">LOREM IPSUM</button>
+                <button class="btn btn-light " onclick="appendToDisplay('7')">LOREM IPSUM</button>
+                <button class="btn btn-light" onclick="appendToDisplay('8')">LOREM IPSUM </button>
+
+
+            </div>
+        </div>
+        {{-- MANUAL --}}
+        <div class="mop-column" id="manual-column">
+            <h2>Manual</h2>
+            <div id="pumps-info">
+               <h1>Under Development</h1>
+
+            </div>
         </div>
     </div>
     <div class="button-container">
-        <button class="my-button">Pumps</button>
-        <button class="my-button">Manual</button>
-        <button class="my-button">MOP</button>
-        <button class="my-button">Non-Fuel</button>
-        <button class="my-button">Reports</button>
+        <button class="my-button" onclick="pumps()">Pumps</button>
+        <button class="my-button" onclick="manual()" >Manual</button>
+        <button class="my-button" onclick="mop()">MOP</button>
+        <button class="my-button"  onclick="nonfuel()">Non-Fuel</button>
+        <button class="my-button" onclick="reports()">Reports</button>
         <button class="my-button">Config</button>
     </div>
 
+
     <script>
+var pumpdiv = document.getElementById("pumps-column");
+var mopdiv = document.getElementById("mop-column");
+var reportsdiv = document.getElementById("reports-column");
+var nonfueldiv = document.getElementById("nonfuel-column");
+var manualdiv = document.getElementById("manual-column")
+        function mop(){
+ reportsdiv.style.display = "none";
+  pumpdiv.style.display = "none";
+  nonfueldiv.style.display = "none";
+  mopdiv.style.display = "block";
+    }
+    function reports(){
+        pumpdiv.style.display = "none";
+        mopdiv.style.display = "none";
+        nonfueldiv.style.display = "none";
+        manualdiv.style.display = "none"
+        reportsdiv.style.display = "block";
+
+    }
+    function nonfuel(){
+        pumpdiv.style.display = "none";
+        mopdiv.style.display = "none";
+        reportsdiv.style.display = "none";
+        manualdiv.style.display = "none"
+        nonfueldiv.style.display = "block";
+    }
+    function pumps(){
+
+        mopdiv.style.display = "none";
+        reportsdiv.style.display = "none";
+        nonfueldiv.style.display = "none";
+        manualdiv.style.display = "none"
+        pumpdiv.style.display = "block";
+    }
+    function manual(){
+        mopdiv.style.display = "none";
+        reportsdiv.style.display = "none";
+        nonfueldiv.style.display = "none";
+        pumpdiv.style.display = "none";
+        manualdiv.style.display = "block"
+
+    }
+
         document.addEventListener('DOMContentLoaded', function () {
             clearDisplay();
         });
