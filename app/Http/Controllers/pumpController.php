@@ -19,17 +19,44 @@ class pumpController extends Controller
             'Packets' => [
                 [
                     'Id' => 1,
-                    'Type' => 'GetPumpsConfiguration'
-                ]
+                    'Type' => 'PumpGetStatus',
+                    'Data'=>[
+                        'Pump'=> 1
+                    ]
+                    ],
+                    [
+                        'Id' => 2,
+                        'Type' => 'PumpGetStatus',
+                        'Data'=>[
+                            'Pump'=> 2
+                        ]
+                        ],  [
+                            'Id' => 3,
+                            'Type' => 'PumpGetStatus',
+                            'Data'=>[
+                                'Pump'=> 3
+                            ]
+                            ],  [
+                                'Id' => 4,
+                                'Type' => 'PumpGetStatus',
+                                'Data'=>[
+                                    'Pump'=> 4
+                                ]
+                            ]
             ]
         ]);
 
         $data = $response->json();
-        // $datab = $data->Packets;
-        $pumpId = $data['Packets'][0]['Data']['Pumps'][0]['Id'];
 
-        Log::info($pumpId);
+          $pumpId = json_encode($data['Packets'], true);
+   $finalpump = json_decode($pumpId, true);
 
-        return view('pos', ['datab' => $pumpId]);
+
+
+
+
+
+        return view('pos')->with('datab',$finalpump);
     }
+
 }

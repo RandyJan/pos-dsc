@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\pumpController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,8 +22,7 @@ Route::get('/', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
 
-Route::get('/pos', function () {
-    return view('pos');
-})->middleware(['auth'])->name('pos');
 
+
+Route::get('/pos',[pumpController::class, 'pump'])->middleware(['auth'])->name('pos');
 require __DIR__.'/auth.php';
