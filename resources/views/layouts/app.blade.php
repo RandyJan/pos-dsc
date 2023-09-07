@@ -12,11 +12,9 @@
 
         <!-- Styles -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-        <!-- <link rel="stylesheet" href="{{ asset('css/pos.css') }}"> -->
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}"> 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" >
         <link rel='stylesheet' href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-
 
         <!-- Scripts -->
         <script src="{{ asset('js/app.js') }}" defer></script>
