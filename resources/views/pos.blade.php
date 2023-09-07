@@ -369,10 +369,7 @@
                                 <button type="button" class="btn btn-danger btn-sm font-weight-bold">Stop</button>
                             </div>
                         </div>
-
                     </div>
-                </fieldset>
-
                 </div>
             </div>
         </div>
@@ -424,7 +421,6 @@
                 <h1>Under Development</h1>
 
             </div>
-
         </div>
     </div>
     <div class="button-container">
