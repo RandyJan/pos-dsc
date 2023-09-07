@@ -193,6 +193,10 @@
         .pump-item input {
             padding: 2px;
         }
+        .pump-container{
+            width: 100%;
+            display: flex;
+        }
     </style>
 
     <div class="pos-container">
@@ -245,12 +249,16 @@
                 </div>
             </div>
         </div>
+
+
         <!-- PUMPS -->
         <div class="column right-column" id="pumps-column">
-            <div id="pumps-info">
-                <div class="pump-container">
+     <div id="pumps-info">
+                <fieldset>
+                    <legend>Pump <p>{{$packet->Id}}</p></legend>
                     <div class="pump-container">
-                        <h2>Pump 1</h2>
+
+
                         <div class="pump-item" id="pump-item-1">
                             <div class="pump-label">Regular Gas</div>
                             <div class="pump-details">
@@ -290,10 +298,16 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
+                </fieldset>
+
                 </div>
-            </div>
-        </div>
+
+
+
+</div>
+
 
 
 
@@ -339,6 +353,7 @@
                 <h1>Under Development</h1>
 
             </div>
+
         </div>
     </div>
     <div class="button-container">
