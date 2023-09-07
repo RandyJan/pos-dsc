@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\pumpController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,5 +25,5 @@ Route::get('/', function () {
 Route::get('/pos', function () {
     return view('pos');
 })->middleware(['auth'])->name('pos');
-
+Route::get('/poss',[pumpController::class, 'pump'])->middleware(['auth'])->name('pos');
 require __DIR__.'/auth.php';
