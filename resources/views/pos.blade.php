@@ -248,116 +248,45 @@
         </div>
 
         <!-- PUMPS -->
-
-
-
-        <div class="column right-column" id="pumps-column">
+        <div class="right-column column" >
             <h2 class="mb-4">Fuel Pumps</h2>
-
-
-
-              @foreach ($datab as $pump )
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 m-1 w-100" id="pump">
-                <!-- Pump 1 -->
-                <div class="col mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body p-2">
-                            <h5 class="card-title text-center font-weight-bold mb-2">
-                                <span class="float-left rounded-circle bg-dark text-white mr-2">{{$pump['Id']}}</span>
-                              @if($pump['Type']=== 'PumpOfflineStatus')
-                              OFFLINE
-                              @elseif ($pump['Type']=== 'PumpIdleStatus')
-                              IDLE
-                              @if ($pump['Data']['NozzleUp']> 0)
-                                  NOZZLE UP
-                                @endif
-                                @elseif($pump['Type']=== 'PumpFillingStatus')
-                                FILLING
-                                <div class="fuel-pump-info">
-                                    <div class="mb-2">
-                                        <span class="font-weight-bold">Amount:</span>
-                                        <input readonly class="form-control text-monospace text-dark bg-white" style="font-size: 12px;" value="{{$pump['Data']['Amount']}}">
-
+            <div id="pumps-column">
+                <div class="col-sm-6 mb-sm-0">
+                    <div class="card">
+                        <div class="card-body">
+                            <div>
+                                <h5 class="card-title">Price</h5>
+                                <input readonly type="text">
+                                <div>
+                                    <div>
+                                        <h5 class="card-title">Volume</h5>
+                                        <input readonly type="text">
                                     </div>
-                                    <div class="mb-2">
-                                        <span class="font-weight-bold">Volume:</span>
-                                        <input readonly class="form-control text-monospace text-dark bg-white" style="font-size: 12px;" value="{{$pump['Data']['Volume']}}">
+                                    <div>
+                                        <h5 class="card-title">Amount</h5>
+                                        <input readonly type="text">
                                     </div>
-                                    <div class="mb-2">
-                                        <span class="font-weight-bold">Price:</span>
-                                        <input readonly class="form-control text-monospace text-dark bg-white" style="font-size: 12px;" value="{{$pump['Data']['Price']}}">
+                                        <h5 class="card-title">Nozzle</h5>
+                                        <select class="form-select" aria-label="Default select example">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                        </select>
+                    
+                                    <div>
+                                        <button class="btn btn-primary">Start</button>
+                                        <button class="btn btn-danger">Stop</button>
                                     </div>
                                 </div>
-                                <!-- Fuel Pump Progress Bar -->
-                                <div class="progress mb-2" style="height: 4px;"> <!-- Reduced height -->
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <!-- Nozzle Selection -->
-                                <div class="mb-2">
-                                    <span class="font-weight-bold">Nozzle:</span>
-                                    <select class="form-control text-monospace text-dark bg-white" style="font-size: 10px;"> <!-- Reduced font size -->
-                                        <option value="1">Premium</option>
-                                        <option value="2">Diesel</option>
-                                    </select>
-                                </div>
-                                <!-- Start/Stop Buttons -->
-                                <div class="d-flex justify-content-between">
-                                    <button type="button" class="btn btn-success btn-sm font-weight-bold">Start</button> <!-- Reduced button size -->
-                                    <button type="button" class="btn btn-danger btn-sm font-weight-bold">Stop</button> <!-- Reduced button size -->
-                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                                @endif
-
-
-
-                                <span class="float-right font-italic text-white" style="font-size: 12px; text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;"></span>
-                            </h5>
-                            <!-- Fuel Pump Info -->
-                            <div class="fuel-pump-info">
-                                <div class="mb-2">
-                                    <span class="font-weight-bold">Amount:</span>
-                                    <input readonly class="form-control text-monospace text-dark bg-white" style="font-size: 12px;" value="">
-
-                                </div>
-                                <div class="mb-2">
-                                    <span class="font-weight-bold">Volume:</span>
-                                    <input readonly class="form-control text-monospace text-dark bg-white" style="font-size: 12px;" value="">
-                                </div>
-                                <div class="mb-2">
-                                    <span class="font-weight-bold">Price:</span>
-                                    <input readonly class="form-control text-monospace text-dark bg-white" style="font-size: 12px;" value="">
-                                </div>
-                            </div>
-                            <!-- Fuel Pump Progress Bar -->
-                            <div class="progress mb-2" style="height: 4px;"> <!-- Reduced height -->
-                                <div class="progress-bar bg-info" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <!-- Nozzle Selection -->
-                            <div class="mb-2">
-                                <span class="font-weight-bold">Nozzle:</span>
-                                <select class="form-control text-monospace text-dark bg-white" style="font-size: 10px;"> <!-- Reduced font size -->
-                                    <option value="1">Premium</option>
-                                    <option value="2">Diesel</option>
-                                </select>
-                            </div>
-                            <!-- Start/Stop Buttons -->
-                            <div class="d-flex justify-content-between">
-                                <button type="button" class="btn btn-success btn-sm font-weight-bold">Start</button> <!-- Reduced button size -->
-                                <button type="button" class="btn btn-danger btn-sm font-weight-bold">Stop</button> <!-- Reduced button size -->
-                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            @endforeach
-
         </div>
-
 
         {{-- MOP --}}
         <div class="mop-column" id="mop-column">
@@ -415,12 +344,13 @@
     </div>
 
     <script type="text/javascript">
-     const myinterval = setInterval(refressh, 1000);
+        const myinterval = setInterval(refressh, 1000);
 
 
-function refressh() {
-    $('#pumps-column').load(document.URL + " #pumps-column");
-}
+        function refressh() {
+           
+            $('#pumps-column').load(document.URL + " #pumps-column");
+        }
 
 
         var pumpdiv = document.getElementById("pumps-column");
@@ -487,11 +417,7 @@ function refressh() {
             }
 
         });
-        setInterval(function() {
-    var divToRefresh = document.getElementById('pump');
-    divToRefresh.innerHTML =  divToRefresh.innerHTML;
-    console.log('refreshed');
-  }, 1000); // 1000 milliseconds = 1 second
+       
     </script>
 
 </x-app-layout>
