@@ -252,10 +252,14 @@
 
 
         <!-- PUMPS -->
+
+
+
         <div class="column right-column" id="pumps-column">
+            @foreach ($pumpId as $pumps )
      <div id="pumps-info">
                 <fieldset>
-                    <legend>Pump <p>{{$packet->Id}}</p></legend>
+                    <legend>{{$pumps}}</legend>
                     <div class="pump-container">
 
 
@@ -301,7 +305,7 @@
 
                     </div>
                 </fieldset>
-
+                @endforeach
                 </div>
 
 

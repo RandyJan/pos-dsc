@@ -30,6 +30,6 @@ class pumpController extends Controller
 
         Log::info($pumpId);
 
-        // return view('pos', ['datab' => $datab]);
+        return view('pos', ['datab' => $pumpId]);
     }
 }
