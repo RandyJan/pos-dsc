@@ -1,576 +1,455 @@
 <x-app-layout>
     <style>
-        @media screen and (min-width: 768px) and (max-width: 1024px) {
-            .calculator-button {
-                height: 80px;
-                width: 70px;
-            }
-
-            .btn {
-                height: 80px;
-                width: 70px;
-            }
-
-            #items-info {
-                max-height: 200px;
-                overflow-y: auto;
-            }
-
-        }
-
-        @media (min-width: 768px) {
-            .calculator-button {
-                height: 80px;
-                width: 70px;
-            }
-
-            .btn {
-                height: 80px;
-                width: 70px;
-            }
-
-            #items-info {
-                max-height: 200px;
-                overflow-y: auto;
-            }
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
         .pos-container {
             display: flex;
             justify-content: space-between;
-            padding: 20px;
+            padding: 10px;
+            flex-wrap: wrap;
         }
 
-        .column {
-
-            flex: 1;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-        }
-
+        /* Styles for left column (Item Display and Calculator) */
         .left-column {
-            margin-right: 20px;
+            flex: 1;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            /* Ensure the calculator is below the item display */
+            margin-right: 5px;
+            /* Add margin to create space on the right */
         }
 
-        .item-display-container,
-        .calculator-container {
-            background-color: #fff;
+        /* Styles for right column (Fuel Pumps) */
+        .right-column {
+            flex: 1;
+            background-color: #ffffff;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
             padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            min-width: 300px;
+            margin-left: 5px;
+            /* Add margin to create space on the left */
+        }
+
+        /* Styles for the item display container */
+        .item-display-container {
+            flex-grow: 1;
+            /* Expand to fill available space */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            max-height: 300px;
+            /* Set a maximum height for the container (adjust as needed) */
+        }
+
+        h1 {
+            color: #007bff;
             margin-bottom: 20px;
         }
 
+        /* Styles for the item display table */
+        .item-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            /* Add margin-top to create space for the header */
+            margin-top: 20px;
+        }
+
+        .item-table th,
+        .item-table td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .item-table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .item-table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Style the quantity input field */
+        .item-table input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Styles for Calculator */
+        .calculator-display {
+            width: 100%;
+            height: 40px;
+            font-size: 24px;
+            text-align: right;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            outline: none;
+            /* Remove the input outline on focus */
+        }
+
         .calculator-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: auto;
+            /* Push to the bottom */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .calculator-buttons {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            grid-gap: 0;
+            gap: 5px;
         }
 
-        .calculator-button {
-            padding: 15px;
-            font-size: 12px;
-            text-align: center;
-            background-color: #ccc;
-            border: 1px solid black;
+        .calcbutton {
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
-        .calculator-button:hover {
-            background-color: #ddd;
+        .calcbutton:hover {
+            background-color: #0056b3;
         }
 
-        .button-container {
-            text-align: center;
+        .calcbutton.clear-button,
+        .calcbutton.special-button {
+            background-color: #ccc;
+            color: #333;
+        }
+
+
+        /* Styles for the container of pump items */
+        .pump-items-container {
+            display: flex;
+            flex-wrap: wrap;
+            /* Allow items to wrap to the next row */
+            justify-content: space-between;
+            /* Space items evenly */
+            overflow-y: auto;
+            /* Add a vertical scrollbar when content overflows */
+            max-height: 600px;
+        }
+
+        /* Styles for Fuel Pumps Item */
+        .pump-item {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            /* Reduced padding for smaller cards */
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-sizing: border-box;
+        }
+
+        .label-input-group {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            /* Reduced margin for smaller spacing */
+        }
+
+        .label-input-group label {
+            width: 80px;
+            /* Adjust label width as needed */
+            text-align: right;
+            margin-right: 10px;
+        }
+
+        .label-input-group input[type="text"] {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button-group {
+            margin-top: 10px;
+            /* Reduced margin for smaller spacing */
+            text-align: right;
+        }
+
+        .start-button,
+        .stop-button {
+            padding: 5px 10px;
+            /* Reduced padding for smaller buttons */
+            margin: 0 5px;
+            /* Reduced margin for smaller spacing between buttons */
+            font-size: 14px;
+            /* Adjust font size as needed */
+            border-radius: 3px;
+            /* Slightly smaller border radius */
+        }
+
+        .start-button:hover,
+        .stop-button:hover {
+            background-color: #0056b3;
+        }
+
+        .pos-buttons {
+            display: flex;
+            justify-content: center;
+            /* Center horizontally */
+            align-items: center;
+            /* Center vertically */
             margin-top: 20px;
+            /* Add some top margin for spacing */
         }
 
-        .my-button {
-            padding: 10px 20px;
-            font-size: 12px;
+        .pos-buttons button {
+            padding: 10px 15px;
+            font-size: 15px;
             background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-right: 10px;
+            margin-top: -20px;
         }
 
-        .btn {
-            border: 1px solid black;
+        .pos-buttons button:last-child {
+            margin-right: 0;
+            /* Remove margin from the last button */
         }
 
-
-        .my-button:hover {
+        .pos-buttons button:hover {
             background-color: #0056b3;
         }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 0px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 5px;
-            text-align: center;
-        }
-
-        th {
-            color: #fff;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        input {
-            width: 100%;
-            height: 36px;
-            border-radius: 4px;
-            padding-left: 8px;
-            font-size: 14px;
-            font-weight: normal;
-            border: 1px solid rgb(137, 151, 155);
-            transition: border-color 150ms ease-in-out 0s;
-            outline: none;
-            color: rgb(33, 49, 60);
-            background-color: rgb(255, 255, 255);
-            padding-right: -30px;
-            text-align: right;
-        }
-
-        input:hover {
-            box-shadow: rgb(231, 238, 236) 0px 0px 0px 3px;
-        }
-
-        #items-info {
-            max-height: 10px;
-            overflow-y: auto;
-        }
-
-        .items {
-            max-height: 10px;
-            overflow-y: auto;
-        }
-
-        .mop-column {
-            display: none;
-            flex: 1;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-        }
-
-        .pump-item {
-            display: flex;
-            align-items: center;
-            width: 200px;
-            height: 100px;
-            background-color: lightgray;
-            padding: 10px;
-            margin: 10px;
-        }
-
-        .pump-item input {
-            padding: 2px;
-        }
     </style>
+    </head>
 
-    <div class="pos-container">
-        <div class="column left-column">
-            <div class="item-display-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody id="items-info" class="items">
-                    </tbody>
-                </table>
-            </div>
-            <div class="calculator-container">
-                <div class="calculator">
-                    <div class="calculator-display-top">
-                        <input type="text" readonly class="form-control text-monospace text-dark bg-white" placeholder="0.00" style="font-size: 30px;">
+    <body>
+        <div class="pos-container">
+            <div class="column left-column">
+                <!-- Item Display -->
+                <div class="table-container">
+                    <div class="item-display-container">
+                        <table class="item-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="calculator-buttons text-dark">
-                        <button class="btn btn-warning " onclick="appendToDisplay('7')">7</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('8')">8</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('9')">9</button>
-                        <button class="btn btn-danger text-dark" onclick="clearDisplay()">Clear</button>
-                        <button class="btn btn-success text-dark">void</button>
-                        <button class="btn btn-danger text-dark">preset</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('4')">4</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('5')">5</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('6')">6</button>
-                        <button class="calculator-button" style="background-color:darkgray;color:black">Open Drawer</button>
-                        <button class="calculator-button text-dark">Sub ttl</button>
-                        <button class="btn btn-success text-dark">Void All</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('1')">1</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('2')">2</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('3')">3</button>
-                        <button class="calculator-button" style="background-color:darkgray">Print Receipt</button>
-                        <button class="calculator-button">User</button>
-                        <button class="calculator-button" style="background-color: darkgreen;color:black">Puregold Disc</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('0')">0</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('00')">00</button>
-                        <button class="btn btn-warning" onclick="appendToDisplay('.')">.</button>
-                        <button class="btn btn-info">Safe Drop</button>
-                        <button class="calculator-button">All Stop</button>
-                        <button class="calculator-button">All Auth</button>
+                </div>
+                <!-- Calculator Container -->
+                <!-- <div class="calculator-container"> -->
+                <!-- Calculator Buttons Container -->
+                <div class="calculator-buttons-container">
+                    <div class="calculator">
+                        <input type="text" readonly class="calculator-display" placeholder="0.00" />
+                    </div>
+                    <div class="calculator-buttons">
+                        <button class="calcbutton" onclick="appendToDisplay('7')">7</button>
+                        <button class="calcbutton" onclick="appendToDisplay('8')">8</button>
+                        <button class="calcbutton" onclick="appendToDisplay('9')">9</button>
+                        <button class="calcbutton clear-button" onclick="clearDisplay()">Clear</button>
+                        <button class="calcbutton special-button">Void</button>
+                        <button class="calcbutton special-button">Preset</button>
+                        <button class="calcbutton" onclick="appendToDisplay('4')">4</button>
+                        <button class="calcbutton" onclick="appendToDisplay('5')">5</button>
+                        <button class="calcbutton" onclick="appendToDisplay('6')">6</button>
+                        <button class="calcbutton special-button">Open Drawer</button>
+                        <button class="calcbutton special-button">Sub Total</button>
+                        <button class="calcbutton special-button">Void All</button>
+                        <button class="calcbutton" onclick="appendToDisplay('1')">1</button>
+                        <button class="calcbutton" onclick="appendToDisplay('2')">2</button>
+                        <button class="calcbutton" onclick="appendToDisplay('3')">3</button>
+                        <button class="calcbutton special-button">Print Receipt</button>
+                        <button class="calcbutton special-button">User</button>
+                        <button class="calcbutton special-button">PG Disc</button>
+                        <button class="calcbutton" onclick="appendToDisplay('0')">0</button>
+                        <button class="calcbutton" onclick="appendToDisplay('00')">00</button>
+                        <button class="calcbutton" onclick="appendToDisplay('.')">.</button>
+                        <button class="calcbutton special-button">Safe Drop</button>
+                        <button class="calcbutton special-button">All Stop</button>
+                        <button class="calcbutton special-button">All Auth</button>
+                    </div>
+                </div>
+                <!-- </div> -->
+            </div>
+            <!-- Fuel Pumps -->
+            <div class="right-column column">
+                <h1>Fuel Pumps</h1>
+                <div class="pump-items-container">
+                    <div class="pump-item">
+                        <h3>Pump 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Nozzle Up</h3>
+                        <div class="label-input-group">
+                            <label for="price">Price:</label>
+                            <input type="text" id="price" />
+                        </div>
+                        <div class="label-input-group">
+                            <label for="volume">Volume:</label>
+                            <input type="text" id="volume" />
+                        </div>
+                        <div class="label-input-group">
+                            <label for="amount">Amount:</label>
+                            <input type="text" id="amount" readonly />
+                        </div>
+                        <div class="button-group">
+                            <button class="start-button" style="background-color: #00cc00; color: #fff">
+                                Start
+                            </button>
+                            <button class="stop-button" style="background-color: #ff0000; color: #fff">
+                                Stop
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- PUMPS -->
-        <div class="right-column column" >
-            <h2 class="mb-4">Fuel Pumps</h2>
-            <div id="pumps-column">
-                @foreach ($datab as $pump )
-
-
-                <div class="col-sm-6 mb-sm-0">
-                    <div class="card">
-                        <div class="card-body">
-                            @if($pump['Type']==='PumpIdleStatus')
-                            @if($pump['Data']['NozzleUp'] > 0)
-                            <p>NOZZLE UP</p>
-                          <h5 class="card-title">Pump {{$pump['Id']}}</h5>
-                          <div>
-
-                              <h5 class="card-title">Price</h5>
-                              <input type="text" value="{{$pump['Data']['LastPrice']}}">
-                              <div>
-
-                                  <div>
-                                      <h5 class="card-title">Volume</h5>
-                                      <input  type="text" value="{{$pump['Data']['LastVolume']}}">
-                                  </div>
-                                  <div>
-                                      <h5 class="card-title">Amount</h5>
-                                      <input readonly type="text" value="{{$pump['Data']['LastAmount']}}">
-                                  </div>
-                                      <h5 class="card-title">Nozzle</h5>
-                                      <select class="form-select" aria-label="Default select example">
-                                          <option selected>Open this select menu</option>
-                                          <option value="1">One</option>
-                                          <option value="2">Two</option>
-                                      </select>
-
-                                  <div>
-                                      <button class="btn btn-primary">Start</button>
-                                      <button class="btn btn-danger">Stop</button>
-                                  </div>
-                              </div>
-                          </div>
-
-                      </div>
-                  </div>
-              </div>
-              @else
-              <p>IDLE</p>
-              <h5 class="card-title">Pump {{$pump['Id']}}</h5>
-              <div>
-
-                  <h5 class="card-title">Price</h5>
-                  <input type="text" value="{{$pump['Data']['LastPrice']}}">
-                  <div>
-
-                      <div>
-                          <h5 class="card-title">Volume</h5>
-                          <input  type="text" value="{{$pump['Data']['LastVolume']}}">
-                      </div>
-                      <div>
-                          <h5 class="card-title">Amount</h5>
-                          <input readonly type="text" value="{{$pump['Data']['LastAmount']}}">
-                      </div>
-                          <h5 class="card-title">Nozzle</h5>
-                          <select class="form-select" aria-label="Default select example">
-                              <option selected>Open this select menu</option>
-                              <option value="1">One</option>
-                              <option value="2">Two</option>
-                          </select>
-
-                      <div>
-                          <button class="btn btn-primary">Start</button>
-                          <button class="btn btn-danger">Stop</button>
-                      </div>
-                  </div>
-              </div>
-
-          </div>
-      </div>
-  </div>
-                            @endif
-
-              {{-- FILLING --}}
-                             @elseif($pump['Type']==='PumpFillingStatus')
-                             <p>Filling</p>
-                             <h5 class="card-title">Pump {{$pump['Id']}}</h5>
-                             <div>
-
-                                 <h5 class="card-title">Price</h5>
-                                 <input type="text" value="{{$pump['Data']['Price']}}">
-                                 <div>
-
-                                     <div>
-                                         <h5 class="card-title">Volume</h5>
-                                         <input  type="text" value="{{$pump['Data']['Volume']}}">
-                                     </div>
-                                     <div>
-                                         <h5 class="card-title">Amount</h5>
-                                         <input readonly type="text" value="{{$pump['Data']['Amount']}}">
-                                     </div>
-                                         <h5 class="card-title">Nozzle</h5>
-                                         <select class="form-select" aria-label="Default select example">
-                                             <option selected>Open this select menu</option>
-                                             <option value="1">One</option>
-                                             <option value="2">Two</option>
-                                         </select>
-
-                                     <div>
-                                         <button class="btn btn-primary">Start</button>
-                                         <button class="btn btn-danger">Stop</button>
-                                     </div>
-                                 </div>
-                             </div>
-
-                         </div>
-                     </div>
-                 </div>
-                 {{-- Offline --}}
-                             @elseif($pump['Type']==='PumpOfflineStatus')
-                             <p>Offline</p>
-                             <h5 class="card-title">Pump {{$pump['Id']}}</h5>
-                             <div>
-
-                                 <h5 class="card-title">Price</h5>
-                                 <input type="text" value="">
-                                 <div>
-
-                                     <div>
-                                         <h5 class="card-title">Volume</h5>
-                                         <input  type="text" value="">
-                                     </div>
-                                     <div>
-                                         <h5 class="card-title">Amount</h5>
-                                         <input readonly type="text" value="">
-                                     </div>
-                                         <h5 class="card-title">Nozzle</h5>
-                                         <select class="form-select" aria-label="Default select example">
-                                             <option selected>Open this select menu</option>
-                                             <option value="1">One</option>
-                                             <option value="2">Two</option>
-                                         </select>
-
-                                     <div>
-                                         <button class="btn btn-primary">Start</button>
-                                         <button class="btn btn-danger">Stop</button>
-                                     </div>
-                                 </div>
-                             </div>
-
-                         </div>
-                     </div>
-                 </div>
-                 {{-- Nozzle Up --}}
-                              @elseif($pump['Type'] === 'PumpIdleStatus' && $pump['Data']['NozzleUp'] > 0)
-                             <p>NOZZLE UP</p>
-                             <h5 class="card-title">Pump {{$pump['Id']}}</h5>
-                             <div>
-
-                                 <h5 class="card-title">Price</h5>
-                                 <input type="text" value="{{$pump['Data']['LastPrice']}}">
-                                 <div>
-
-                                     <div>
-                                         <h5 class="card-title">Volume</h5>
-                                         <input  type="text" value="{{$pump['Data']['LastVolume']}}">
-                                     </div>
-                                     <div>
-                                         <h5 class="card-title">Amount</h5>
-                                         <input readonly type="text" value="{{$pump['Data']['LastAmount']}}">
-                                     </div>
-                                         <h5 class="card-title">Nozzle</h5>
-                                         <select class="form-select" aria-label="Default select example">
-                                             <option selected>Open this select menu</option>
-                                             <option value="1">One</option>
-                                             <option value="2">Two</option>
-                                         </select>
-
-                                     <div>
-                                         <button class="btn btn-primary">Start</button>
-                                         <button class="btn btn-danger">Stop</button>
-                                     </div>
-                                 </div>
-                             </div>
-
-                         </div>
-                     </div>
-                 </div>
-                            @endif
-
-
-@endforeach
-            </div>
-
+        <div class="pos-buttons">
+            <button>Pumps</button>
+            <button>Manual</button>
+            <button>MoP</button>
+            <button>Non-Fuel</button>
+            <button>Reports</button>
+            <button>Config</button>
         </div>
 
-        {{-- MOP --}}
-        <div class="mop-column" id="mop-column">
-            <h2>Mode of Payment</h2>
-            <div id="pumps-info">
-                <button class="btn btn-light " onclick="appendToDisplay('7')">GCASH</button>
-                <button class="btn btn-light" onclick="appendToDisplay('8')">BDO</button>
-                <button class="btn btn-light" onclick="appendToDisplay('9')">BPI</button>
-                <button class="btn btn-light text-dark" onclick="clearDisplay()">PAY<br>MAYA</button>
-            </div>
-        </div>
-
-        {{-- REPORTS --}}
-        <div class="mop-column" id="reports-column">
-            <h2>Reports</h2>
-            <div id="pumps-info">
-                <button class="btn btn-light " onclick="appendToDisplay('7')">Close Cashdraw</button>
-                <button class="btn btn-light" onclick="appendToDisplay('8')">Print Cashdraw</button>
-                <button class="btn btn-light" onclick="appendToDisplay('9')">Att print shift</button>
-                <button class="btn btn-light text-dark" onclick="clearDisplay()">Close shift</button>
-                <button class="btn btn-light " onclick="appendToDisplay('7')">Print shift</button>
-                <button class="btn btn-light" onclick="appendToDisplay('8')">Commulative shift </button>
-            </div>
-        </div>
-
-        {{-- NON-FUEL --}}
-        <div class="mop-column" id="nonfuel-column">
-            <h2>None-Fuel</h2>
-            <div id="pumps-info">
-                <button class="btn btn-light " onclick="appendToDisplay('7')">LOREM IPSUM</button>
-                <button class="btn btn-light" onclick="appendToDisplay('8')">LOREM IPSUM</button>
-                <button class="btn btn-light" onclick="appendToDisplay('9')">LOREM IPSUM</button>
-                <button class="btn btn-light text-dark" onclick="clearDisplay()">LOREM IPSUM</button>
-                <button class="btn btn-light " onclick="appendToDisplay('7')">LOREM IPSUM</button>
-                <button class="btn btn-light" onclick="appendToDisplay('8')">LOREM IPSUM </button>
-            </div>
-        </div>
-
-        {{-- MANUAL --}}
-        <div class="mop-column" id="manual-column">
-            <h2>Manual</h2>
-            <div id="pumps-info">
-                <h1>Under Development</h1>
-
-            </div>
-        </div>
-    </div>
-    <div class="button-container">
-        <button class="my-button" onclick="pumps()">Pumps</button>
-        <button class="my-button" onclick="manual()">Manual</button>
-        <button class="my-button" onclick="mop()">MOP</button>
-        <button class="my-button" onclick="nonfuel()">Non-Fuel</button>
-        <button class="my-button" onclick="reports()">Reports</button>
-        <button class="my-button">Config</button>
-    </div>
-
-    <script type="text/javascript">
-        const myinterval = setInterval(refressh, 500);
+        <script type="text/javascript">
+            const myinterval = setInterval(refressh, 500);
 
 
-        function refressh() {
+            function refressh() {
 
-            $('#pumps-column').load(document.URL + " #pumps-column");
-        }
+                $('#pumps-column').load(document.URL + " #pumps-column");
+            }
 
 
-        var pumpdiv = document.getElementById("pumps-column");
-        var mopdiv = document.getElementById("mop-column");
-        var reportsdiv = document.getElementById("reports-column");
-        var nonfueldiv = document.getElementById("nonfuel-column");
-        var manualdiv = document.getElementById("manual-column")
+            var pumpdiv = document.getElementById("pumps-column");
+            var mopdiv = document.getElementById("mop-column");
+            var reportsdiv = document.getElementById("reports-column");
+            var nonfueldiv = document.getElementById("nonfuel-column");
+            var manualdiv = document.getElementById("manual-column")
 
-        function mop() {
-            reportsdiv.style.display = "none";
-            pumpdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            manualdiv.style.display = "none"
-            mopdiv.style.display = "block";
-        }
+            function mop() {
+                reportsdiv.style.display = "none";
+                pumpdiv.style.display = "none";
+                nonfueldiv.style.display = "none";
+                manualdiv.style.display = "none"
+                mopdiv.style.display = "block";
+            }
 
-        function reports() {
-            pumpdiv.style.display = "none";
-            mopdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            manualdiv.style.display = "none"
-            reportsdiv.style.display = "block";
-        }
+            function reports() {
+                pumpdiv.style.display = "none";
+                mopdiv.style.display = "none";
+                nonfueldiv.style.display = "none";
+                manualdiv.style.display = "none"
+                reportsdiv.style.display = "block";
+            }
 
-        function nonfuel() {
-            pumpdiv.style.display = "none";
-            mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            manualdiv.style.display = "none"
-            nonfueldiv.style.display = "block";
-        }
+            function nonfuel() {
+                pumpdiv.style.display = "none";
+                mopdiv.style.display = "none";
+                reportsdiv.style.display = "none";
+                manualdiv.style.display = "none"
+                nonfueldiv.style.display = "block";
+            }
 
-        function pumps() {
-            mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            manualdiv.style.display = "none"
-            pumpdiv.style.display = "block";
-        }
+            function pumps() {
+                mopdiv.style.display = "none";
+                reportsdiv.style.display = "none";
+                nonfueldiv.style.display = "none";
+                manualdiv.style.display = "none"
+                pumpdiv.style.display = "block";
+            }
 
-        function manual() {
-            mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            pumpdiv.style.display = "none";
-            manualdiv.style.display = "block"
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
+            function manual() {
+                mopdiv.style.display = "none";
+                reportsdiv.style.display = "none";
+                nonfueldiv.style.display = "none";
+                pumpdiv.style.display = "none";
+                manualdiv.style.display = "block"
+            }
 
             document.addEventListener('DOMContentLoaded', function() {
 
-                clearDisplay();
+                document.addEventListener('DOMContentLoaded', function() {
+
+                    clearDisplay();
+                });
+
+                function appendToDisplay(value) {
+                    const display = document.getElementById('calculator-display');
+                    display.value += value;
+                }
+
+                function clearDisplay() {
+                    const display = document.getElementById('calculator-display');
+                    display.value = '';
+                }
+
             });
-
-            function appendToDisplay(value) {
-                const display = document.getElementById('calculator-display');
-                display.value += value;
-            }
-
-            function clearDisplay() {
-                const display = document.getElementById('calculator-display');
-                display.value = '';
-            }
-
-        });
-
-    </script>
+        </script>
 
 </x-app-layout>
