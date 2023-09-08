@@ -247,7 +247,7 @@
                     <div class="item-display-container">
                         <table class="item-table">
                             <thead>
-                                <tr>
+                                <tr style="position: sticky; top: 0;  z-index: 1;">
                                     <th>Item</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
