@@ -251,39 +251,192 @@
         <div class="right-column column" >
             <h2 class="mb-4">Fuel Pumps</h2>
             <div id="pumps-column">
+                @foreach ($datab as $pump )
+
+
                 <div class="col-sm-6 mb-sm-0">
                     <div class="card">
                         <div class="card-body">
-                            <div>
-                                <h5 class="card-title">Price</h5>
-                                <input readonly type="text">
-                                <div>
-                                    <div>
-                                        <h5 class="card-title">Volume</h5>
-                                        <input readonly type="text">
-                                    </div>
-                                    <div>
-                                        <h5 class="card-title">Amount</h5>
-                                        <input readonly type="text">
-                                    </div>
-                                        <h5 class="card-title">Nozzle</h5>
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option selected>Open this select menu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                        </select>
-                    
-                                    <div>
-                                        <button class="btn btn-primary">Start</button>
-                                        <button class="btn btn-danger">Stop</button>
-                                    </div>
-                                </div>
-                            </div>
+                            @if($pump['Type']==='PumpIdleStatus')
+                            @if($pump['Data']['NozzleUp'] > 0)
+                            <p>NOZZLE UP</p>
+                          <h5 class="card-title">Pump {{$pump['Id']}}</h5>
+                          <div>
 
-                        </div>
-                    </div>
-                </div>
+                              <h5 class="card-title">Price</h5>
+                              <input type="text" value="{{$pump['Data']['LastPrice']}}">
+                              <div>
 
+                                  <div>
+                                      <h5 class="card-title">Volume</h5>
+                                      <input  type="text" value="{{$pump['Data']['LastVolume']}}">
+                                  </div>
+                                  <div>
+                                      <h5 class="card-title">Amount</h5>
+                                      <input readonly type="text" value="{{$pump['Data']['LastAmount']}}">
+                                  </div>
+                                      <h5 class="card-title">Nozzle</h5>
+                                      <select class="form-select" aria-label="Default select example">
+                                          <option selected>Open this select menu</option>
+                                          <option value="1">One</option>
+                                          <option value="2">Two</option>
+                                      </select>
+
+                                  <div>
+                                      <button class="btn btn-primary">Start</button>
+                                      <button class="btn btn-danger">Stop</button>
+                                  </div>
+                              </div>
+                          </div>
+
+                      </div>
+                  </div>
+              </div>
+              @else
+              <p>IDLE</p>
+              <h5 class="card-title">Pump {{$pump['Id']}}</h5>
+              <div>
+
+                  <h5 class="card-title">Price</h5>
+                  <input type="text" value="{{$pump['Data']['LastPrice']}}">
+                  <div>
+
+                      <div>
+                          <h5 class="card-title">Volume</h5>
+                          <input  type="text" value="{{$pump['Data']['LastVolume']}}">
+                      </div>
+                      <div>
+                          <h5 class="card-title">Amount</h5>
+                          <input readonly type="text" value="{{$pump['Data']['LastAmount']}}">
+                      </div>
+                          <h5 class="card-title">Nozzle</h5>
+                          <select class="form-select" aria-label="Default select example">
+                              <option selected>Open this select menu</option>
+                              <option value="1">One</option>
+                              <option value="2">Two</option>
+                          </select>
+
+                      <div>
+                          <button class="btn btn-primary">Start</button>
+                          <button class="btn btn-danger">Stop</button>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+                            @endif
+
+              {{-- FILLING --}}
+                             @elseif($pump['Type']==='PumpFillingStatus')
+                             <p>Filling</p>
+                             <h5 class="card-title">Pump {{$pump['Id']}}</h5>
+                             <div>
+
+                                 <h5 class="card-title">Price</h5>
+                                 <input type="text" value="{{$pump['Data']['Price']}}">
+                                 <div>
+
+                                     <div>
+                                         <h5 class="card-title">Volume</h5>
+                                         <input  type="text" value="{{$pump['Data']['Volume']}}">
+                                     </div>
+                                     <div>
+                                         <h5 class="card-title">Amount</h5>
+                                         <input readonly type="text" value="{{$pump['Data']['Amount']}}">
+                                     </div>
+                                         <h5 class="card-title">Nozzle</h5>
+                                         <select class="form-select" aria-label="Default select example">
+                                             <option selected>Open this select menu</option>
+                                             <option value="1">One</option>
+                                             <option value="2">Two</option>
+                                         </select>
+
+                                     <div>
+                                         <button class="btn btn-primary">Start</button>
+                                         <button class="btn btn-danger">Stop</button>
+                                     </div>
+                                 </div>
+                             </div>
+
+                         </div>
+                     </div>
+                 </div>
+                 {{-- Offline --}}
+                             @elseif($pump['Type']==='PumpOfflineStatus')
+                             <p>Offline</p>
+                             <h5 class="card-title">Pump {{$pump['Id']}}</h5>
+                             <div>
+
+                                 <h5 class="card-title">Price</h5>
+                                 <input type="text" value="">
+                                 <div>
+
+                                     <div>
+                                         <h5 class="card-title">Volume</h5>
+                                         <input  type="text" value="">
+                                     </div>
+                                     <div>
+                                         <h5 class="card-title">Amount</h5>
+                                         <input readonly type="text" value="">
+                                     </div>
+                                         <h5 class="card-title">Nozzle</h5>
+                                         <select class="form-select" aria-label="Default select example">
+                                             <option selected>Open this select menu</option>
+                                             <option value="1">One</option>
+                                             <option value="2">Two</option>
+                                         </select>
+
+                                     <div>
+                                         <button class="btn btn-primary">Start</button>
+                                         <button class="btn btn-danger">Stop</button>
+                                     </div>
+                                 </div>
+                             </div>
+
+                         </div>
+                     </div>
+                 </div>
+                 {{-- Nozzle Up --}}
+                              @elseif($pump['Type'] === 'PumpIdleStatus' && $pump['Data']['NozzleUp'] > 0)
+                             <p>NOZZLE UP</p>
+                             <h5 class="card-title">Pump {{$pump['Id']}}</h5>
+                             <div>
+
+                                 <h5 class="card-title">Price</h5>
+                                 <input type="text" value="{{$pump['Data']['LastPrice']}}">
+                                 <div>
+
+                                     <div>
+                                         <h5 class="card-title">Volume</h5>
+                                         <input  type="text" value="{{$pump['Data']['LastVolume']}}">
+                                     </div>
+                                     <div>
+                                         <h5 class="card-title">Amount</h5>
+                                         <input readonly type="text" value="{{$pump['Data']['LastAmount']}}">
+                                     </div>
+                                         <h5 class="card-title">Nozzle</h5>
+                                         <select class="form-select" aria-label="Default select example">
+                                             <option selected>Open this select menu</option>
+                                             <option value="1">One</option>
+                                             <option value="2">Two</option>
+                                         </select>
+
+                                     <div>
+                                         <button class="btn btn-primary">Start</button>
+                                         <button class="btn btn-danger">Stop</button>
+                                     </div>
+                                 </div>
+                             </div>
+
+                         </div>
+                     </div>
+                 </div>
+                            @endif
+
+
+@endforeach
             </div>
 
         </div>
@@ -344,11 +497,11 @@
     </div>
 
     <script type="text/javascript">
-        const myinterval = setInterval(refressh, 1000);
+        const myinterval = setInterval(refressh, 500);
 
 
         function refressh() {
-           
+
             $('#pumps-column').load(document.URL + " #pumps-column");
         }
 
@@ -417,7 +570,7 @@
             }
 
         });
-       
+
     </script>
 
 </x-app-layout>
