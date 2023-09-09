@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href=" ">
-                        <x-application-logo class="block h-10 w-auto fill-current text-gray-600" />
+                        <x-nav-logo style="width: 50px; height: 40px;" class="block h-10 w-auto fill-current text-gray-600" />
                     </a>
                 </div>
 
