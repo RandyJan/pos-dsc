@@ -357,20 +357,20 @@
 
                     @foreach ($datab as $pump )
                     <form action="/authorizepump">
-                        <div class="pump-item">
+                        <div class="pump-item text-dark">
 
 
                             @if ($pump['Type']==='PumpIdleStatus')
 
                             @if ($pump['Data']['NozzleUp'] > 0)
-                            <h3>Pump {{$pump['Id']}} <a style="color:Green">NOZZLE UP</a></h3>
+                            <h3 style="background-color: lightgreen"> {{$pump['Id']}} <a>NOZZLE UP</a></h3>
                             @else
-                            <h3>Pump {{$pump['Id']}} <a style="color:Orange">IDLE</a></h3>
+                            <h3 style="background-color:#FFD580"> {{$pump['Id']}} <a>IDLE</a></h3>
                             @endif
                             @elseif ($pump['Type']==='PumpOfflineStatus')
-                            <h3>Pump {{$pump['Id']}} <a style="color:Red">OFFLINE</a></h3>
+                            <h3 style="background-color: #FFCCCB"> {{$pump['Id']}} <a>OFFLINE</a></h3>
                             @elseif ($pump['Type']==='PumpFillingStatus')
-                            <h3>Pump {{$pump['Id']}} <a style="color:Blue">Filling</a></h3>
+                            <h3 style="background-color: lightblue"> {{$pump['Id']}} <a>Filling</a></h3>
                             @endif
 
                             <div class="label-input-group">
@@ -401,7 +401,7 @@
                                 <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['LastAmount']}}" />
 
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
-                                <input readonly ype="text" id="amount" name="amount" value="0" />
+                                <input readonly type="text" id="amount" name="amount" value="0" />
                                 @elseif ($pump['Type']==='PumpFillingStatus')
                                 <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['Amount']}}" />
                                 @endif
