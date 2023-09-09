@@ -151,36 +151,49 @@
         }
 
         /* Styles for Fuel Pumps Item */
+
         .pump-item {
             background-color: #ffffff;
             border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 30px;
-            /* Reduced padding for smaller cards */
-            margin: 20px 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            padding: 5px;
+            margin: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             box-sizing: border-box;
+            max-width: 170px;
+        }
+
+        /* Styles for labels inside the pump-item */
+        .pump-item h3 {
+            font-size: 18px;
+            /* Adjust the font size for the header */
         }
 
         .label-input-group {
             display: flex;
             align-items: center;
             margin: 5px 0;
-            /* Reduced margin for smaller spacing */
         }
 
         .label-input-group label {
+            flex: 0 0 auto;
             width: 80px;
-            /* Adjust label width as needed */
             text-align: right;
             margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .label-input-group .input-container {
+            flex: 1;
         }
 
         .label-input-group input[type="text"] {
-            flex: 1;
-            padding: 5px;
+            width: 100%;
+            /* Fill the available space */
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            font-size: 14px;
         }
 
         .button-group {
@@ -341,12 +354,12 @@
             <div class="right-column column">
                 <h1>Fuel Pumps</h1>
                 <div class="pump-items-container" id="pump-column">
-               
-                @foreach ($datab as $pump )
-                <form action="/authorizepump">
-                    <div class="pump-item">
-                        
-                     
+
+                    @foreach ($datab as $pump )
+                    <form action="/authorizepump">
+                        <div class="pump-item">
+
+
                             @if ($pump['Type']==='PumpIdleStatus')
 
                             @if ($pump['Data']['NozzleUp'] > 0)
@@ -401,12 +414,12 @@
                                     Stop
                                 </button>
                             </div>
-                       
-                        
-                    </div>
+
+
+                        </div>
                     </form>
                     @endforeach
-                   
+
                 </div>
             </div>
         </div>
@@ -419,10 +432,9 @@
             <button>Config</button>
         </div>
         <script type="text/javascript">
-            const myinterval = setInterval(refressh, 500);
+            const myinterval = setInterval(refresh, 500);
 
-            function refressh() {
-
+            function refresh() {
                 $('#pump-column').load(document.URL + " #pump-column");
             }
             var pumpdiv = document.getElementById("pumps-column");
