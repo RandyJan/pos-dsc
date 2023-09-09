@@ -340,16 +340,14 @@
             <!-- Fuel Pumps -->
             <div class="right-column column">
                 <h1>Fuel Pumps</h1>
-                {{-- start div --}}
-
-
-
-                <div class="pump-items-container">
-
-                    <div class=""  id="pump-column">
-                        @foreach ($datab as $pump )
-                        <form action="/authorizepump">
-                        @if ($pump['Type']==='PumpIdleStatus')
+                <div class="pump-items-container" id="pump-column">
+               
+                @foreach ($datab as $pump )
+                <form action="/authorizepump">
+                    <div class="pump-item">
+                        
+                     
+                            @if ($pump['Type']==='PumpIdleStatus')
 
                             @if ($pump['Data']['NozzleUp'] > 0)
                             <h3>Pump {{$pump['Id']}} <a style="color:Green">NOZZLE UP</a></h3>
@@ -362,63 +360,54 @@
                             <h3>Pump {{$pump['Id']}} <a style="color:Blue">Filling</a></h3>
                             @endif
 
-                        <div class="label-input-group">
-                            <input type = "hidden" name="pumpid" value="{{$pump['Id']}}">
-                            <label for="price">Price:</label>
-                            @if ($pump['Type']==='PumpIdleStatus')
-                             <input readonly type="text" id="price"  name = "price" value="{{$pump['Data']['LastPrice']}}"/>
+                            <div class="label-input-group">
+                                <input type="hidden" name="pumpid" value="{{$pump['Id']}}">
+                                <label for="price">Price:</label>
+                                @if ($pump['Type']==='PumpIdleStatus')
+                                <input readonly type="text" id="price" name="price" value="{{$pump['Data']['LastPrice']}}" />
+                                @elseif ($pump['Type']==='PumpOfflineStatus')
+                                <input readonly type="text" id="price" name="price" value="0" />
+                                @elseif ($pump['Type']==='PumpFillingStatus')
+                                <input readonly type="text" id="price" name="price" value="{{$pump['Data']['Price']}}" />
+                                @endif
+                            </div>
+                            <div class="label-input-group">
+                                <label for="volume">Volume:</label>
+                                @if ($pump['Type']==='PumpIdleStatus')
+                                <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['LastVolume']}}" />
 
-                            @elseif ($pump['Type']==='PumpOfflineStatus')
-                            <input readonly type="text" id="price" name = "price" value="0"/>
-                            @elseif ($pump['Type']==='PumpFillingStatus')
-                            <input readonly type="text" id="price"  name = "price" value="{{$pump['Data']['Price']}}"/>
-                            @endif
-                        </div>
-                        <div class="label-input-group">
-                            <label for="volume">Volume:</label>
-                            @if ($pump['Type']==='PumpIdleStatus')
-                            <input readonly type="text" id="volume" name = "volume" value="{{$pump['Data']['LastVolume']}}"/>
+                                @elseif ($pump['Type']==='PumpOfflineStatus')
+                                <input readonly type="text" id="volume" name="volume" value="0" />
+                                @elseif ($pump['Type']==='PumpFillingStatus')
+                                <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['Volume']}}" />
+                                @endif
+                            </div>
+                            <div class="label-input-group">
+                                <label for="amount">Amount:</label>
+                                @if ($pump['Type']==='PumpIdleStatus')
+                                <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['LastAmount']}}" />
 
-                           @elseif ($pump['Type']==='PumpOfflineStatus')
-                           <input readonly type="text" id="volume" name = "volume" value="0"/>
-                           @elseif ($pump['Type']==='PumpFillingStatus')
-                           <input readonly type="text" id="volume"  name = "volume" value="{{$pump['Data']['Volume']}}"/>
-                           @endif
-
-                        </div>
-                        <div class="label-input-group">
-                            <label for="amount">Amount:</label>
-                            @if ($pump['Type']==='PumpIdleStatus')
-                            <input readonly type="text" id="amount" name = "amount" value="{{$pump['Data']['LastAmount']}}"/>
-
-                           @elseif ($pump['Type']==='PumpOfflineStatus')
-                           <input readonly ype="text" id="amount"  name = "amount" value="0"/>
-                           @elseif ($pump['Type']==='PumpFillingStatus')
-                           <input readonly type="text" id="amount"  name = "amount" value="{{$pump['Data']['Amount']}}"/>
-                           @endif
-
-
-                        </div>
-                        <div class="button-group">
-                            <button type="submit" class="start-button"  style="background-color: #00cc00; color: #fff">
-                              Authorize
-                          </button>
-                            <button class="stop-button" style="background-color: #ff0000; color: #fff">
-                                Stop
-                            </button>
-                        </div>
-
-                    </form>
-                        @endforeach
-
+                                @elseif ($pump['Type']==='PumpOfflineStatus')
+                                <input readonly ype="text" id="amount" name="amount" value="0" />
+                                @elseif ($pump['Type']==='PumpFillingStatus')
+                                <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['Amount']}}" />
+                                @endif
+                            </div>
+                            <div class="button-group">
+                                <button type="submit" class="start-button" style="background-color: #00cc00; color: #fff">
+                                    Authorize
+                                </button>
+                                <button class="stop-button" style="background-color: #ff0000; color: #fff">
+                                    Stop
+                                </button>
+                            </div>
+                       
+                        
                     </div>
-
-
-
-
+                    </form>
+                    @endforeach
+                   
                 </div>
-
-                {{-- end div --}}
             </div>
         </div>
         <div class="pos-buttons">
@@ -429,17 +418,13 @@
             <button>Reports</button>
             <button>Config</button>
         </div>
-
         <script type="text/javascript">
             const myinterval = setInterval(refressh, 500);
-
 
             function refressh() {
 
                 $('#pump-column').load(document.URL + " #pump-column");
             }
-
-
             var pumpdiv = document.getElementById("pumps-column");
             var mopdiv = document.getElementById("mop-column");
             var reportsdiv = document.getElementById("reports-column");
@@ -502,8 +487,6 @@
                     const display = document.getElementById('calculator-display');
                     display.value = '';
                 }
-
             });
         </script>
-
 </x-app-layout>
