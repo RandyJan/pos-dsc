@@ -340,31 +340,85 @@
             <!-- Fuel Pumps -->
             <div class="right-column column">
                 <h1>Fuel Pumps</h1>
+                {{-- start div --}}
+
+
+
                 <div class="pump-items-container">
-                    <div class="pump-item">
-                        <h3>Pump 1 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp Nozzle Up</h3>
+
+                    <div class=""  id="pump-column">
+                        @foreach ($datab as $pump )
+                        <form action="/authorizepump">
+                        @if ($pump['Type']==='PumpIdleStatus')
+
+                            @if ($pump['Data']['NozzleUp'] > 0)
+                            <h3>Pump {{$pump['Id']}} <a style="color:Green">NOZZLE UP</a></h3>
+                            @else
+                            <h3>Pump {{$pump['Id']}} <a style="color:Orange">IDLE</a></h3>
+                            @endif
+                            @elseif ($pump['Type']==='PumpOfflineStatus')
+                            <h3>Pump {{$pump['Id']}} <a style="color:Red">OFFLINE</a></h3>
+                            @elseif ($pump['Type']==='PumpFillingStatus')
+                            <h3>Pump {{$pump['Id']}} <a style="color:Blue">Filling</a></h3>
+                            @endif
+
                         <div class="label-input-group">
+                            <input type = "hidden" name="pumpid" value="{{$pump['Id']}}">
                             <label for="price">Price:</label>
-                            <input type="text" id="price" />
+                            @if ($pump['Type']==='PumpIdleStatus')
+                             <input readonly type="text" id="price"  name = "price" value="{{$pump['Data']['LastPrice']}}"/>
+
+                            @elseif ($pump['Type']==='PumpOfflineStatus')
+                            <input readonly type="text" id="price" name = "price" value="0"/>
+                            @elseif ($pump['Type']==='PumpFillingStatus')
+                            <input readonly type="text" id="price"  name = "price" value="{{$pump['Data']['Price']}}"/>
+                            @endif
                         </div>
                         <div class="label-input-group">
                             <label for="volume">Volume:</label>
-                            <input type="text" id="volume" />
+                            @if ($pump['Type']==='PumpIdleStatus')
+                            <input readonly type="text" id="volume" name = "volume" value="{{$pump['Data']['LastVolume']}}"/>
+
+                           @elseif ($pump['Type']==='PumpOfflineStatus')
+                           <input readonly type="text" id="volume" name = "volume" value="0"/>
+                           @elseif ($pump['Type']==='PumpFillingStatus')
+                           <input readonly type="text" id="volume"  name = "volume" value="{{$pump['Data']['Volume']}}"/>
+                           @endif
+
                         </div>
                         <div class="label-input-group">
                             <label for="amount">Amount:</label>
-                            <input type="text" id="amount" readonly />
+                            @if ($pump['Type']==='PumpIdleStatus')
+                            <input readonly type="text" id="amount" name = "amount" value="{{$pump['Data']['LastAmount']}}"/>
+
+                           @elseif ($pump['Type']==='PumpOfflineStatus')
+                           <input readonly ype="text" id="amount"  name = "amount" value="0"/>
+                           @elseif ($pump['Type']==='PumpFillingStatus')
+                           <input readonly type="text" id="amount"  name = "amount" value="{{$pump['Data']['Amount']}}"/>
+                           @endif
+
+
                         </div>
                         <div class="button-group">
-                            <button class="start-button" style="background-color: #00cc00; color: #fff">
-                                Start
-                            </button>
+                            <button type="submit" class="start-button"  style="background-color: #00cc00; color: #fff">
+                              Authorize
+                          </button>
                             <button class="stop-button" style="background-color: #ff0000; color: #fff">
                                 Stop
                             </button>
                         </div>
+
+                    </form>
+                        @endforeach
+
                     </div>
+
+
+
+
                 </div>
+
+                {{-- end div --}}
             </div>
         </div>
         <div class="pos-buttons">
@@ -382,7 +436,7 @@
 
             function refressh() {
 
-                $('#pumps-column').load(document.URL + " #pumps-column");
+                $('#pump-column').load(document.URL + " #pump-column");
             }
 
 

@@ -58,4 +58,33 @@ class pumpController extends Controller
 
         return view('pos')->with('datab', $finalpump);
     }
+    public function authorizejson(Request $request){
+        $pumpid = $request->input('pumpid');
+        $price = $request->input('price');
+        $volume = $request->input('volume');
+        $amount = $request->input('amount');
+
+         $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Basic ' . base64_encode('admin:admin')
+        ])->post('http://172.16.12.200/jsonPTS', [
+            'Protocol' => 'jsonPTS',
+            'Packets' => [
+                [
+                    'Id' => $pumpid,
+                    'Type' => 'PumpAuthorize',
+                    'Data' => [
+                        'Pump' => $pumpid,
+                        'Nozzle'=>1,
+                        'Type'=>'FullTank',
+                        'Price' =>$price
+                    ]
+
+            ]
+            ]
+        ]);
+        LOG::info($response);
+        return redirect()->route('pos');
+
+    }
 }
