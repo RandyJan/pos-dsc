@@ -364,7 +364,16 @@
                             @if ($pump['Type']==='PumpIdleStatus')
 
                             @if ($pump['Data']['NozzleUp'] > 0)
-                            <h3 style="background-color: lightgreen"> {{$pump['Id']}} <a>NOZZLE UP</a></h3>
+                            @if ($pump['Data']['NozzleUp'] === 1)
+                            <h3 style="background-color: lightgreen"> {{$pump['Id']}} <a>NOZZLE <a style="font-size:14px;color:red">(Premium)</a> </a></h3>
+                            @elseif ($pump['Data']['NozzleUp'] === 2)
+                            <h3 style="background-color: lightgreen"> {{$pump['Id']}} <a>NOZZLE <a style="font-size:14px;color:red">(Diesel)</a> </a></h3>
+                            @elseif ($pump['Data']['NozzleUp'] === 3)
+                            <h3 style="background-color: lightgreen"> {{$pump['Id']}} <a >NOZZLE <a style="font-size:14px;color:red">(Regular)</a> </a></h3>
+                            @else
+                            <h3 style="background-color: lightgreen"> {{$pump['Id']}} <a>NOZZLE  </a></h3>
+                            @endif
+
                             @else
                             <h3 style="background-color:#FFD580"> {{$pump['Id']}} <a>IDLE</a></h3>
                             @endif
