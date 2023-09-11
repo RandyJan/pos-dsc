@@ -357,6 +357,7 @@
 
                     @foreach ($datab as $pump )
                     <form action="/authorizepump">
+                        <form action="/stoppump">
                         <div class="pump-item text-dark">
 
 
@@ -410,9 +411,12 @@
                                 <button type="submit" class="start-button" style="background-color: #00cc00; color: #fff">
                                     Authorize
                                 </button>
-                                <button class="stop-button" style="background-color: #ff0000; color: #fff">
+
+                                <button type = "submit"
+                                class="stop-button" style="background-color: #ff0000; color: #fff">
                                     Stop
                                 </button>
+                            </form>
                             </div>
 
 

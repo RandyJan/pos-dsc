@@ -26,4 +26,5 @@ Route::get('/', function () {
 
 Route::get('/pos',[pumpController::class, 'pump'])->middleware(['auth'])->name('pos');
 Route::get('/authorizepump',[pumpController::class, 'authorizejson'])->middleware(['auth'])->name('authpump');
+Route::get('/stoppump',[pumpController::class, 'pumpstop'])->middleware(['auth'])->name('stoppump');
 require __DIR__.'/auth.php';

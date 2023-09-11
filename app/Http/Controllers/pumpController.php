@@ -47,7 +47,7 @@ class pumpController extends Controller
         ]);
 
         $data = $response->json();
-
+        LOG::info($data);
         $pumpId = json_encode($data['Packets'], true);
         $finalpump = json_decode($pumpId, true);
 
@@ -64,7 +64,7 @@ class pumpController extends Controller
         $volume = $request->input('volume');
         $amount = $request->input('amount');
 
-         $response = Http::withHeaders([
+         Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
         ])->post('http://172.16.12.200/jsonPTS', [
@@ -83,8 +83,31 @@ class pumpController extends Controller
             ]
             ]
         ]);
-        LOG::info($response);
+
         return redirect()->route('pos');
+
+    }
+    public function pumpstop(Request $request){
+        $pumpid =  $request->input('pumpid');
+       Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Basic ' . base64_encode('admin:admin')
+        ])->post('http://172.16.12.200/jsonPTS', [
+            'Protocol' => 'jsonPTS',
+            'Packets' => [
+                [
+                    'Id' => $pumpid,
+                    'Type' => 'PumpStop',
+                    'Data' => [
+                        'Pump' => $pumpid,
+
+                    ]
+
+            ]
+            ]
+        ]);
+        return redirect()->route('pos');
+
 
     }
 }
