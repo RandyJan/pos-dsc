@@ -212,13 +212,18 @@
                 background-color: #0056b3;
             }
 
+            /* Styles for the container of bottom buttons */
             .pos-buttons {
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 margin-top: 20px;
+                /* Adjust the top margin as needed */
+                padding: 10px 0;
+                /* Adjust the padding as needed */
             }
 
+            /* Style for the bottom buttons */
             .pos-buttons button {
                 padding: 10px 15px;
                 font-size: 15px;
@@ -228,13 +233,14 @@
                 border-radius: 5px;
                 cursor: pointer;
                 margin-right: 10px;
-                margin-top: -20px;
             }
 
+            /* Remove the margin-right from the last button */
             .pos-buttons button:last-child {
                 margin-right: 0;
             }
 
+            /* Hover style for the buttons */
             .pos-buttons button:hover {
                 background-color: #0056b3;
             }
@@ -250,12 +256,16 @@
                 background-color: rgba(0, 0, 0, 0.7);
             }
 
+            /* Style for the top modal content */
             .modal-content {
-                background-color: #fff;
-                margin: 10% auto;
+                width: 80%;
+                height: 80%;
+                overflow-y: auto;
+                margin: auto;
+                margin-top: 5%;
                 padding: 20px;
-                border-radius: 5px;
-                width: 60%;
+                border-radius: 10px;
+                background-color: #fff;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 position: relative;
             }
@@ -452,19 +462,91 @@
         <div id="pending-transaction-modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closePendingTransactionModal()">&times;</span>
-                <h2>Pending Transaction Details</h2>
-                <div class="table-container">
-                    <div class="item-display-container">
+                <h1>Pending Transaction Details</h1>
+                <div class="table-container" style="margin-top:0%">
+                    <div class="item-display-container" style="max-height: 500px; overflow-y: auto;">
                         <table class="item-table">
                             <thead>
-                                <th>Item</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
+                                <tr style="position: sticky; top: 0;  z-index: 1;">
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Product 1</td>
+                                    <td>$10.00</td>
+                                    <td>2</td>
+                                    <td>$20.00</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
