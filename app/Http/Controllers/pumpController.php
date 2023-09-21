@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
-use App\Models\transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -48,7 +47,7 @@ class pumpController extends Controller
         ]);
 
         $data = $response->json();
-
+        LOG::info($data);
         $pumpId = json_encode($data['Packets'], true);
         $finalpump = json_decode($pumpId, true);
 
@@ -85,78 +84,7 @@ class pumpController extends Controller
             ]
         ]);
 
-
         return redirect()->route('pos');
-
-    }
-    public function pendingtrans(){
-
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Basic ' . base64_encode('admin:admin')
-        ])->post('http://172.16.12.200/jsonPTS', [
-            'Protocol' => 'jsonPTS',
-            'Packets' => [
-                [
-                    'Id' => 1,
-                    'Type' => 'PumpGetStatus',
-                    'Data' => [
-                        'Pump' => 1
-                    ]
-                ],
-                [
-                    'Id' => 2,
-                    'Type' => 'PumpGetStatus',
-                    'Data' => [
-                        'Pump' => 2
-                    ]
-                ],  [
-                    'Id' => 3,
-                    'Type' => 'PumpGetStatus',
-                    'Data' => [
-                        'Pump' => 3
-                    ]
-                ],  [
-                    'Id' => 4,
-                    'Type' => 'PumpGetStatus',
-                    'Data' => [
-                        'Pump' => 4
-                    ]
-                ]
-            ]
-        ]);
-
-        $pumptype = json_decode($response->body(), true);
-
-        foreach($pumptype['Packets'] as $packet){
-            if($packet['Type'] === 'PumpEndOfTransactionStatus'){
-
-                $id = $packet['Id'];
-                $type = $packet['Type'];
-                $amount = $packet['Data']['Amount'];
-                $price = $packet['Data']['Price'];
-                $nozzle = $packet['Data']['Nozzle'];
-                $transaction = $packet['Data']['Transaction'];
-                $volume = $packet['Data']['Volume'];
-                $user = $packet['Data']['User'];
-
-                transaction::create([
-                    'pumpid' => $id,
-                    'pump' => $nozzle,
-                    'transaction' => $transaction,
-                    'state' => $type,
-                    'nozzle' =>$nozzle,
-                    'amount' => $amount,
-                    'volume' =>$volume,
-                    'price' => $price,
-                    'tcvolume' =>'testvolume',
-                    'totalamount'=>'testamount',
-                    'totalvolume' => 'totalvolume',
-                    'userid'=> $user
-                ]);
-            }
-        }
-
 
     }
     public function pumpstop(Request $request){
