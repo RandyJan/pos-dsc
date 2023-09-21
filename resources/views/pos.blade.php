@@ -282,6 +282,7 @@
     </head>
 
     <body>
+        <div id="app">
         <div class="pos-container">
             <div class="column left-column">
                 <!-- Item Display -->
@@ -380,6 +381,7 @@
             <!-- Fuel Pumps -->
             <div class="right-column column">
                 <h1>Fuel Pumps</h1>
+
                 <div class="pump-items-container" id="pump-column">
                     @foreach ($datab as $pump )
 
@@ -405,8 +407,9 @@
                             <h3 style="background-color: #FFCCCB"> {{$pump['Id']}} <a>OFFLINE</a></h3>
                             @elseif ($pump['Type']==='PumpFillingStatus')
                             <h3 style="background-color: lightblue"> {{$pump['Id']}} <a>Filling</a></h3>
-                            @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                <h3 style="background-color:#FFD580"> {{$pump['Id']}} <a>IDLE</a></h3>
+                            @else
+                            <h3 style="background-color:#FFD580"> {{$pump['Id']}} <a>IDLE</a></h3>
+
                             @endif
 
                             <div class="label-input-group">
@@ -419,7 +422,7 @@
                                 @elseif ($pump['Type']==='PumpFillingStatus')
                                 <input readonly type="text" id="price" name="price" value="{{$pump['Data']['Price']}}" />
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                    <input readonly type="text" id="price" name="price" value="{{$pump['Data']['Price']}}" />
+                                <input readonly type="text" id="price" name="price" value="{{$pump['Data']['Price']}}" />
                                 @endif
                             </div>
                             <div class="label-input-group">
@@ -483,77 +486,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                                 <tr>
                                     <td>Product 1</td>
                                     <td>$10.00</td>
                                     <td>2</td>
                                     <td>$20.00</td>
                                 </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>$10.00</td>
-                                    <td>2</td>
-                                    <td>$20.00</td>
+
                                 </tr>
                             </tbody>
                         </table>
@@ -570,7 +510,7 @@
             <button>Reports</button>
             <button>Config</button>
         </div>
-
+    </div>
         <script>
             const myinterval = setInterval(refresh, 500);
 
