@@ -9,6 +9,7 @@ class transaction extends Model
 {
     use HasFactory;
     protected $table = 'transaction';
+    protected $primaryKey = 'id';
     protected $fillable = [
         'pumpid',
         'pump',

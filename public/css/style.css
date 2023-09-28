@@ -1,0 +1,457 @@
+
+.pos-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    flex-wrap: wrap;
+}
+
+/* Styles for left column (Item Display and Calculator) */
+.left-column {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+}
+
+/* Styles for right column (Fuel Pumps) */
+.right-column {
+    flex: 1;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+    margin-left: 5px;
+    height: 600px;
+}
+
+/* Styles for the item display container */
+.item-display-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 150px;
+}
+
+h1 {
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+/* Styles for the item display table */
+.item-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-container {
+    margin-top: 20px;
+}
+
+.item-table th,
+.item-table td {
+    border: 1px solid #ccc;
+    /* padding: 10px; */
+    text-align: center;
+
+}
+
+.item-table th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.item-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Style the quantity input field */
+.item-table input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Styles for Calculator */
+.calculator-display {
+    width: 100%;
+    height: 40px;
+    font-size: 24px;
+    text-align: right;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px 15px;
+    background-color: #f9f9f9;
+    outline: none;
+    margin-top: 40px;
+    margin-bottom: 0px;
+
+}
+
+.calculator-container {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calculator-buttons {
+  flex: 1;
+  align-items: center;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 3px;
+    margin-top: 20px;
+
+}
+
+.calcbutton {
+    padding: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.calcbutton:hover {
+    background-color: #0056b3;
+}
+
+.calcbutton.clear-button,
+.calcbutton.special-button {
+    background-color: #ccc;
+    color: #333;
+}
+
+/* Styles for the container of pump items */
+.pump-items-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+/* Styles for Fuel Pumps Item */
+.pump-item {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    max-width: 170px;
+}
+
+/* Styles for labels inside the pump-item */
+.pump-item h3 {
+    font-size: 18px;
+}
+
+.label-input-group {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+}
+
+.label-input-group label {
+    flex: 0 0 auto;
+    width: 80px;
+    text-align: left;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.label-input-group .input-container {
+    flex: 1;
+}
+
+.label-input-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.button-group {
+    margin-top: 10px;
+    text-align: right;
+    background-color: black;
+white-space: nowrap;
+  }
+
+.start-button{
+    padding: 5px 10px;
+    margin: 0 6px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+.stop-button {
+    padding: 5px 10px;
+    margin: 0 6px;
+    font-size: 14px;
+    border-radius: 3px;
+}
+
+
+.pt-button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    font-size: 14px;
+    border-radius: 3px;
+    margin-top: 10px;
+}
+
+.start-button:hover,
+.stop-button:hover {
+    background-color: #0056b3;
+}
+
+/* Styles for the container of bottom buttons */
+.pos-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    /* Adjust the top margin as needed */
+    padding: 10px 0;
+    /* Adjust the padding as needed */
+}
+
+/* Style for the bottom buttons */
+.pos-buttons button {
+    /* padding: 10px 15px;
+    font-size: 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; */
+}
+
+/* Remove the margin-right from the last button */
+.pos-buttons button:last-child {
+    margin-right: 0;
+}
+
+/* Hover style for the buttons */
+.pos-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Style for the top modal content */
+.modal-content {
+    width: 80%;
+    height: 80%;
+    overflow-y: auto;
+    margin: auto;
+    margin-top: 5%;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+/* Style the close button for the modal */
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+button.calcbutton {
+    width: 100px;
+    height: 50px;
+    margin: 2px;
+  }
+  button.special-button {
+    width: 110px;
+    height: 50px;
+    margin: 2px;
+  }
+  button.clear-button {
+    width: 110px;
+    height: 50px;
+    margin: 2px;
+  }
+  .pos-but{
+    width: 110px;
+    height: 50px;
+    margin: 0px;
+    margin-top: 0px;
+    color: #fff;
+  }
+  .pos-buttons{
+    margin-top: 0px;
+    width: auto;
+  }
+.pos-shape{
+    /* display: inline-block; */
+
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    height: auto;
+    border-radius: 7px;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+margin: 10px;
+margin-left: 0px;
+    margin-top: 0px;
+    margin-bottom: 0%;
+}
+#mopdiv{
+    display: none;
+}
+#price{
+    height: 25px;
+}
+#volume{
+    height: 25px;
+}
+#amount{
+    height:25px;
+}
+#nonfuel-column{
+display: none;
+}
+#manual-column{
+    display: none;
+    }
+    #reports-column{
+        display: none;
+        }
+        #config-column{
+            display: none;
+            }
+@media(min-width:1024px) and (max-width:1336px){
+     button.calcbutton{
+    width: 80px;
+    height: 60px;
+  }
+  .item-display-container{
+    height: 90%;
+  }
+  .calculator-display{
+    position: relative;
+    bottom:30px;
+
+  }
+  .calculator-buttons{
+    position: relative;
+    bottom:30px;
+    right: 12px;
+  }
+  .button-group{
+    position:relative ;
+
+  }
+  .button-group button{
+    width: 30%;
+
+  }
+#price{
+    height: 25px;
+}
+#volume{
+    height: 25px;
+}
+#amount{
+    height:25px;
+}
+body{
+    overflow: hidden;
+}
+.right-column{
+    height: 600px;
+}
+.left-column{
+    height: 600px;
+}
+
+
+  }
+
+@media(max-width:1024px){
+    button.calcbutton{
+   width: 70px;
+   height: 60px;
+ }
+ .item-display-container{
+   height: 100%;
+ }
+ .calculator{
+    width: 100%;
+ }
+ .calculator-display{
+   position: relative;
+   bottom:-5px;
+   width: 100%;
+
+ }
+ .calculator-buttons{
+   position: relative;
+   bottom:-10px;
+   right: 12px;
+ }
+ .button-group{
+   position:relative ;
+ }
+ .button-group button{
+   width: 30%;
+
+ }
+#price{
+   height: 25px;
+}
+#volume{
+   height: 25px;
+}
+#amount{
+   height:25px;
+}
+body{
+   overflow: hidden;
+}
+.right-column{
+   height: 550px;
+}
+.left-column{
+   height: 550px;
+}
+
+
+ }
+
+

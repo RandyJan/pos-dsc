@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\transaction;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -30,13 +31,15 @@ class pumpController extends Controller
                     'Data' => [
                         'Pump' => 2
                     ]
-                ],  [
+                ],
+                [
                     'Id' => 3,
                     'Type' => 'PumpGetStatus',
                     'Data' => [
                         'Pump' => 3
                     ]
-                ],  [
+                ],
+                [
                     'Id' => 4,
                     'Type' => 'PumpGetStatus',
                     'Data' => [
@@ -47,24 +50,57 @@ class pumpController extends Controller
         ]);
 
         $data = $response->json();
-        LOG::info($data);
-        $pumpId = json_encode($data['Packets'], true);
-        $finalpump = json_decode($pumpId, true);
+        $packets = $data['Packets'];
+        // LOG::info($packets);
+        foreach ($packets as $packet) {
+            if ($packet['Type'] === 'PumpEndOfTransactionStatus') {
+                // Log::info("EOTTTT");
+                $transaction = new Transaction();
+                $transaction->pumpid = $packet['Data']['Pump'];
+                $transaction->pump = $packet['Data']['Pump'];
+                if($packet['Data']['Nozzle'] === 1){
+                    $transaction->nozzle = 'Premium';
+                }
+                elseif($packet['Data']['Nozzle']=== 2){
+                    $transaction->nozzle='Diesel';
+                }
+                else{
+                    $transaction->nozzle='Regular';
+                }
 
+                $transaction->volume = $packet['Data']['Volume'];
+                // $transaction->tcvolume = $packet['Data']['TCVolume'];
+                $transaction->price = $packet['Data']['Price'];
+                $transaction->amount = $packet['Data']['Amount'];
+                $transaction->transaction = $packet['Data']['Transaction'];
+                // $transaction->userid = $packet['Data']['User'];
+                $transaction->state = 0;
+                $existingrecord = transaction::where('transaction',$packet['Data']['Transaction'])->where('pumpid',$packet['Data']['Pump'])
+                ->where('volume', $packet['Data']['Volume'])->get();
+                if(Empty($existingrecord->count())){
+                    $transaction->save();
+                }
+                else{
+                   LOG::info($existingrecord);
+                }
 
+            }
+            }
 
+$pendingtrans = transaction::where('state',0)->get();
+            // LOG::info($pendingtrans);
 
-
-
-        return view('pos')->with('datab', $finalpump);
+            // dd($pendingtrans);
+        return view('pos')->with('datab', $packets)->with('pending', $pendingtrans);
     }
+
     public function authorizejson(Request $request){
         $pumpid = $request->input('pumpid');
         $price = $request->input('price');
-        $volume = $request->input('volume');
+        $nozzle = $request->input('nozzle');
         $amount = $request->input('amount');
-
-         Http::withHeaders([
+        LOG::info($nozzle);
+        $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
         ])->post('http://172.16.12.200/jsonPTS', [
@@ -75,7 +111,7 @@ class pumpController extends Controller
                     'Type' => 'PumpAuthorize',
                     'Data' => [
                         'Pump' => $pumpid,
-                        'Nozzle'=>1,
+                        'Nozzle'=>$nozzle,
                         'Type'=>'FullTank',
                         'Price' =>$price
                     ]
@@ -83,6 +119,7 @@ class pumpController extends Controller
             ]
             ]
         ]);
+        // LOG::info($response);
 
         return redirect()->route('pos');
 
