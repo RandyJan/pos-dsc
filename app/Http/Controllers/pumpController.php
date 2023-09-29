@@ -58,14 +58,12 @@ class pumpController extends Controller
                 $transaction = new Transaction();
                 $transaction->pumpid = $packet['Data']['Pump'];
                 $transaction->pump = $packet['Data']['Pump'];
-                if($packet['Data']['Nozzle'] === 1){
+                if ($packet['Data']['Nozzle'] === 1) {
                     $transaction->nozzle = 'Premium';
-                }
-                elseif($packet['Data']['Nozzle']=== 2){
-                    $transaction->nozzle='Diesel';
-                }
-                else{
-                    $transaction->nozzle='Regular';
+                } elseif ($packet['Data']['Nozzle'] === 2) {
+                    $transaction->nozzle = 'Diesel';
+                } else {
+                    $transaction->nozzle = 'Regular';
                 }
 
                 $transaction->volume = $packet['Data']['Volume'];
@@ -75,26 +73,25 @@ class pumpController extends Controller
                 $transaction->transaction = $packet['Data']['Transaction'];
                 // $transaction->userid = $packet['Data']['User'];
                 $transaction->state = 0;
-                $existingrecord = transaction::where('transaction',$packet['Data']['Transaction'])->where('pumpid',$packet['Data']['Pump'])
-                ->where('volume', $packet['Data']['Volume'])->get();
-                if(Empty($existingrecord->count())){
+                $existingrecord = transaction::where('transaction', $packet['Data']['Transaction'])->where('pumpid', $packet['Data']['Pump'])
+                    ->where('volume', $packet['Data']['Volume'])->get();
+                if (empty($existingrecord->count())) {
                     $transaction->save();
+                } else {
+                    LOG::info($existingrecord);
                 }
-                else{
-                   LOG::info($existingrecord);
-                }
-
             }
-            }
+        }
 
-$pendingtrans = transaction::where('state',0)->get();
-            // LOG::info($pendingtrans);
+        $pendingtrans = transaction::where('state', 0)->get();
+        // LOG::info($pendingtrans);
 
-            // dd($pendingtrans);
+        // dd($pendingtrans);
         return view('pos')->with('datab', $packets)->with('pending', $pendingtrans);
     }
 
-    public function authorizejson(Request $request){
+    public function authorizejson(Request $request)
+    {
         $pumpid = $request->input('pumpid');
         $price = $request->input('price');
         $nozzle = $request->input('nozzle');
@@ -111,22 +108,22 @@ $pendingtrans = transaction::where('state',0)->get();
                     'Type' => 'PumpAuthorize',
                     'Data' => [
                         'Pump' => $pumpid,
-                        'Nozzle'=>$nozzle,
-                        'Type'=>'FullTank',
-                        'Price' =>$price
+                        'Nozzle' => $nozzle,
+                        'Type' => 'FullTank',
+                        'Price' => $price
                     ]
 
-            ]
+                ]
             ]
         ]);
         // LOG::info($response);
 
         return redirect()->route('pos');
-
     }
-    public function pumpstop(Request $request){
+    public function pumpstop(Request $request)
+    {
         $pumpid =  $request->input('pumpid');
-       Http::withHeaders([
+        Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
         ])->post('http://172.16.12.200/jsonPTS', [
@@ -140,11 +137,9 @@ $pendingtrans = transaction::where('state',0)->get();
 
                     ]
 
-            ]
+                ]
             ]
         ]);
         return redirect()->route('pos');
-
-
     }
 }

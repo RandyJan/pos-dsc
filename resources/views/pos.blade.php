@@ -343,7 +343,8 @@ function authorize() {
             Swal.fire({
               title: 'Pump Authorized',
               icon: 'success',
-              scrollbarPadding: false
+              scrollbarPadding: false,
+              showConfirmButton: false
             });
             // document.getElementById("pump-data").setAttribute('action','/authorizepump');
             // document.getElementById("pump-data").submit();
