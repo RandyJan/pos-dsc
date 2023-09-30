@@ -51,6 +51,7 @@ class pumpController extends Controller
 
         $data = $response->json();
         $packets = $data['Packets'];
+        $pendingTransactionsByPump = [];
         // LOG::info($packets);
         foreach ($packets as $packet) {
             if ($packet['Type'] === 'PumpEndOfTransactionStatus') {
@@ -80,14 +81,34 @@ class pumpController extends Controller
                 } else {
                     LOG::info($existingrecord);
                 }
+
+                $pumpId = $packet['Data']['Pump'];
+                if (!isset($pendingTransactionsByPump[$pumpId])) {
+                    $pendingTransactionsByPump[$pumpId] = [];
+                }
+                $pendingTransactionsByPump[$pumpId][] = $transaction;
             }
         }
 
-        $pendingtrans = transaction::where('state', 0)->get();
+        // $pendingtrans = transaction::where('state', 0)->get();
+        // Fetch all pending transactions from the database
+        $pendingTransactions = Transaction::where('state', 0)->get();
+
+        // Group pending transactions by pump id
+        $pendingTransactionsByPump = [];
+        foreach ($pendingTransactions as $transaction) {
+            $pumpId = $transaction->pumpid;
+            if (!isset($pendingTransactionsByPump[$pumpId])) {
+                $pendingTransactionsByPump[$pumpId] = [];
+            }
+            $pendingTransactionsByPump[$pumpId][] = $transaction;
+        }
         // LOG::info($pendingtrans);
 
         // dd($pendingtrans);
-        return view('pos')->with('datab', $packets)->with('pending', $pendingtrans);
+        return view('pos')->with('datab', $packets)
+                     ->with('pending', $pendingTransactions)
+                     ->with('pendingTransactionsByPump', $pendingTransactionsByPump);
     }
 
     public function authorizejson(Request $request)
