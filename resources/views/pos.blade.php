@@ -138,25 +138,25 @@
                                 @if ($pump['Data']['NozzleUp'] > 0)
                                 <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}">
                                 @if ($pump['Data']['NozzleUp'] === 1)
-                                <h3 style="background-color: lightgreen" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Premium)</a> </a></h3>
+                                <h3 style="background-color: lightgreen;" class="card-header">{{$pump['Id']}}<a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Premium)</a> </a></h3>
 
                                 @elseif ($pump['Data']['NozzleUp'] === 2)
-                                <h3 style="background-color: lightgreen" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Diesel)</a> </a></h3>
+                                <h3 style="background-color: lightgreen" class="card-header"><a>{{$pump['Id']}} </a> <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Diesel)</a> </a></h3>
 
                                 @elseif ($pump['Data']['NozzleUp'] === 3)
-                                <h3 style="background-color: lightgreen" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Regular)</a> </a></h3>
+                                <h3 style="background-color: lightgreen" class="card-header"> <a>{{$pump['Id']}} </a> <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Regular)</a> </a></h3>
 
                                 @else
-                                <h3 style="background-color: lightgreen" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">NOZZLE </a></h3>
+                                <h3 style="background-color: lightgreen" class="card-header"> <a>{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
                                 @endif
 
                                 @else
-                                <h3 style="background-color:#FFD580;" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">IDLE</a></h3>
+                                <h3 style="background-color:#FFD580;" class="card-header"><a>{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
                                 @endif
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
-                                <h3 style="background-color: #FFCCCB" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">OFFLINE</a></h3>
+                                <h3 style="background-color: #FFCCCB" class="card-header"> <a>{{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
                                 @elseif ($pump['Type']==='PumpFillingStatus')
-                                <h3 style="background-color: lightblue" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
+                                <h3 style="background-color: lightblue" class="card-header"> <a>{{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
                                 <h3 style="background-color:darkgray" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">DONE</a></h3>
                                 @endif

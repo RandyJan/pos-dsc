@@ -1,0 +1,240 @@
+[33mcommit cea7d14eb1b81c3ea7cd48ac478ced09a05f4e4f[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Sat Sep 30 15:03:24 2023 +0800
+
+    update
+
+[33mcommit 7972a54cd4c02567e6b9a62dcb3fd9f260dc9a73[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Fri Sep 29 13:32:45 2023 +0800
+
+    update
+
+[33mcommit 06e080c65078cd15c938b9b10fcfaa7edf4cbcd8[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 28 16:52:33 2023 -0700
+
+    update
+
+[33mcommit d1d446af6e6ea4d6e47d4b60090e9e5e70e55c69[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 21 11:42:56 2023 -0700
+
+    Revert "Fixed pump 1 issue"
+    
+    This reverts commit d1410d897195b68cc9113a162d5d72776642cb0d.
+
+[33mcommit d1410d897195b68cc9113a162d5d72776642cb0d[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 21 10:55:07 2023 -0700
+
+    Fixed pump 1 issue
+
+[33mcommit 4e51b5e343adee45bbbe86094a55133607d21c25[m
+Author: Mark <dev.reymark@gmail.com>
+Date:   Wed Sep 13 16:11:53 2023 -0700
+
+    update
+
+[33mcommit 586580731fafdbf1f8140870f8e43e15d2d7cd8a[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Wed Sep 13 15:59:18 2023 -0700
+
+    added eot
+
+[33mcommit 88928fe9413f3a485f4ad2f658053a541dd07160[m
+Author: Mark <dev.reymark@gmail.com>
+Date:   Tue Sep 12 11:16:16 2023 -0700
+
+    Resize Modal
+
+[33mcommit 500c391cbb537cbebf74b073e19342a441ddd1a7[m
+Author: Mark <dev.reymark@gmail.com>
+Date:   Tue Sep 12 10:41:24 2023 -0700
+
+    Add Pending Transaction Button
+
+[33mcommit 581ed492d0616990b694c041525e2adc2c9698a5[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Mon Sep 11 16:07:51 2023 -0700
+
+    added products when nozzle up
+
+[33mcommit 2c50031b95fa0c812b49736b45425875921a39dc[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Mon Sep 11 15:51:29 2023 -0700
+
+    added database and model
+
+[33mcommit d81f7c37199712cb8d0bb8d2a04062fc65ad6a9d[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Sat Sep 9 14:58:03 2023 -0700
+
+    [update]added colors to the pump status text
+
+[33mcommit ba8d6acc65ed280851a0e000a0cc516fb44a97b0[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Sat Sep 9 14:05:50 2023 +0800
+
+    Reduce card size for pump item
+
+[33mcommit 5e7296c3da8750f58db54012729f9702c1318791[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Sat Sep 9 11:32:52 2023 +0800
+
+    Fix pump card
+
+[33mcommit f0a57864dd4d733915367ce257679f2295e62752[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Sat Sep 9 11:17:19 2023 +0800
+
+    Resize logo for nav
+
+[33mcommit 8496282a5e4d4d1053b93ec801f631585655a870[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Sat Sep 9 10:47:46 2023 +0800
+
+    Change Logo
+
+[33mcommit c22788197c341574ffc2ef6e80c3a11e2e3aa26e[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Sat Sep 9 10:19:38 2023 -0700
+
+    [update]Added functionality for authorize button
+
+[33mcommit 0c5825e6e31efc2887de4664175331659388ca9a[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Fri Sep 8 16:00:37 2023 +0800
+
+    [update] Fix table header
+
+[33mcommit f73c8b4415045a7ad0649e61a380eb633f066398[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Fri Sep 8 15:44:43 2023 +0800
+
+    [update] Improve UI
+
+[33mcommit 7f27a5f983a2fff60b407067e2bb99239a8654a6[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Fri Sep 8 09:45:31 2023 -0700
+
+    connected amount,price and volume to the controller
+
+[33mcommit fb18291ab56adc2370c7de3a439f685475b18233[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Thu Sep 7 16:35:57 2023 +0800
+
+    update
+
+[33mcommit 05754d7db52e3e21c094c36bb91a2b56ff757d0c[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 7 15:29:10 2023 -0700
+
+    successfully connected to PTS-Controller
+
+[33mcommit 45be10704c505c2800d8a34ffb94b6de9e420139[m
+Merge: 64f427c d593166
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 7 09:52:56 2023 -0700
+
+    update
+
+[33mcommit 64f427ca75bdb58c89735143a2689770a05ab213[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 7 09:39:49 2023 -0700
+
+    minor changes
+
+[33mcommit 28480fa2b7acce3d49ff33245a35cffc105591ef[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Thu Sep 7 09:32:35 2023 -0700
+
+    Back end coding has begun
+
+[33mcommit d5931668618b070d6b4473c652231f53748fab93[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Thu Sep 7 09:50:42 2023 +0800
+
+    update
+
+[33mcommit a82ac2df3df28796988cb916fbdee6df058b6463[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Thu Sep 7 09:46:34 2023 +0800
+
+    Revert "Back end coding has begun"
+    
+    This reverts commit 28480fa2b7acce3d49ff33245a35cffc105591ef.
+
+[33mcommit c6fdb74928c8870204063990f4153cea18ef485d[m
+Merge: 28a14f5 28480fa
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Thu Sep 7 09:38:33 2023 +0800
+
+    Merge branch 'main' of https://github.com/dev-reymark/pos-dsc
+
+[33mcommit 28a14f564e1fd88fbaa2288fd41d4ddc2052d5f5[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Thu Sep 7 09:36:43 2023 +0800
+
+    update
+
+[33mcommit 6de11206e2da8c8c0c4c37f52e4dad5944c20edc[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Wed Sep 6 12:41:39 2023 +0800
+
+    update
+
+[33mcommit a3fc7f6e38806995ecdd075e5bf317ff1a843ac9[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Wed Sep 6 10:12:42 2023 +0800
+
+    Resolved merge conflict
+
+[33mcommit 2968a9456229efa54222d5fa53bb2632ed6c4545[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Wed Sep 6 09:42:39 2023 -0700
+
+    corrected minor bug
+
+[33mcommit 1560ca72c53bb2f48d3dae42d31a1d853724c11d[m
+Merge: 6e9372c c61316b
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Wed Sep 6 09:40:38 2023 -0700
+
+    Merge branch 'main' of https://github.com/dev-reymark/pos-dsc
+
+[33mcommit 6e9372cda95657961cf5f2721d5c80471ca9dc30[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Wed Sep 6 09:39:52 2023 -0700
+
+    added functionalities of buttons at the bottom
+
+[33mcommit c99475f11ffb91b98959bde61c0f7af047bb5a15[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Tue Sep 5 14:57:51 2023 -0700
+
+    [update] fixed button size and added responsiveness
+
+[33mcommit 3e0a93c1d2288b5aed336f676f334d9202b4de54[m
+Author: Randy Jan <randyjan250@gmail.com>
+Date:   Tue Sep 5 14:07:10 2023 -0700
+
+    aded colors to the buttons
+
+[33mcommit c61316b836fd462a84a3a5f815d2193a77d4b8af[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Tue Sep 5 15:46:45 2023 +0800
+
+    [update] change title as 'POS'
+
+[33mcommit e0fa965ed103cf20436aadbda2abae287aef6e8b[m
+Author: dev-reymark <dev.reymark@gmail.com>
+Date:   Tue Sep 5 13:15:34 2023 +0800
+
+    [update]
+
+[33mcommit 5eaae0f28431b897679472fe4b679acba6cf8bb1[m
+Author: anthony allan paraiso <allan.paraiso@datalogicorp.net>
+Date:   Tue Sep 5 13:09:21 2023 +0800
+
+    POS Project
