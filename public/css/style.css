@@ -37,7 +37,7 @@
 .item-display-container {
     flex-grow: 1;
     overflow-y: auto;
-    max-height: 150px;
+    max-height: 200px;
 }
 
 h1 {
@@ -93,7 +93,7 @@ h1 {
     padding: 10px 15px;
     background-color: #f9f9f9;
     outline: none;
-    margin-top: 40px;
+    margin-top: 20px;
     margin-bottom: 0px;
 
 }
@@ -139,10 +139,12 @@ h1 {
 /* Styles for the container of pump items */
 .pump-items-container {
     display: flex;
+
     flex-wrap: wrap;
-    justify-content: space-between;
-    overflow-y: auto;
+    /* justify-content: space-evenly; */
+    /* overflow-y: auto; */
     max-height: 600px;
+    padding: 0px;
 }
 
 /* Styles for Fuel Pumps Item */
@@ -150,11 +152,14 @@ h1 {
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 5px;
+    padding: 0px;
     margin: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     max-width: 170px;
+    width: 100px;
+    height: 100px;
+
 }
 
 /* Styles for labels inside the pump-item */
@@ -355,6 +360,14 @@ display: none;
         #config-column{
             display: none;
             }
+.pump-number{
+    display: inline-block;
+    padding: 1px;
+    border-radius: 100%;
+    background-color: gray;
+    color:white;
+    margin-right: 3px;
+}
 @media(min-width:1024px) and (max-width:1336px){
      button.calcbutton{
     width: 80px;

@@ -125,12 +125,13 @@
                 </div>
 
                 <div id="pumpdiv">
+                    @foreach ($datab as $pump )
 
-                    <div class="pump-items-container" id="pump-column">
+                    <div class="pump-items-container"  id="pump-column">
 
-                        @foreach ($datab as $pump )
+
                         <form action="/authorizepump" method="GET" id="{{$pump['Id']}}">
-                            <div class="pump-item text-dark">
+                            <div class="pump-item text-dark" onclick="pumpDetails({{$pump['Id']}})">
 
 
                                 @if ($pump['Type']==='PumpIdleStatus')
@@ -138,29 +139,37 @@
                                 @if ($pump['Data']['NozzleUp'] > 0)
                                 <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}">
                                 @if ($pump['Data']['NozzleUp'] === 1)
-                                <h3 style="background-color: lightgreen;" class="card-header">{{$pump['Id']}}<a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Premium)</a> </a></h3>
-
+                                <h3 style="background-color: lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <center><img src="img/premium.png"></center>
                                 @elseif ($pump['Data']['NozzleUp'] === 2)
-                                <h3 style="background-color: lightgreen" class="card-header"><a>{{$pump['Id']}} </a> <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Diesel)</a> </a></h3>
-
+                                <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <center><img src="img/diesel.png"></center>
                                 @elseif ($pump['Data']['NozzleUp'] === 3)
-                                <h3 style="background-color: lightgreen" class="card-header"> <a>{{$pump['Id']}} </a> <a class="card-header-title p-0">NOZZLE <a style="font-size:14px;color:red">(Regular)</a> </a></h3>
-
+                                <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <center><img src="img/regular.png"></center>
                                 @else
-                                <h3 style="background-color: lightgreen" class="card-header"> <a>{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+
                                 @endif
 
                                 @else
-                                <h3 style="background-color:#FFD580;" class="card-header"><a>{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
+                                <h3 style="background-color:#FFD580;" class="card-header"><a class="pump-number">{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
+                                <center><img src="img/idle.png"></center>
                                 @endif
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
-                                <h3 style="background-color: #FFCCCB" class="card-header"> <a>{{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
+                                <h3 style="background-color: #FFCCCB" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
+                                <center><img src="img/offline.png"></center>
                                 @elseif ($pump['Type']==='PumpFillingStatus')
-                                <h3 style="background-color: lightblue" class="card-header"> <a>{{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
+                                <h3 style="background-color: lightblue" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
+                                <center><img src="img/refilling-bar.gif"></center>
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                <h3 style="background-color:darkgray" class="card-header"> {{$pump['Id']}} <a class="card-header-title p-0">DONE</a></h3>
+                                <h3 style="background-color:lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
+                                <center><img src="img/done-filling.gif"></center>
                                 @endif
 
+
+
+                     <div id="pump-details-{{$pump['Id']}}" style = "display: none" >
                                 <div class="label-input-group">
 
                                     <label for="price">Price:</label>
@@ -201,10 +210,11 @@
                                     @endif
                                 </div>
 
+
                                 <input type="hidden" name="pumpid" value="{{$pump['Id']}}">
-                                {{-- <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}"> --}}
+
                                 <div class="btn-group">
-                                    <button type="submit" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
+                                    <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
                                         Authorize
                                     </button>
 
@@ -213,6 +223,7 @@
                                     </button>
 
                                 </div>
+
                         </form>
 
                         <div style="display: none" class="item-display-container" id="pending-table-{{ $pump['Id'] }}">
@@ -252,6 +263,10 @@
                         </button>
 
                     </div>
+
+                    </div>
+
+
 
                     @endforeach
                     {{-- Mode of payment --}}
@@ -327,8 +342,28 @@
                 });
             });
 
-            function authorize() {
-                var pumpdataform = document.getElementById("pump-data");
+            function pumpDetails(Id){
+                var details = document.getElementById("pump-details-" + Id).innerHTML;
+                var id = Id;
+            const mySwal = Swal.fire({
+                title: 'Pump ' + id,
+                html: details,
+                scrollbarPadding: false
+                });
+
+                setInterval(function() {
+                    var newDetails = document.getElementById("pump-details-" + Id).innerHTML;
+
+                mySwal.update({
+                    html: newDetails
+                });
+                }, 500);
+
+                            }
+
+            function authorize(Id) {
+                document.getElementById(Id).setAttribute('action', '/authorizepump');
+                        document.getElementById(Id).submit();
 
                 function isDocumentReady() {
                     Swal.fire({
