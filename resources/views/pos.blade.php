@@ -169,10 +169,11 @@
 
 
 
-                     <div id="pump-details-{{$pump['Id']}}" style = "display: none" >
+                           <div id="pump-details-{{$pump['Id']}}" class = "pump-details" style = "display: none;" >
                                 <div class="label-input-group">
 
                                     <label for="price">Price:</label>
+
                                     @if ($pump['Type']==='PumpIdleStatus')
                                     <input readonly type="text" id="price" name="price" value="{{$pump['Data']['LastPrice']}}" />
                                     @elseif ($pump['Type']==='PumpOfflineStatus')
@@ -182,6 +183,7 @@
                                     @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
                                     <input readonly type="text" id="price" name="eotprice" value="{{$pump['Data']['Price']}}" />
                                     @endif
+
                                 </div>
                                 <div class="label-input-group">
                                     <label for="volume">Volume:</label>
@@ -321,7 +323,8 @@
                 Swal.fire({
                     title: 'Pending Transaction Table',
                     html: tableContent,
-                    scrollbarPadding: false
+                    scrollbarPadding: false,
+
                 });
             }
 
@@ -348,7 +351,9 @@
             const mySwal = Swal.fire({
                 title: 'Pump ' + id,
                 html: details,
-                scrollbarPadding: false
+                scrollbarPadding: false,
+                showCloseButton:true,
+                showConfirmButton: false
                 });
 
                 setInterval(function() {
