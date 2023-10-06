@@ -141,7 +141,7 @@ h1 {
 /* Styles for the container of pump items */
 .pump-items-container {
     display: flex;
-
+    align-items: start;
     flex-wrap: wrap;
     /* justify-content: space-evenly; */
     /* overflow-y: auto; */
@@ -296,7 +296,7 @@ white-space: nowrap;
     cursor: pointer;
 }
 button.calcbutton {
-    width: 80px;
+    width: 110px;
     height: 50px;
     margin: 2px;
   }
@@ -338,8 +338,8 @@ margin-left: 0px;
     margin-top: 0px;
     margin-bottom: 0%;
 }
-#mopdiv{
-    display: none;
+#mop-div{
+   display: none;
 }
 #price{
     font-size: 20px;
@@ -373,6 +373,7 @@ display: none;
     color:white;
     margin-right: 3px;
 }
+
 @media(min-width:1024px) and (max-width:1336px){
      button.calcbutton{
     width: 80px;

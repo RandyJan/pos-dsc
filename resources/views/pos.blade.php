@@ -124,14 +124,16 @@
                     </ul>
                 </div>
 
-                <div id="pumpdiv">
+
+                <div id="pump-div" class="pump-items-container">
+
                     @foreach ($datab as $pump )
 
                     <div class="pump-items-container"  id="pump-column">
 
 
                         <form action="/authorizepump" method="GET" id="{{$pump['Id']}}">
-                            <div class="pump-item text-dark" onclick="pumpDetails({{$pump['Id']}})">
+                            <div class="pump-item text-dark" onclick="pumpDetails({{$pump['Id']}})"  id="pump-column">
 
 
                                 @if ($pump['Type']==='PumpIdleStatus')
@@ -165,14 +167,15 @@
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
                                 <h3 style="background-color:lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
                                 <center><img src="img/done-filling.gif"></center>
+                                @else
+                                <h1>you have no pumps</h1>
                                 @endif
-
-
+                            </div>
 
                            <div id="pump-details-{{$pump['Id']}}" class = "pump-details" style = "display: none;" >
                                 <div class="label-input-group">
 
-                                    <label for="price">Price:</label>
+                                    <label for="price"  style="font-size: 20px">Price:</label>
 
                                     @if ($pump['Type']==='PumpIdleStatus')
                                     <input readonly type="text" id="price" name="price" value="{{$pump['Data']['LastPrice']}}" />
@@ -186,7 +189,7 @@
 
                                 </div>
                                 <div class="label-input-group">
-                                    <label for="volume">Volume:</label>
+                                    <label for="volume" style="font-size: 20px" >Volume:</label>
                                     @if ($pump['Type']==='PumpIdleStatus')
                                     <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['LastVolume']}}" />
 
@@ -199,7 +202,7 @@
                                     @endif
                                 </div>
                                 <div class="label-input-group">
-                                    <label for="amount">Amount:</label>
+                                    <label for="amount" style="font-size: 20px">Amount:</label>
                                     @if ($pump['Type']==='PumpIdleStatus')
                                     <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['LastAmount']}}" />
 
@@ -216,102 +219,114 @@
                                 <input type="hidden" name="pumpid" value="{{$pump['Id']}}">
 
                                 <div class="btn-group">
-                                    <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
+                                        <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
                                         Authorize
-                                    </button>
+                                         </button>
 
-                                    <button type="button" class="stop-button " style="background-color: #ff0000; color: #fff;" onclick="stop({{$pump['Id']}})">
+                                          <button type="button" class="stop-button " style="background-color: #ff0000; color: #fff;" onclick="stop({{$pump['Id']}})">
                                         Stop
-                                    </button>
+                                          </button>
 
+                                 </div>
+
+                                      </form>
+
+
+                                   <div style="display: none" class="item-display-container" id="pending-table-{{ $pump['Id'] }}">
+                                        <div class="item-display-container">
+                                             <table class="item-table">
+                                                <thead>
+                                                    <tr style="position: sticky; top: 0; z-index: 1;">
+                                                        <th>Nozzle</th>
+                                                        <th>Price</th>
+                                                        <th>Volume</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                      <tbody>
+                                                            @if (isset($pendingTransactionsByPump[$pump['Id']]) && count($pendingTransactionsByPump[$pump['Id']]) > 0)
+                                                            @foreach ($pendingTransactionsByPump[$pump['Id']] as $transaction)
+                                                            <tr>
+                                                                <td>{{ $transaction->nozzle }}</td>
+                                                                <td>{{ $transaction->price }}</td>
+                                                                <td>{{ $transaction->volume }}</td>
+                                                                <td>{{ $transaction->amount }}</td>
+                                                            </tr>
+                                                            @endforeach
+                                                            @else
+                                                            <tr>
+                                                                <td colspan="4">No pending transactions for this pump.</td>
+                                                            </tr>
+                                                              @endif
+                                                      </tbody>
+                                             </table>
+                                         </div>
+                                    </div>
+
+
+                                        <button type="button" class="pt-button" style="background-color: #007bff; color: #fff" onclick="showTable({{ $pump['Id'] }})">
+                                             Pending Transaction
+                                        </button>
                                 </div>
-
-                        </form>
-
-                        <div style="display: none" class="item-display-container" id="pending-table-{{ $pump['Id'] }}">
-                            <div class="item-display-container">
-                                <table class="item-table">
-                                    <thead>
-                                        <tr style="position: sticky; top: 0; z-index: 1;">
-                                            <th>Nozzle</th>
-                                            <th>Price</th>
-                                            <th>Volume</th>
-                                            <th>Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @if (isset($pendingTransactionsByPump[$pump['Id']]) && count($pendingTransactionsByPump[$pump['Id']]) > 0)
-                                        @foreach ($pendingTransactionsByPump[$pump['Id']] as $transaction)
-                                        <tr>
-                                            <td>{{ $transaction->nozzle }}</td>
-                                            <td>{{ $transaction->price }}</td>
-                                            <td>{{ $transaction->volume }}</td>
-                                            <td>{{ $transaction->amount }}</td>
-                                        </tr>
-                                        @endforeach
-                                        @else
-                                        <tr>
-                                            <td colspan="4">No pending transactions for this pump.</td>
-                                        </tr>
-                                        @endif
-                                    </tbody>
-                                </table>
                             </div>
-                        </div>
+                                @endforeach
 
-
-                        <button type="button" class="pt-button" style="background-color: #007bff; color: #fff" onclick="showTable({{ $pump['Id'] }})">
-                            Pending Transaction
-                        </button>
-
-                    </div>
-
-                    </div>
+                            </div>
 
 
 
-                    @endforeach
+
+
+
                     {{-- Mode of payment --}}
+                    <div id="mop-div" >
 
-                </div>
-                <div id="mopdiv">
+                        <button class="calcbutton">GCASH</button>
+                        <button class="calcbutton">PAYMAYA</button>
+                        <button class="calcbutton">BANK</button>
+                        <button class="calcbutton">BDO</button>
+                    </div>
 
-                    <button class="calcbutton">GCASH</button>
-                    <button class="calcbutton">PAYMAYA</button>
-                    <button class="calcbutton">BANK</button>
-                    <button class="calcbutton">BDO</button>
-                </div>
-                <div id="reports-column">
+                    <div id="reports-column">
 
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                </div>
-                <div id="nonfuel-column">
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                    </div>
+                    <div id="nonfuel-column">
 
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                </div>
-                <div id="manual-column">
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                    </div>
+                    <div id="manual-column">
 
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                </div>
-                <div id="config-column">
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                    </div>
+                    <div id="config-column">
 
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                    <button class="calcbutton">Lorem ipsum</button>
-                </div>
-            </div>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                        <button class="calcbutton">Lorem ipsum</button>
+                    </div>
+
+
         </div>
-        </div>
+
+     </div>
+
+
+
+
+
+
+
 
         <!-- MODAL -->
 
@@ -424,22 +439,26 @@
             const myinterval = setInterval(refresh, 500);
 
             function refresh() {
-                $('#pump-column').load(document.URL + " #pump-column");
+                $('#pump-div').load(document.URL + " #pump-div");
             }
-            var pumpdiv = document.getElementById("pump-column");
-            var mopdiv = document.getElementById("mopdiv");
+            var pumpdiv = document.getElementById("pump-div");
+            var mopdiv = document.getElementById("mop-div");
             var reportsdiv = document.getElementById("reports-column");
             var nonfueldiv = document.getElementById("nonfuel-column");
             var manualdiv = document.getElementById("manual-column");
             var configdiv = document.getElementById("config-column");
 
+
             function mop() {
+
                 reportsdiv.style.display = "none";
                 pumpdiv.style.display = "none";
                 nonfueldiv.style.display = "none";
                 manualdiv.style.display = "none"
-                mopdiv.style.display = "block";
                 configdiv.style.display = "none";
+                // mopdiv.style.display = "block";
+                mopdiv.setAttribute('style','display:block');
+                // $("#mop-div").show();
                 console.log('mop clicked!');
 
                 document.getElementById("mop-nav").setAttribute('class', 'is-active');
@@ -451,6 +470,7 @@
             }
 
             function reports() {
+                console.log("reports");
                 pumpdiv.style.display = "none";
                 mopdiv.style.display = "none";
                 nonfueldiv.style.display = "none";
@@ -466,6 +486,7 @@
             }
 
             function nonfuel() {
+                console.log("nonfuel");
                 pumpdiv.style.display = "none";
                 mopdiv.style.display = "none";
                 reportsdiv.style.display = "none";
@@ -481,12 +502,14 @@
             }
 
             function pumps() {
+                console.log("pumps")
                 mopdiv.style.display = "none";
                 reportsdiv.style.display = "none";
                 nonfueldiv.style.display = "none";
                 manualdiv.style.display = "none";
                 configdiv.style.display = "none";
-                pumpdiv.style.display = "block";
+                // pumpdiv.style.display = "block";
+                pumpdiv.setAttribute('style','display:block');
                 document.getElementById("mop-nav").setAttribute('class', '');
                 document.getElementById("pump-nav").setAttribute('class', 'is-active');
                 document.getElementById("config-nav").setAttribute('class', '');
@@ -502,6 +525,7 @@
                 pumpdiv.style.display = "none";
                 manualdiv.style.display = "block";
                 configdiv.style.display = "none";
+                console.log("manual");
                 document.getElementById("mop-nav").setAttribute('class', '');
                 document.getElementById("pump-nav").setAttribute('class', '');
                 document.getElementById("config-nav").setAttribute('class', '');
@@ -511,6 +535,7 @@
             }
 
             function config() {
+                console.log("config");
                 mopdiv.style.display = "none";
                 reportsdiv.style.display = "none";
                 nonfueldiv.style.display = "none";
