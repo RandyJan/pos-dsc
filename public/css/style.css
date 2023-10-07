@@ -382,6 +382,27 @@ display: none;
     margin: 5px;
     border-radius: 10px;
 }
+.img-icon{
+    position: absolute;
+    opacity:0.5;
+    margin-left:15px;
+}
+.pump-thumb-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+.pump-thumb-details{
+    margin-top:35px;
+     position:relative;
+     font-size:14px;
+     align-items:center;
+     font-weight:bold;
+
+}
+.pump-thumb-details p{
+    text-align: center;
+}
 @media(min-width:1024px) and (max-width:1336px){
      button.calcbutton{
     width: 80px;

@@ -7,7 +7,7 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-
+use Illuminate\Support\Facades\Cache;
 class pumpController extends Controller
 {
     public function pump(Request $request)
@@ -106,18 +106,29 @@ class pumpController extends Controller
         // LOG::info($pendingtrans);
 
         // dd($pendingtrans);
+    //     $mopresponse = Http::withHeaders([
+    //         'Content-Type'=>'application/json',
+    //     ])->get('http://172.16.12.178:88/api/finalisations');
+
+    //    $mop = $mopresponse['data'];
+    function getMopData() {
         $mopresponse = Http::withHeaders([
             'Content-Type'=>'application/json',
         ])->get('http://172.16.12.178:88/api/finalisations');
 
-       $mop = $mopresponse['data'];
+        return $mopresponse['data'];
+    }
+    $mop = Cache::remember('mop_data', 60, function () {
+        return getMopData();
+    });
+                return view('pos')->with('datab', $packets)
+                ->with('pending', $pendingTransactions)
+                ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
+                ->with('mopData',$mop);
 
-            LOG::info($mop);
 
-        return view('pos')->with('datab', $packets)
-                     ->with('pending', $pendingTransactions)
-                     ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
-                     ->with('mopData',$mop);
+            // LOG::info($mop);
+
 
     }
 

@@ -142,13 +142,19 @@
                                 <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}">
                                 @if ($pump['Data']['NozzleUp'] === 1)
                                 <h3 style="background-color: lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                                <center><img src="img/premium.png"></center>
+                                <center><img src="img/premium.png"  class="img-icon"></center>
+                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
                                 @elseif ($pump['Data']['NozzleUp'] === 2)
                                 <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                                <center><img src="img/diesel.png"></center>
+                                <center><img src="img/diesel.png"  class="img-icon"></center>
+                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
                                 @elseif ($pump['Data']['NozzleUp'] === 3)
                                 <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                                <center><img src="img/regular.png"></center>
+                                <center><img src="img/regular.png" class="img-icon"></center>
+                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
                                 @else
                                 <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
 
@@ -156,14 +162,19 @@
 
                                 @else
                                 <h3 style="background-color:#FFD580;" class="card-header"><a class="pump-number">{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
-                                <center><img src="img/idle.png"></center>
+                                <center><img src="img/idle.png" class="img-icon"></center>
+                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
                                 @endif
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
                                 <h3 style="background-color: #FFCCCB" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
                                 <center><img src="img/offline.png"></center>
                                 @elseif ($pump['Type']==='PumpFillingStatus')
                                 <h3 style="background-color: lightblue" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
-                                <center><img src="img/refilling-bar.gif"></center>
+                                <center><img src="img/refilling-bar.gif"  class="img-icon" style="margin-left:25px;opacity:1">   </center>
+                                  <div class="pump-thumb-details"><p>A: {{ $pump['Data']['Amount'] }}<br>
+                                    L: {{ $pump['Data']['Volume'] }}</p></div>
+
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
                                 <h3 style="background-color:lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
                                 <center><img src="img/done-filling.gif"></center>
@@ -282,7 +293,7 @@
                     <div id="mop-div" class="mop-column">
                         @foreach($mopData as $mop)
 
-                        <button type="button" id="mop-btn" style="min-width:190px" onClick="addmop({{$mop['id']}},{{$mop['name']}})">{{$mop['name']}}</button>
+                        <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['keyNum']}})">{{$mop['name']}}</button>
 
                         @endforeach
                     </div>
@@ -404,9 +415,7 @@
                     document.addEventListener('DOMContentLoaded', isDocumentReady);
                 }
             }
-function addmop(id,name){
-    alert(id,name);
-}
+
             function stop(Id) {
                 Swal.fire({
                     title: 'Stop pump',
@@ -564,6 +573,10 @@ function addmop(id,name){
                 var modal = document.getElementById("pending-transaction-modal");
                 modal.style.display = "none";
             }
+            function addmop(id,name){
+    alert(id);
+    console.log(name);
+}
         </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
     </body>
