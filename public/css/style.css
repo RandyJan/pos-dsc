@@ -373,7 +373,15 @@ display: none;
     color:white;
     margin-right: 3px;
 }
-
+#mop-btn{
+    /* display: grid;
+    grid-template-columns: repeat(6, 1fr); */
+    background-color:  #007bff;
+    color: white;
+    padding:10px;
+    margin: 5px;
+    border-radius: 10px;
+}
 @media(min-width:1024px) and (max-width:1336px){
      button.calcbutton{
     width: 80px;

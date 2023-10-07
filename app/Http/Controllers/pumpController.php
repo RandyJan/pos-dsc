@@ -106,9 +106,19 @@ class pumpController extends Controller
         // LOG::info($pendingtrans);
 
         // dd($pendingtrans);
+        $mopresponse = Http::withHeaders([
+            'Content-Type'=>'application/json',
+        ])->get('http://172.16.12.178:88/api/finalisations');
+
+       $mop = $mopresponse['data'];
+
+            LOG::info($mop);
+
         return view('pos')->with('datab', $packets)
                      ->with('pending', $pendingTransactions)
-                     ->with('pendingTransactionsByPump', $pendingTransactionsByPump);
+                     ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
+                     ->with('mopData',$mop);
+
     }
 
     public function authorizejson(Request $request)

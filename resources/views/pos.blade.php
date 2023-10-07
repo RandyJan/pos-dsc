@@ -279,12 +279,12 @@
 
 
                     {{-- Mode of payment --}}
-                    <div id="mop-div" >
+                    <div id="mop-div" class="mop-column">
+                        @foreach($mopData as $mop)
 
-                        <button class="calcbutton">GCASH</button>
-                        <button class="calcbutton">PAYMAYA</button>
-                        <button class="calcbutton">BANK</button>
-                        <button class="calcbutton">BDO</button>
+                        <button type="button" id="mop-btn" style="min-width:190px" onClick="addmop({{$mop['id']}},{{$mop['name']}})">{{$mop['name']}}</button>
+
+                        @endforeach
                     </div>
 
                     <div id="reports-column">
@@ -404,7 +404,9 @@
                     document.addEventListener('DOMContentLoaded', isDocumentReady);
                 }
             }
-
+function addmop(id,name){
+    alert(id,name);
+}
             function stop(Id) {
                 Swal.fire({
                     title: 'Stop pump',
