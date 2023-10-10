@@ -19,59 +19,23 @@
                         <table class="item-table">
                             <thead>
                                 <tr style="position: sticky; top: 0;  z-index: 1;">
-                                    <th>Item</th>
+                                    <th>Pump ID</th>
+                                    <th>Nozzle</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
+                                    <td id="pump"></td>
+                                    <td id="nozzle"></td>
+                                    <td id="price"></td>
+                                    <td id="volume"></td>
+                                    <td id="amount"></td>
+                                    <td id="state"></td>
                                 </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
-                                </tr>
-
-                                <tr>
-                                    <td>Product 1</td>
-                                    <td>Php10.00</td>
-                                    <td>2</td>
-                                    <td>Php20.00</td>
-                                </tr>
-
-
                             </tbody>
                         </table>
                     </div>
@@ -80,13 +44,13 @@
                 <!-- Calculator Buttons Container -->
                 <div class="calculator-buttons-container">
                     <div class="calculator">
-                        <input type="text" readonly class="calculator-display" placeholder="0.00" />
+                        <input type="number" class="calculator-display" id="amountPaid" placeholder="0.00" />
                     </div>
                     <div class="calculator-buttons">
                         <button class="calcbutton" onclick="appendToDisplay('7')">7</button>
                         <button class="calcbutton" onclick="appendToDisplay('8')">8</button>
                         <button class="calcbutton" onclick="appendToDisplay('9')">9</button>
-                        <button class="calcbutton clear-button" onclick="clearDisplay()"> Clear</button>
+                        <button class="calcbutton clear-button" id="clearButton"> Clear</button>
                         <button class="calcbutton special-button">Void</button>
                         <button class="calcbutton special-button">Preset</button>
                         <button class="calcbutton" onclick="appendToDisplay('4')">4</button>
@@ -104,7 +68,7 @@
                         <button class="calcbutton" onclick="appendToDisplay('0')">0</button>
                         <button class="calcbutton" onclick="appendToDisplay('00')">00</button>
                         <button class="calcbutton" onclick="appendToDisplay('.')">.</button>
-                        <button class="calcbutton special-button">Safe Drop</button>
+                        <button class="calcbutton special-button" id="calculateButton">Enter</button>
                         <button class="calcbutton special-button">All Stop</button>
                         <button class="calcbutton special-button">All Auth</button>
                     </div>
@@ -129,11 +93,11 @@
 
                     @foreach ($datab as $pump )
 
-                    <div class="pump-items-container"  id="pump-column">
+                    <div class="pump-items-container" id="pump-column">
 
 
                         <form action="/authorizepump" method="GET" id="{{$pump['Id']}}">
-                            <div class="pump-item text-dark" onclick="pumpDetails({{$pump['Id']}})"  id="pump-column">
+                            <div class="pump-item text-dark" onclick="pumpDetails({{$pump['Id']}})" id="pump-column">
 
 
                                 @if ($pump['Type']==='PumpIdleStatus')
@@ -141,52 +105,62 @@
                                 @if ($pump['Data']['NozzleUp'] > 0)
                                 <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}">
                                 @if ($pump['Data']['NozzleUp'] === 1)
-                                <h3 style="background-color: lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                                <center><img src="img/premium.png"  class="img-icon"></center>
-                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
+                                <h3 style="background-color: lightgreen" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <center><img src="img/premium.png" class="img-icon"></center>
+                                <div class="pump-thumb-details">
+                                    <p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                        L: {{ $pump['Data']['LastVolume'] }}</p>
+                                </div>
                                 @elseif ($pump['Data']['NozzleUp'] === 2)
-                                <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                                <center><img src="img/diesel.png"  class="img-icon"></center>
-                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
+                                <h3 style="background-color: lightgreen" class="card-header"> <a class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <center><img src="img/diesel.png" class="img-icon"></center>
+                                <div class="pump-thumb-details">
+                                    <p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                        L: {{ $pump['Data']['LastVolume'] }}</p>
+                                </div>
                                 @elseif ($pump['Data']['NozzleUp'] === 3)
-                                <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <h3 style="background-color: lightgreen" class="card-header"> <a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
                                 <center><img src="img/regular.png" class="img-icon"></center>
-                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
+                                <div class="pump-thumb-details">
+                                    <p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                        L: {{ $pump['Data']['LastVolume'] }}</p>
+                                </div>
                                 @else
-                                <h3 style="background-color: lightgreen" class="card-header"> <a  class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                <h3 style="background-color: lightgreen" class="card-header"> <a class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
 
                                 @endif
 
                                 @else
                                 <h3 style="background-color:#FFD580;" class="card-header"><a class="pump-number">{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
                                 <center><img src="img/idle.png" class="img-icon"></center>
-                                <div class="pump-thumb-details"><p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p></div>
+                                <div class="pump-thumb-details">
+                                    <p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                        L: {{ $pump['Data']['LastVolume'] }}</p>
+                                </div>
                                 @endif
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
-                                <h3 style="background-color: #FFCCCB" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
+                                <h3 style="background-color: #FFCCCB" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
                                 <center><img src="img/offline.png"></center>
                                 @elseif ($pump['Type']==='PumpFillingStatus')
-                                <h3 style="background-color: lightblue" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
-                                <center><img src="img/refilling-bar.gif"  class="img-icon" style="margin-left:25px;opacity:1">   </center>
-                                  <div class="pump-thumb-details"><p>A: {{ $pump['Data']['Amount'] }}<br>
-                                    L: {{ $pump['Data']['Volume'] }}</p></div>
+                                <h3 style="background-color: lightblue" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
+                                <center><img src="img/refilling-bar.gif" class="img-icon" style="margin-left:25px;opacity:1"> </center>
+                                <div class="pump-thumb-details">
+                                    <p>A: {{ $pump['Data']['Amount'] }}<br>
+                                        L: {{ $pump['Data']['Volume'] }}</p>
+                                </div>
 
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                <h3 style="background-color:lightgreen" class="card-header"><a  class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
+                                <h3 style="background-color:lightgreen" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
                                 <center><img src="img/done-filling.gif"></center>
                                 @else
                                 <h1>you have no pumps</h1>
                                 @endif
                             </div>
 
-                           <div id="pump-details-{{$pump['Id']}}" class = "pump-details" style = "display: none;" >
+                            <div id="pump-details-{{$pump['Id']}}" class="pump-details" style="display: none;">
                                 <div class="label-input-group">
 
-                                    <label for="price"  style="font-size: 20px">Price:</label>
+                                    <label for="price" style="font-size: 20px">Price:</label>
 
                                     @if ($pump['Type']==='PumpIdleStatus')
                                     <input readonly type="text" id="price" name="price" value="{{$pump['Data']['LastPrice']}}" />
@@ -200,7 +174,7 @@
 
                                 </div>
                                 <div class="label-input-group">
-                                    <label for="volume" style="font-size: 20px" >Volume:</label>
+                                    <label for="volume" style="font-size: 20px">Volume:</label>
                                     @if ($pump['Type']==='PumpIdleStatus')
                                     <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['LastVolume']}}" />
 
@@ -230,119 +204,112 @@
                                 <input type="hidden" name="pumpid" value="{{$pump['Id']}}">
 
                                 <div class="btn-group">
-                                        <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
+                                    <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
                                         Authorize
-                                         </button>
+                                    </button>
 
-                                          <button type="button" class="stop-button " style="background-color: #ff0000; color: #fff;" onclick="stop({{$pump['Id']}})">
+                                    <button type="button" class="stop-button " style="background-color: #ff0000; color: #fff;" onclick="stop({{$pump['Id']}})">
                                         Stop
-                                          </button>
+                                    </button>
 
-                                 </div>
-
-                                      </form>
-
-
-                                   <div style="display: none" class="item-display-container" id="pending-table-{{ $pump['Id'] }}">
-                                        <div class="item-display-container">
-                                             <table class="item-table">
-                                                <thead>
-                                                    <tr style="position: sticky; top: 0; z-index: 1;">
-                                                        <th>Nozzle</th>
-                                                        <th>Price</th>
-                                                        <th>Volume</th>
-                                                        <th>Amount</th>
-                                                    </tr>
-                                                </thead>
-                                                      <tbody>
-                                                            @if (isset($pendingTransactionsByPump[$pump['Id']]) && count($pendingTransactionsByPump[$pump['Id']]) > 0)
-                                                            @foreach ($pendingTransactionsByPump[$pump['Id']] as $transaction)
-                                                            <tr>
-                                                                <td>{{ $transaction->nozzle }}</td>
-                                                                <td>{{ $transaction->price }}</td>
-                                                                <td>{{ $transaction->volume }}</td>
-                                                                <td>{{ $transaction->amount }}</td>
-                                                            </tr>
-                                                            @endforeach
-                                                            @else
-                                                            <tr>
-                                                                <td colspan="4">No pending transactions for this pump.</td>
-                                                            </tr>
-                                                              @endif
-                                                      </tbody>
-                                             </table>
-                                         </div>
-                                    </div>
-
-
-                                        <button type="button" class="pt-button" style="background-color: #007bff; color: #fff" onclick="showTable({{ $pump['Id'] }})">
-                                             Pending Transaction
-                                        </button>
                                 </div>
+
+                        </form>
+
+
+                        <div style="display: none" class="item-display-container" id="pending-table-{{ $pump['Id'] }}">
+                            <div class="item-display-container">
+                                <table class="item-table">
+                                    <thead>
+                                        <tr style="position: sticky; top: 0;  z-index: 1;">
+                                            <th>Nozzle</th>
+                                            <th>Price</th>
+                                            <th>Quantity</th>
+                                            <th>Total</th>
+                                            <th>Pay</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if (isset($pendingTransactionsByPump[$pump['Id']]) && count($pendingTransactionsByPump[$pump['Id']]) > 0)
+                                        @foreach ($pendingTransactionsByPump[$pump['Id']] as $transaction)
+                                        <tr id="transaction-row-{{ $transaction->id }}">
+                                            <td>{{ $transaction->nozzle }}</td>
+                                            <td>{{ $transaction->price }}</td>
+                                            <td>{{ $transaction->volume }}</td>
+                                            <td>{{ $transaction->amount }}</td>
+                                            <td>
+                                                <button class="btn btn-light pay-button" onclick="payTransaction({{ $transaction->id }})">
+                                                    <img src="img/payment.png" alt="Pay Now">
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                        <tr>
+                                            <td colspan="5">No pending transactions for this pump.</td>
+                                        </tr>
+                                        @endif
+                                    </tbody>
+                                </table>
                             </div>
-                                @endforeach
-
-                            </div>
+                        </div>
 
 
-
-
-
-
-                    {{-- Mode of payment --}}
-                    <div id="mop-div" class="mop-column">
-                        @foreach($mopData as $mop)
-
-                        <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['keyNum']}})">{{$mop['name']}}</button>
-
-                        @endforeach
+                        <button type="button" class="pt-button" style="background-color: #007bff; color: #fff" onclick="showTable({{ $pump['Id'] }})">
+                            Pending Transaction
+                        </button>
                     </div>
+                </div>
+                @endforeach
 
-                    <div id="reports-column">
+            </div>
 
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                    </div>
-                    <div id="nonfuel-column">
 
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                    </div>
-                    <div id="manual-column">
+            {{-- Mode of payment --}}
+            <div id="mop-div" class="mop-column">
+                @foreach($mopData as $mop)
 
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                    </div>
-                    <div id="config-column">
+                <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['keyNum']}})">{{$mop['name']}}</button>
 
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                        <button class="calcbutton">Lorem ipsum</button>
-                    </div>
+                @endforeach
+            </div>
+
+            <div id="reports-column">
+
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+            <div id="nonfuel-column">
+
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+            <div id="manual-column">
+
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+            <div id="config-column">
+
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
 
 
         </div>
 
-     </div>
-
-
-
-
-
-
-
+        </div>
 
         <!-- MODAL -->
-
         </div>
-
         <script>
             function showTable(pumpId) {
                 const tableContent = document.getElementById('pending-table-' + pumpId).innerHTML;
@@ -350,11 +317,8 @@
                     title: 'Pending Transaction Table',
                     html: tableContent,
                     scrollbarPadding: false,
-
                 });
             }
-
-
             const form = document.querySelector('form');
 
             // Add an event listener for form submission
@@ -371,30 +335,30 @@
                 });
             });
 
-            function pumpDetails(Id){
+            function pumpDetails(Id) {
                 var details = document.getElementById("pump-details-" + Id).innerHTML;
                 var id = Id;
-            const mySwal = Swal.fire({
-                title: 'Pump ' + id,
-                html: details,
-                scrollbarPadding: false,
-                showCloseButton:true,
-                showConfirmButton: false
+                const mySwal = Swal.fire({
+                    title: 'Pump ' + id,
+                    html: details,
+                    scrollbarPadding: false,
+                    showCloseButton: true,
+                    showConfirmButton: false
                 });
 
                 setInterval(function() {
                     var newDetails = document.getElementById("pump-details-" + Id).innerHTML;
 
-                mySwal.update({
-                    html: newDetails
-                });
+                    mySwal.update({
+                        html: newDetails
+                    });
                 }, 500);
 
-                            }
+            }
 
             function authorize(Id) {
                 document.getElementById(Id).setAttribute('action', '/authorizepump');
-                        document.getElementById(Id).submit();
+                document.getElementById(Id).submit();
 
                 function isDocumentReady() {
                     Swal.fire({
@@ -468,7 +432,7 @@
                 manualdiv.style.display = "none"
                 configdiv.style.display = "none";
                 // mopdiv.style.display = "block";
-                mopdiv.setAttribute('style','display:block');
+                mopdiv.setAttribute('style', 'display:block');
                 // $("#mop-div").show();
                 console.log('mop clicked!');
 
@@ -520,7 +484,7 @@
                 manualdiv.style.display = "none";
                 configdiv.style.display = "none";
                 // pumpdiv.style.display = "block";
-                pumpdiv.setAttribute('style','display:block');
+                pumpdiv.setAttribute('style', 'display:block');
                 document.getElementById("mop-nav").setAttribute('class', '');
                 document.getElementById("pump-nav").setAttribute('class', 'is-active');
                 document.getElementById("config-nav").setAttribute('class', '');
@@ -561,24 +525,72 @@
                 document.getElementById("manual-nav").setAttribute('class', '');
 
             }
+        </script>
 
-            // Function to open the pending transaction modal
-            function openPendingTransactionModal() {
-                var modal = document.getElementById("pending-transaction-modal");
-                modal.style.display = "block";
+        <!-- Append a transaction to the item display container -->
+        <script>
+            // Function to save transactions to local storage
+            function saveTransactionsToLocalStorage(transactions) {
+                localStorage.setItem('transactions', JSON.stringify(transactions));
             }
 
-            // Function to close the pending transaction modal
-            function closePendingTransactionModal() {
-                var modal = document.getElementById("pending-transaction-modal");
-                modal.style.display = "none";
+            // Function to retrieve transactions from local storage
+            function getTransactionsFromLocalStorage() {
+                var transactions = localStorage.getItem('transactions');
+                return transactions ? JSON.parse(transactions) : [];
             }
-            function addmop(id,name){
-    alert(id);
-    console.log(name);
-}
+
+            // Function to initialize the item display container with transactions from local storage
+            function initializeItemDisplayContainer() {
+                var transactions = getTransactionsFromLocalStorage();
+                transactions.forEach(function(transaction) {
+                    appendTransactionToDisplay(transaction);
+                });
+            }
+
+            // Call the initialization function when the page loads
+            $(document).ready(function() {
+                initializeItemDisplayContainer();
+            });
+
+            // Function to append a transaction to the item display container
+            function appendTransactionToDisplay(transaction) {
+                var tableBody = document.querySelector('.item-table tbody');
+                var newRow = tableBody.insertRow();
+
+                // Create table cells for each column
+                var pumpCell = newRow.insertCell(0);
+                var nozzleCell = newRow.insertCell(1);
+                var priceCell = newRow.insertCell(2);
+                var volumeCell = newRow.insertCell(3);
+                var amountCell = newRow.insertCell(4);
+                var stateCell = newRow.insertCell(5);
+
+                // Fill the table cells with data
+                pumpCell.textContent = transaction.pump;
+                nozzleCell.textContent = transaction.nozzle;
+                priceCell.textContent = transaction.price;
+                volumeCell.textContent = transaction.volume;
+                amountCell.textContent = transaction.amount;
+                stateCell.textContent = transaction.state;
+            }
+
+            // Function to add a transaction to local storage and the item display container
+            function addTransactionToLocalStorageAndDisplay(transaction) {
+                var transactions = getTransactionsFromLocalStorage();
+                transactions.push(transaction);
+                saveTransactionsToLocalStorage(transactions);
+                appendTransactionToDisplay(transaction);
+            }
+
+            function addmop(id, name) {
+                alert(id);
+                console.log(name);
+            }
         </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+
     </body>
 
     </html>

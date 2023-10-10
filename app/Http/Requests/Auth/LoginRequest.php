@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class LoginRequest extends FormRequest
 {
@@ -56,6 +57,34 @@ class LoginRequest extends FormRequest
         RateLimiter::clear($this->throttleKey());
     }
 
+    // public function authenticate()
+    // {
+    //     $this->ensureIsNotRateLimited();
+
+    //     // Authenticate against the Cashiers table in the enablerdb database
+    //     $credentials = [
+    //         'Cashier_Number' => $this->input('username'),
+    //         'Cashier_Psw' => $this->input('password'),
+    //     ];
+
+    //     $cashier = DB::connection('sqlsrv_second')
+    //         ->table('dbo.Cashiers')
+    //         ->where($credentials)
+    //         ->first();
+
+    //     if (!$cashier) {
+    //         RateLimiter::hit($this->throttleKey());
+
+    //         throw ValidationException::withMessages([
+    //             'username' => trans('auth.failed'),
+    //         ]);
+    //     }
+
+    //     // You can store the Cashier_Name in the session or other temporary storage
+    //     session(['authenticated_cashier_name' => $cashier->Cashier_Name]);
+
+    //     RateLimiter::clear($this->throttleKey());
+    // }
 
     /**
      * Ensure the login request is not rate limited.

@@ -29,4 +29,5 @@ Route::get('/pos',[pumpController::class, 'pump'])->middleware(['auth'])->name('
 Route::get('/authorizepump',[pumpController::class, 'authorizejson'])->middleware(['auth'])->name('authpump');
 Route::get('/stoppump',[pumpController::class, 'pumpstop'])->middleware(['auth'])->name('stoppump');
 Route::get('/mop',[mopController::class, 'mop'] );
+Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->middleware(['auth'])->name('payTransaction');
 require __DIR__.'/auth.php';
