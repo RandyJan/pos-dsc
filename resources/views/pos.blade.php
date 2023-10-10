@@ -44,30 +44,30 @@
                 <!-- Calculator Buttons Container -->
                 <div class="calculator-buttons-container">
                     <div class="calculator">
-                        <input type="number" class="calculator-display" id="amountPaid" placeholder="0.00" />
+                        <input type="text" class="calculator-display" id="display" readonly placeholder="0.00" />
                     </div>
                     <div class="calculator-buttons">
-                        <button class="calcbutton" onclick="appendToDisplay('7')">7</button>
-                        <button class="calcbutton" onclick="appendToDisplay('8')">8</button>
-                        <button class="calcbutton" onclick="appendToDisplay('9')">9</button>
-                        <button class="calcbutton clear-button" id="clearButton"> Clear</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">7</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">8</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">9</button>
+                        <button class="calcbutton clear-button" onclick="clearDisplay"> Clear</button>
                         <button class="calcbutton special-button">Void</button>
                         <button class="calcbutton special-button">Preset</button>
-                        <button class="calcbutton" onclick="appendToDisplay('4')">4</button>
-                        <button class="calcbutton" onclick="appendToDisplay('5')">5</button>
-                        <button class="calcbutton" onclick="appendToDisplay('6')">6</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">4</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">5</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">6</button>
                         <button class="calcbutton special-button">Open Drawer</button>
                         <button class="calcbutton special-button">Sub Total</button>
-                        <button class="calcbutton special-button">Void All</button>
-                        <button class="calcbutton" onclick="appendToDisplay('1')">1</button>
-                        <button class="calcbutton" onclick="appendToDisplay('2')">2</button>
-                        <button class="calcbutton" onclick="appendToDisplay('3')">3</button>
+                        <button class="calcbutton special-button" id="clearButton">Void All</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">1</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">2</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">3</button>
                         <button class="calcbutton special-button">Print Receipt</button>
                         <button class="calcbutton special-button">User</button>
                         <button class="calcbutton special-button">PG Disc</button>
-                        <button class="calcbutton" onclick="appendToDisplay('0')">0</button>
-                        <button class="calcbutton" onclick="appendToDisplay('00')">00</button>
-                        <button class="calcbutton" onclick="appendToDisplay('.')">.</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">0</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">00</button>
+                        <button class="calcbutton" onclick="appendToDisplay('')">.</button>
                         <button class="calcbutton special-button" id="calculateButton">Enter</button>
                         <button class="calcbutton special-button">All Stop</button>
                         <button class="calcbutton special-button">All Auth</button>
@@ -587,6 +587,33 @@
                 alert(id);
                 console.log(name);
             }
+        </script>
+        <script>
+            // Get the display element
+            const display = document.getElementById('display');
+
+            // Function to append the clicked number to the display
+            function appendToDisplay(number) {
+                display.value += number;
+            }
+
+            // Function to clear the display
+            function clearDisplay() {
+                display.value = '';
+            }
+
+            // Add event listeners to the number buttons
+            const numberButtons = document.querySelectorAll('.calcbutton:not(.special-button)');
+            numberButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const number = button.textContent;
+                    appendToDisplay(number);
+                });
+            });
+
+            // Add event listener to the clear button
+            const clearButton = document.querySelector('.clear-button');
+            clearButton.addEventListener('click', clearDisplay);
         </script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.all.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
