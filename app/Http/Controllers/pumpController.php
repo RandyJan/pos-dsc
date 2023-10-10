@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+
 class pumpController extends Controller
 {
     public function pump(Request $request)
@@ -106,28 +107,29 @@ class pumpController extends Controller
         // LOG::info($pendingtrans);
 
         // dd($pendingtrans);
-    //     $mopresponse = Http::withHeaders([
-    //         'Content-Type'=>'application/json',
-    //     ])->get('http://172.16.12.178:88/api/finalisations');
+        //     $mopresponse = Http::withHeaders([
+        //         'Content-Type'=>'application/json',
+        //     ])->get('http://172.16.12.178:88/api/finalisations');
 
-    //    $mop = $mopresponse['data'];
-    function getMopData() {
-        $mopresponse = Http::withHeaders([
-            'Content-Type'=>'application/json',
-        ])->get('http://172.16.12.178:88/api/finalisations');
+        //    $mop = $mopresponse['data'];
+        function getMopData()
+        {
+            $mopresponse = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->get('http://172.16.12.178:88/api/finalisations');
 
-        return $mopresponse['data'];
-    }
-    $mop = Cache::remember('mop_data', 60, function () {
-        return getMopData();
-    });
-                return view('pos')->with('datab', $packets)
-                ->with('pending', $pendingTransactions)
-                ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
-                ->with('mopData',$mop);
+            return $mopresponse['data'];
+        }
+        $mop = Cache::remember('mop_data', 60, function () {
+            return getMopData();
+        });
+        return view('pos')->with('datab', $packets)
+            ->with('pending', $pendingTransactions)
+            ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
+            ->with('mopData', $mop);
 
 
-            // LOG::info($mop);
+        // LOG::info($mop);
 
 
     }
@@ -183,5 +185,27 @@ class pumpController extends Controller
             ]
         ]);
         return redirect()->route('pos');
+    }
+
+    public function payTransaction(Request $request)
+    {
+        try {
+            // Retrieve the transaction ID from the request
+            $transactionId = $request->input('transactionId');
+
+            // Fetch the transaction details based on the transaction ID
+            $transaction = Transaction::find($transactionId);
+
+            if ($transaction) {
+
+                return response()->json($transaction);
+            } else {
+                // Transaction not found
+                return response()->json(['error' => 'Transaction not found'], 404);
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions here
+            return response()->json(['error' => 'Failed to fetch transaction details'], 500);
+        }
     }
 }
