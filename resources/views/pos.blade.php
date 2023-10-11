@@ -523,9 +523,10 @@
             clearTransactions();
         });
 
-        function addmop(id, name) {
-            alert(id);
-            console.log(name);
+        function addmop() {
+
+            // alert(id);
+            // console.log(name);
         }
     </script>
     <!-- Pay Now -->
