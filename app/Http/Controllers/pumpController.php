@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class pumpController extends Controller
 {
@@ -75,6 +76,7 @@ class pumpController extends Controller
                 $transaction->transaction = $packet['Data']['Transaction'];
                 // $transaction->userid = $packet['Data']['User'];
                 $transaction->state = 0;
+                $transaction->status = 0;
                 $existingrecord = transaction::where('transaction', $packet['Data']['Transaction'])->where('pumpid', $packet['Data']['Pump'])
                     ->where('volume', $packet['Data']['Volume'])->get();
                 if (empty($existingrecord->count())) {
@@ -93,7 +95,7 @@ class pumpController extends Controller
 
         // $pendingtrans = transaction::where('state', 0)->get();
         // Fetch all pending transactions from the database
-        $pendingTransactions = Transaction::where('state', 0)->get();
+        $pendingTransactions = Transaction::get();
 
         // Group pending transactions by pump id
         $pendingTransactionsByPump = [];
@@ -123,8 +125,7 @@ class pumpController extends Controller
         $mop = Cache::remember('mop_data', 60, function () {
             return getMopData();
         });
-        LOG::info($mop);
-        return view('pos')->with('datab', $packets)
+        return view('pos')->with('datab', $packets)->with('transaction', $transaction)
             ->with('pending', $pendingTransactions)
             ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
             ->with('mopData', $mop);
@@ -190,23 +191,49 @@ class pumpController extends Controller
 
     public function payTransaction(Request $request)
     {
-        try {
-            // Retrieve the transaction ID from the request
-            $transactionId = $request->input('transactionId');
-
-            // Fetch the transaction details based on the transaction ID
-            $transaction = Transaction::find($transactionId);
-
-            if ($transaction) {
-
-                return response()->json($transaction);
-            } else {
-                // Transaction not found
-                return response()->json(['error' => 'Transaction not found'], 404);
-            }
-        } catch (\Exception $e) {
-            // Handle exceptions here
-            return response()->json(['error' => 'Failed to fetch transaction details'], 500);
+        $transactionId = $request->input('transactionId');
+        // Find the transaction and set status to 1
+        $transaction = Transaction::find($transactionId);
+        if ($transaction) {
+            $transaction->status = 1;
+            $transaction->save();
+            return $transaction;
         }
+        return response('Transaction not found', 404);
+    }
+
+    public function voidTransaction(Request $request)
+    {
+        $transactionId = $request->input('transactionId');
+        // Log::info('Received transactionId: ' . $transactionId);
+
+        // Attempt to find the transaction by ID
+        $transaction = Transaction::where('transaction', $transactionId)->first();
+
+        if ($transaction) {
+            // Log::info('Found transaction: ' . $transaction->transaction);
+            // Log::info('Current Status: ' . $transaction->status);
+
+            $transaction->status = 0;
+            $transaction->save();
+            // Log::info('Updated Status: ' . $transaction->status);
+
+            return response('Transaction voided', 200);
+        } else {
+            // Log::error('Failed to void transaction. Transaction not found.');
+            return response('Failed to void transaction. Transaction not found.', 404);
+        }
+    }
+
+    public function voidAllTransactions(Request $request)
+    {
+        // Get all transactions and update their statuses to 0 (voided)
+        $transactions = Transaction::all();
+        foreach ($transactions as $transaction) {
+            $transaction->status = 0;
+            $transaction->save();
+        }
+
+        return response('All transactions voided', 200);
     }
 }

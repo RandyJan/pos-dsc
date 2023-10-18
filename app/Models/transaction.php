@@ -22,9 +22,7 @@ class transaction extends Model
         'tcvolume',
         'totalamount',
         'totalvolume',
-        'userid'
-
-
-
+        'userid',
+        'status',
     ];
 }

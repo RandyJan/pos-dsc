@@ -15,18 +15,19 @@ class CreateTransactionTable extends Migration
     {
         Schema::create('transaction', function (Blueprint $table) {
             $table->id();
-            $table->integer('pumpid');
-            $table->float('pump');
-            $table->integer('transaction');
-            $table->integer('state');
-            $table->string('nozzle');
-            $table->float('amount');
-            $table->float('volume');
-            $table->float('price');
-            $table->float('tcvolume');
-            $table->float('totalamount');
-            $table->float('totalvolume');
-            $table->string('userid');
+            $table->integer('pumpid')->nullable();
+            $table->float('pump')->nullable();
+            $table->integer('transaction')->nullable();
+            $table->integer('state')->nullable();
+            $table->string('nozzle')->nullable();
+            $table->float('amount')->nullable();
+            $table->float('volume')->nullable();
+            $table->float('price')->nullable();
+            $table->float('tcvolume')->nullable();
+            $table->float('totalamount')->nullable();
+            $table->float('totalvolume')->nullable();
+            $table->string('userid')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

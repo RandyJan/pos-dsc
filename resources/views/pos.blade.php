@@ -2,57 +2,54 @@
     <div class="pos-container">
         <div class="column left-column">
             <!-- Item Display -->
-
             <div class="table-container">
                 <div class="item-display-container">
-                    <table class="item-table" id ="items-table">
+                    <table class="item-table" id="items-table">
                         <thead>
                             <tr style="position: sticky; top: 0;  z-index: 1;">
-                                <th>Pump ID</th>
+                                <th hidden>Transaction Id</th>
+                                <th>Pump</th>
                                 <th>Nozzle</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
+                                <td id="transaction" hidden></td>
                                 <td id="pump"></td>
                                 <td id="nozzle"></td>
                                 <td id="price"></td>
                                 <td id="volume"></td>
                                 <td id="amount"></td>
-                                <td id="state"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
             </div>
-            <div class ="sub-total-div">
-            <label for="sub-total"> Sub total: ₱
-                <input type="text" id="sub-total" value="0" name="sub-total" class="sub-total" readonly >
-            </label>
-        </div>
+            <div class="sub-total-div">
+                <label for="sub-total"> Sub total: ₱
+                    <input type="text" id="sub-total" value="0" name="sub-total" class="sub-total" readonly>
+                </label>
+            </div>
             <div class="calculator-buttons-container">
                 <div class="calculator">
-                    <label for="display"></label>
-                    <input type="text" class="calculator-display" id="display" readonly placeholder="0.00" value="0" style="margin-top:0"/>
+                    <input type="text" class="calculator-display" id="display" readonly placeholder="0.00" />
                 </div>
                 <div class="calculator-buttons">
                     <button class="calcbutton" onclick="appendToDisplay('')">7</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">8</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">9</button>
                     <button class="calcbutton clear-button" onclick="clearDisplay"> Clear</button>
-                    <button class="calcbutton special-button">Void</button>
+                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow('{{ $transaction->id }}')">Void</button>
                     <button class="calcbutton special-button">Preset</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">4</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">5</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">6</button>
                     <button class="calcbutton special-button">Open Drawer</button>
                     <button class="calcbutton special-button">Sub Total</button>
-                    <button class="calcbutton special-button" id="clearButton">Void All</button>
+                    <button class="calcbutton special-button" id="voidAll">Void All</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">1</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">2</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">3</button>
@@ -219,15 +216,21 @@
                                         <td>{{ $transaction->volume }}</td>
                                         <td>{{ $transaction->amount }}</td>
                                         <td>
-                                            <button class="btn btn-light pay-button"  onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }})">
+                                            @if ($transaction->status == 0)
+                                            <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }})">
                                                 <img src="img/payment.png" alt="Pay Now">
                                             </button>
+                                            @else
+                                            <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" disabled>
+                                                Paying...
+                                            </button>
+                                            @endif
                                         </td>
                                     </tr>
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="5">No pending transactions for this pump.</td>
+                                        <td colspan="6">No pending transactions for this pump.</td>
                                     </tr>
                                     @endif
                                 </tbody>
@@ -275,7 +278,7 @@
     </div>
     </div>
     <script>
- function showTable(pumpId) {
+        function showTable(pumpId) {
             const tableContent = document.getElementById('pending-table-' + pumpId).innerHTML;
             Swal.fire({
                 title: 'Pending Transaction Table',
@@ -285,34 +288,31 @@
         }
 
         function pumpDetails(Id) {
-  var details = document.getElementById("pump-details-" + Id).innerHTML;
-  var id = Id;
-  var isOpen = true;
+            var details = document.getElementById("pump-details-" + Id).innerHTML;
+            var id = Id;
+            var isOpen = true;
 
-  const mySwal = Swal.fire({
-    title: 'Pump ' + id,
-    html: details,
-    scrollbarPadding: false,
-    showCloseButton: true,
-    showConfirmButton: false,
-    didClose: () => {
-      isOpen = false;
-    },
-    preConfirm: () => {
-      var newDetails = document.getElementById("pump-details-" + Id).innerHTML;
-      return newDetails;
-    }
-  });
+            const mySwal = Swal.fire({
+                title: 'Pump ' + id,
+                html: details,
+                scrollbarPadding: false,
+                showCloseButton: true,
+                showConfirmButton: false,
+                didClose: () => {
+                    isOpen = false;
+                },
+                preConfirm: () => {
+                    var newDetails = document.getElementById("pump-details-" + Id).innerHTML;
+                    return newDetails;
+                }
+            });
 
-  setInterval(function() {
-    if (isOpen) {
-      mySwal.update();
-    }
-  }, 500);
-}
-
-
-
+            setInterval(function() {
+                if (isOpen) {
+                    mySwal.update();
+                }
+            }, 500);
+        }
 
         function authorize(Id) {
             document.getElementById(Id).setAttribute('action', '/authorizepump');
@@ -374,6 +374,11 @@
         var nonfueldiv = document.getElementById("nonfuel-column");
         var manualdiv = document.getElementById("manual-column");
         var configdiv = document.getElementById("config-column");
+
+        function addmop(id, name) {
+            alert(id);
+            console.log(name);
+        }
 
         function mop() {
             reportsdiv.style.display = "none";
@@ -493,28 +498,28 @@
             });
 
             const table = document.getElementById('items-table');
-        const rows = table.querySelectorAll('tr');
+            const rows = table.querySelectorAll('tr');
 
-        let sum = 0;
+            let sum = 0;
 
-        rows.forEach((row) => {
-          const cells = row.querySelectorAll('td');
-          const fifthCell = cells[4]; // Get the third cell (index 2)
+            rows.forEach((row) => {
+                const cells = row.querySelectorAll('td');
+                const fifthCell = cells[5]; // Get the third cell (index 2)
 
-          if (fifthCell) {
-            const value = parseFloat(fifthCell.textContent);
-            if (!isNaN(value)) {
-              sum += value;
-            }
-          }
-        });
+                if (fifthCell) {
+                    const value = parseFloat(fifthCell.textContent);
+                    if (!isNaN(value)) {
+                        sum += value;
+                    }
+                }
+            });
 
-        var vatsale = sum/1.12;
-        var vat = sum-vatsale;
-        console.log("Sub total:"+sum);
-        console.log("vat sale:"+vatsale);
-        console.log("vat amount:"+vat);
-        var subttl = document.getElementById("sub-total");
+            var vatsale = sum / 1.12;
+            var vat = sum - vatsale;
+            console.log("Sub total:" + sum);
+            console.log("vat sale:" + vatsale);
+            console.log("vat amount:" + vat);
+            var subttl = document.getElementById("sub-total");
             subttl.value = sum;
         }
 
@@ -522,46 +527,6 @@
         $(document).ready(function() {
             initializeItemDisplayContainer();
         });
-
-        // Function to append a transaction to the item display container
-        function appendTransactionToDisplay(transaction) {
-            var tableBody = document.querySelector('.item-table tbody');
-            var newRow = tableBody.insertRow(0);
-
-            // Create table cells for each column
-            var pumpCell = newRow.insertCell(0);
-            var nozzleCell = newRow.insertCell(1);
-            var priceCell = newRow.insertCell(2);
-            var volumeCell = newRow.insertCell(3);
-            var amountCell = newRow.insertCell(4);
-            var stateCell = newRow.insertCell(5);
-
-            // Fill the table cells with data
-            pumpCell.textContent = transaction.pump;
-            nozzleCell.textContent = transaction.nozzle;
-            priceCell.textContent = transaction.price;
-            volumeCell.textContent = transaction.volume;
-            amountCell.textContent = transaction.amount;
-            stateCell.textContent = transaction.state;
-        }
-
-        // Function to add a transaction to local storage and the item display container
-        function addTransactionToLocalStorageAndDisplay(transaction) {
-            var transactions = getTransactionsFromLocalStorage();
-            transactions.push(transaction);
-            saveTransactionsToLocalStorage(transactions);
-            appendTransactionToDisplay(transaction);
-        }
-
-        // Function to clear transactions from local storage and the item display container
-        function clearTransactions() {
-            // Clear transactions from local storage
-            localStorage.removeItem('transactions');
-
-            // Clear transactions from the item display container
-            var tableBody = document.querySelector('.item-table tbody');
-            tableBody.innerHTML = '';
-        }
 
         // Attach a click event handler to the "Clear" button
         document.getElementById('clearButton').addEventListener('click', function() {
@@ -575,49 +540,83 @@
 
             // alert(id);
             // console.log(name);
-        var subttl = document.getElementById("sub-total");
-        var  total = parseFloat(subttl.value);
-        var money = document.getElementById("display");
-        var moneyb = parseFloat(money.value);
-        var vatsale = total/1.12;
-        var vat = total - vatsale;
-        console.log(total);
-        if(total == 0 || total == NaN){
-            Swal.fire({
-            title:"Please select transaction",
-            icon:"error",
-            scrollbarPadding:false
-        });
+            var subttl = document.getElementById("sub-total");
+            var total = parseFloat(subttl.value);
+            var money = document.getElementById("display");
+            var moneyb = parseFloat(money.value);
+            var vatsale = total / 1.12;
+            var vat = total - vatsale;
+            console.log(total);
+            if (total == 0 || total == NaN) {
+                Swal.fire({
+                    title: "Please select transaction",
+                    icon: "error",
+                    scrollbarPadding: false
+                });
 
 
-    }
-    else{
-        if(moneyb == NaN || moneyb == 0 || moneyb == null){
-            Swal.fire({
-                title:"payment successful",
-                icon:"success",
-                scrollbarPadding:false
-            })
-        }
-        else{
-            var change = moneyb - total;
-            Swal.fire({
-                title:"Change",
-                text:"Php "+change,
-                icon:"success",
-                scrollbarPadding:false
-            })
-        }
+            } else {
+                if (moneyb == NaN || moneyb == 0 || moneyb == null) {
+                    Swal.fire({
+                        title: "payment successful",
+                        icon: "success",
+                        scrollbarPadding: false
+                    })
+                } else {
+                    var change = moneyb - total;
+                    Swal.fire({
+                        title: "Change",
+                        text: "Php " + change,
+                        icon: "success",
+                        scrollbarPadding: false
+                    })
+                }
 
-    }
+            }
 
         }
     </script>
-    <!-- Pay Now -->
     <script>
-        function payTransaction(transactionId,amount) {
-            // Send an AJAX request to fetch transaction details
+        const table = document.querySelector('.item-table');
+        const lastRowIndex = table.rows.length - 1;
+        table.deleteRow(lastRowIndex);
 
+        // Function to add a transaction to local storage and the item display container
+        function addTransactionToLocalStorageAndDisplay(transaction) {
+            var transactions = getTransactionsFromLocalStorage();
+            transactions.push(transaction);
+            saveTransactionsToLocalStorage(transactions);
+            appendTransactionToDisplay(transaction);
+        }
+
+        // Function to append a transaction to the item display container
+        function appendTransactionToDisplay(transaction, callback) {
+            var tableBody = document.querySelector('.item-table tbody');
+            var newRow = tableBody.insertRow(0);
+
+            newRow.setAttribute("onclick", "selectRow(this)");
+
+            // Create table cells for each column
+            var transactionCell = newRow.insertCell(0);
+            var pumpCell = newRow.insertCell(1);
+            var nozzleCell = newRow.insertCell(2);
+            var priceCell = newRow.insertCell(3);
+            var volumeCell = newRow.insertCell(4);
+            var amountCell = newRow.insertCell(5);
+
+            // Fill the table cells with data
+            transactionCell.textContent = transaction.transaction;
+            pumpCell.textContent = transaction.pump;
+            nozzleCell.textContent = transaction.nozzle;
+            priceCell.textContent = transaction.price;
+            volumeCell.textContent = transaction.volume;
+            amountCell.textContent = transaction.amount;
+            transactionCell.style.display = 'none';
+        }
+    </script>
+    <script>
+        function payTransaction(transactionId, amount) {
+            // Send an AJAX request to fetch transaction details
             $.ajax({
                 url: '/payTransaction',
                 type: 'POST',
@@ -626,22 +625,22 @@
                     'transactionId': transactionId
                 },
                 success: function(data) {
+                    $('[data-transaction-id="' + transactionId + '"]').prop('disabled', true);
                     // Add the transaction to local storage and the item display container
                     addTransactionToLocalStorageAndDisplay(data);
-            var subttl = document.getElementById("sub-total");
-            var total =parseFloat(subttl.value);
-            var payable = total + amount;
-            var final = subttl.value = payable;
 
-            console.log("hello"+final);
+                    var subttl = document.getElementById("sub-total");
+                    var total = parseFloat(subttl.value);
+                    var payable = total + amount;
+                    var final = subttl.value = payable;
+
+                    console.log("hello" + final);
                 },
                 error: function() {
                     alert('Failed to fetch transaction details.');
                 }
             });
         }
-
-
     </script>
     <script>
         // Get the display element
@@ -669,8 +668,101 @@
         // Add event listener to the clear button
         const clearButton = document.querySelector('.clear-button');
         clearButton.addEventListener('click', clearDisplay);
+    </script>
+    <script>
+        /// Add an event listener to the "Void" button
+        const voidButton = document.getElementById('voidButton');
+        voidButton.addEventListener('click', function() {
+            voidSelectedRow();
+        });;
 
+        // Function to select a row and highlight it
+        function selectRow(row) {
+            // Remove highlighting from any previously selected row
+            const selectedRow = document.querySelector('.selected-row');
+            if (selectedRow) {
+                selectedRow.classList.remove('selected-row');
+            }
 
+            // Highlight the selected row
+            row.classList.add('selected-row');
+        }
 
+        // Function to void the selected row
+        function voidSelectedRow() {
+            // Find the selected row
+            const selectedRow = document.querySelector('.selected-row');
+
+            if (selectedRow) {
+                // Get the transaction ID or other identifier for the selected row
+                const transactionId = selectedRow.querySelector('td:first-child').textContent;
+                // console.log('Transaction ID:', transactionId);
+
+                // Send an AJAX request to mark the transaction as void
+                $.ajax({
+                    url: '/voidTransaction',
+                    type: 'POST',
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        'transactionId': transactionId
+                    },
+                    success: function() {
+                        // Remove the selected row from the table
+                        selectedRow.remove();
+                        // Remove the selected row from local storage
+                        removeTransactionFromLocalStorage(transactionId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                        alert('Failed to void transaction');
+                    }
+                });
+            }
+        }
+
+        // Function to remove a transaction from local storage
+        function removeTransactionFromLocalStorage(transactionId) {
+            const transactions = getTransactionsFromLocalStorage();
+            const updatedTransactions = transactions.filter(transaction => transaction.transaction !== transactionId);
+            saveTransactionsToLocalStorage(updatedTransactions);
+        }
+    </script>
+    <script>
+        // Function to void all transactions
+        function voidAllTransactions() {
+
+            // Clear transactions from local storage
+            localStorage.removeItem('transactions');
+
+            // Clear transactions from the item display container
+            var tableBody = document.querySelector('.item-table tbody');
+            tableBody.innerHTML = '';
+
+            // Make an AJAX POST request to your Laravel route
+            fetch('/voidAllTransactions', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => {
+                    if (response.status === 200) {
+                        // Transactions voided successfully
+                        // alert('All transactions voided successfully.');
+                    } else {
+                        // Handle errors
+                        // alert('Failed to void all transactions.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while voiding transactions.');
+                });
+        }
+        // Attach a click event handler to the "Void All" button
+        document.getElementById('voidAll').addEventListener('click', function() {
+            voidAllTransactions();
+        });
     </script>
 </x-app-layout>
