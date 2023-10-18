@@ -2,9 +2,10 @@
     <div class="pos-container">
         <div class="column left-column">
             <!-- Item Display -->
+
             <div class="table-container">
                 <div class="item-display-container">
-                    <table class="item-table">
+                    <table class="item-table" id ="items-table">
                         <thead>
                             <tr style="position: sticky; top: 0;  z-index: 1;">
                                 <th>Pump ID</th>
@@ -27,11 +28,17 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
 
+            </div>
+            <div class ="sub-total-div">
+            <label for="sub-total"> Sub total: ₱
+                <input type="text" id="sub-total" value="0" name="sub-total" class="sub-total" readonly >
+            </label>
+        </div>
             <div class="calculator-buttons-container">
                 <div class="calculator">
-                    <input type="text" class="calculator-display" id="display" readonly placeholder="0.00" />
+                    <label for="display"></label>
+                    <input type="text" class="calculator-display" id="display" readonly placeholder="0.00" value="0" style="margin-top:0"/>
                 </div>
                 <div class="calculator-buttons">
                     <button class="calcbutton" onclick="appendToDisplay('')">7</button>
@@ -83,7 +90,8 @@
                             @if ($pump['Type']==='PumpIdleStatus')
 
                             @if ($pump['Data']['NozzleUp'] > 0)
-                            <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}">
+
+                            <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}" id="nozup">
                             @if ($pump['Data']['NozzleUp'] === 1)
                             <h3 style="background-color: lightgreen" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
                             <center><img src="img/premium.png" class="img-icon"></center>
@@ -149,7 +157,7 @@
                                 @elseif ($pump['Type']==='PumpFillingStatus')
                                 <input readonly type="text" id="price" name="price" value="{{$pump['Data']['Price']}}" />
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                <input readonly type="text" id="price" name="eotprice" value="{{$pump['Data']['Price']}}" />
+                                <input readonly type="text" id="price" name="price" value="{{$pump['Data']['Price']}}" />
                                 @endif
 
                             </div>
@@ -163,7 +171,7 @@
                                 @elseif ($pump['Type']==='PumpFillingStatus')
                                 <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['Volume']}}" />
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                <input readonly type="text" id="volume" name="eotvolume" value="{{$pump['Data']['Volume']}}" />
+                                <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['Volume']}}" />
                                 @endif
                             </div>
                             <div class="label-input-group">
@@ -176,10 +184,11 @@
                                 @elseif ($pump['Type']==='PumpFillingStatus')
                                 <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['Amount']}}" />
                                 @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
-                                <input readonly type="text" id="amount" name="eotamount" value="{{$pump['Data']['Amount']}}" />
+                                <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['Amount']}}" />
                                 @endif
                             </div>
-                            <input type="hidden" name="pumpid" value="{{$pump['Id']}}">
+                            <label for="idpump"></label>
+                            <input type="hidden" name="pumpid" value="{{$pump['Id']}}" id="idpump">
                             <div class="btn-group">
                                 <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
                                     Authorize
@@ -210,7 +219,7 @@
                                         <td>{{ $transaction->volume }}</td>
                                         <td>{{ $transaction->amount }}</td>
                                         <td>
-                                            <button class="btn btn-light pay-button" onclick="payTransaction({{ $transaction->id }})">
+                                            <button class="btn btn-light pay-button"  onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }})">
                                                 <img src="img/payment.png" alt="Pay Now">
                                             </button>
                                         </td>
@@ -235,7 +244,7 @@
         {{-- Mode of payment --}}
         <div id="mop-div" class="mop-column">
             @foreach($mopData as $mop)
-            <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['keyNum']}})">{{$mop['name']}}</button>
+            <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
             @endforeach
         </div>
         <div id="reports-column">
@@ -266,7 +275,7 @@
     </div>
     </div>
     <script>
-        function showTable(pumpId) {
+ function showTable(pumpId) {
             const tableContent = document.getElementById('pending-table-' + pumpId).innerHTML;
             Swal.fire({
                 title: 'Pending Transaction Table',
@@ -276,23 +285,34 @@
         }
 
         function pumpDetails(Id) {
-            var details = document.getElementById("pump-details-" + Id).innerHTML;
-            var id = Id;
-            const mySwal = Swal.fire({
-                title: 'Pump ' + id,
-                html: details,
-                scrollbarPadding: false,
-                showCloseButton: true,
-                showConfirmButton: false
-            });
+  var details = document.getElementById("pump-details-" + Id).innerHTML;
+  var id = Id;
+  var isOpen = true;
 
-            setInterval(function() {
-                var newDetails = document.getElementById("pump-details-" + Id).innerHTML;
-                mySwal.update({
-                    html: newDetails
-                });
-            }, 500);
-        }
+  const mySwal = Swal.fire({
+    title: 'Pump ' + id,
+    html: details,
+    scrollbarPadding: false,
+    showCloseButton: true,
+    showConfirmButton: false,
+    didClose: () => {
+      isOpen = false;
+    },
+    preConfirm: () => {
+      var newDetails = document.getElementById("pump-details-" + Id).innerHTML;
+      return newDetails;
+    }
+  });
+
+  setInterval(function() {
+    if (isOpen) {
+      mySwal.update();
+    }
+  }, 500);
+}
+
+
+
 
         function authorize(Id) {
             document.getElementById(Id).setAttribute('action', '/authorizepump');
@@ -471,6 +491,31 @@
             transactions.forEach(function(transaction) {
                 appendTransactionToDisplay(transaction);
             });
+
+            const table = document.getElementById('items-table');
+        const rows = table.querySelectorAll('tr');
+
+        let sum = 0;
+
+        rows.forEach((row) => {
+          const cells = row.querySelectorAll('td');
+          const fifthCell = cells[4]; // Get the third cell (index 2)
+
+          if (fifthCell) {
+            const value = parseFloat(fifthCell.textContent);
+            if (!isNaN(value)) {
+              sum += value;
+            }
+          }
+        });
+
+        var vatsale = sum/1.12;
+        var vat = sum-vatsale;
+        console.log("Sub total:"+sum);
+        console.log("vat sale:"+vatsale);
+        console.log("vat amount:"+vat);
+        var subttl = document.getElementById("sub-total");
+            subttl.value = sum;
         }
 
         // Call the initialization function when the page loads
@@ -521,18 +566,58 @@
         // Attach a click event handler to the "Clear" button
         document.getElementById('clearButton').addEventListener('click', function() {
             clearTransactions();
+            var subttl = document.getElementById("sub-total");
+            var clear = subttl.value = 0;
+            console.log("sub total is now" + clear);
         });
 
-        function addmop() {
+        function addmop(id, pt, cd) {
 
             // alert(id);
             // console.log(name);
+        var subttl = document.getElementById("sub-total");
+        var  total = parseFloat(subttl.value);
+        var money = document.getElementById("display");
+        var moneyb = parseFloat(money.value);
+        var vatsale = total/1.12;
+        var vat = total - vatsale;
+        console.log(total);
+        if(total == 0 || total == NaN){
+            Swal.fire({
+            title:"Please select transaction",
+            icon:"error",
+            scrollbarPadding:false
+        });
+
+
+    }
+    else{
+        if(moneyb == NaN || moneyb == 0 || moneyb == null){
+            Swal.fire({
+                title:"payment successful",
+                icon:"success",
+                scrollbarPadding:false
+            })
+        }
+        else{
+            var change = moneyb - total;
+            Swal.fire({
+                title:"Change",
+                text:"Php "+change,
+                icon:"success",
+                scrollbarPadding:false
+            })
+        }
+
+    }
+
         }
     </script>
     <!-- Pay Now -->
     <script>
-        function payTransaction(transactionId) {
+        function payTransaction(transactionId,amount) {
             // Send an AJAX request to fetch transaction details
+
             $.ajax({
                 url: '/payTransaction',
                 type: 'POST',
@@ -543,24 +628,20 @@
                 success: function(data) {
                     // Add the transaction to local storage and the item display container
                     addTransactionToLocalStorageAndDisplay(data);
+            var subttl = document.getElementById("sub-total");
+            var total =parseFloat(subttl.value);
+            var payable = total + amount;
+            var final = subttl.value = payable;
+
+            console.log("hello"+final);
                 },
                 error: function() {
                     alert('Failed to fetch transaction details.');
                 }
             });
         }
-    </script>
-    <script>
-        // Get the last appended transaction
-        var tableBody = document.querySelector('.item-table tbody');
-        var lastRow = tableBody.lastChild;
-        var transaction = {
-            pump: lastRow.cells[0].textContent,
-            nozzle: lastRow.cells[1].textContent,
-            price: parseFloat(lastRow.cells[2].textContent),
-            volume: parseFloat(lastRow.cells[3].textContent),
-            amount: parseFloat(lastRow.cells[4].textContent),
-        };
+
+
     </script>
     <script>
         // Get the display element
@@ -588,5 +669,8 @@
         // Add event listener to the clear button
         const clearButton = document.querySelector('.clear-button');
         clearButton.addEventListener('click', clearDisplay);
+
+
+
     </script>
 </x-app-layout>

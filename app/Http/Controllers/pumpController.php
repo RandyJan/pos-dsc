@@ -123,6 +123,7 @@ class pumpController extends Controller
         $mop = Cache::remember('mop_data', 60, function () {
             return getMopData();
         });
+        LOG::info($mop);
         return view('pos')->with('datab', $packets)
             ->with('pending', $pendingTransactions)
             ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
