@@ -222,7 +222,7 @@
                                             </button>
                                             @else
                                             <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" disabled>
-                                                Paying...
+                                                <img src="img/pos.gif" alt="Pay Now">
                                             </button>
                                             @endif
                                         </td>
