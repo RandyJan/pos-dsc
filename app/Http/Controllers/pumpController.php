@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\transaction;
+use stdClass;
 use GuzzleHttp\Client;
+use App\Models\transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 
 class pumpController extends Controller
 {
@@ -118,14 +119,17 @@ class pumpController extends Controller
         {
             $mopresponse = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->get('http://172.16.12.178:88/api/finalisations');
+            ])->get('http://172.16.12.128:88/api/finalisations');
 
             return $mopresponse['data'];
         }
         $mop = Cache::remember('mop_data', 60, function () {
             return getMopData();
         });
-        return view('pos')->with('datab', $packets)->with('transaction', $transaction)
+
+        return view('pos')
+            ->with('datab', $packets)
+            ->with('transaction', $transaction)
             ->with('pending', $pendingTransactions)
             ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
             ->with('mopData', $mop);
@@ -236,4 +240,118 @@ class pumpController extends Controller
 
         return response('All transactions voided', 200);
     }
+    public function getItems(Request $request){
+
+        $data = $request['objectArray'];
+
+        $formattedData = http_build_query($data);
+        parse_str($formattedData, $dataArray);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ])->post('http://97.74.86.26:8083/TransactionCtrl/addNewTransaction',[
+    'cashierID' => 1,
+  'subAccID' => '',
+  'accountID' => '',
+  'posID' => '1',
+  'taxTotal' => '0',
+  'saleTotal' => '0',
+  'isManual' => '0',
+  'isZeroRated' => '0',
+  'customerName' => '',
+  'address' => '',
+  'TIN' => '',
+  'businessStyle' => '',
+  'cardNumber' => '',
+  'approvalCode' => '',
+  'bankCode' => '',
+  'type' => '',
+  'isRefund' => '0',
+  'transaction_type' => '1',
+  'isRefundOrigTransNum' => '',
+  'transaction_resetter' => '',
+  'birReceiptType' => '',
+  'poNum' => '',
+  'plateNum' =>'',
+  'odometer' => '',
+  'transRefund' => '0',
+  'grossRefund' => '0',
+  'subAccPmt' => '',
+  'vehicleTypeID' => '6',
+  'isNormalTrans' => '1',
+  'items' =>[
+    [
+      'itemNumber' => '1',
+      'itemType' => '2',
+      'itemDesc' => 'Premium',
+      'itemPrice' => '50.0',
+      'itemQTY' => '2.8300000000000001',
+      'itemValue' => '141.5',
+      'itemID' => '25390',
+      'itemTaxAmount' => '32.625',
+      'deliveryID' => '1',
+      'itemTaxId' => '1',
+      'gcNumber' => '',
+      'gcAmount' => '',
+      'originalItemValuePreTaxChange' => '271.875',
+      'isTaxExemptItem' => '',
+      'isZeroRatedTaxItem' => '',
+      'itemDiscTotal' => '',
+      'departmentID' => '',
+      'itemDiscCodeType' => '',
+      'itemDBPrice' => '50.0',
+    ],
+ [
+      'itemNumber' => '2',
+      'itemType' => '2',
+      'itemDesc' => 'Premium',
+      'itemPrice' => '50.0',
+      'itemQTY' => '3.2599999999999998',
+      'itemValue' => '163.0',
+      'itemID' => '25389',
+      'itemTaxAmount' => '32.625',
+      'deliveryID' => '1',
+      'itemTaxId' => '1',
+      'gcNumber' => '',
+      'gcAmount' => '',
+      'originalItemValuePreTaxChange' => '271.875',
+      'isTaxExemptItem' => '',
+      'isZeroRatedTaxItem' => '',
+      'itemDiscTotal' => '',
+      'departmentID' => '',
+      'itemDiscCodeType' => '',
+      'itemDBPrice' => '50.0',
+    ],
+    [
+      'itemNumber' => '3',
+      'itemType' => '2',
+      'itemDesc' => 'CASH',
+      'itemPrice' => '304.5',
+      'itemQTY' => '1',
+      'itemValue' => '500',
+      'itemID' => '1',
+      'itemTaxAmount' => '0',
+      'deliveryID' => '1',
+      'itemTaxId' => '1',
+      'gcNumber' => '',
+      'gcAmount' => '',
+      'originalItemValuePreTaxChange' => '0',
+      'isTaxExemptItem' => '',
+      'isZeroRatedTaxItem' => '',
+      'itemDiscTotal' => '',
+      'departmentID' => '',
+      'itemDiscCodeType' => '',
+      'itemDBPrice' => '0',
+    ]
+],
+]);
+
+
+
+        LOG::info($response);
+        return response()->json($response);
+
+
+    }
+
+
 }

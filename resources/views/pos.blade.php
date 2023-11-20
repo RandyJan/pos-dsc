@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="pos-container">
-        <div class="column left-column">
+        <div class="column left-column" id="left-column-div">
             <!-- Item Display -->
             <div class="table-container">
                 <div class="item-display-container">
@@ -28,28 +28,28 @@
                     </table>
                 </div>
             </div>
-            <div class="sub-total-div">
+            <div class="sub-total-div" id="sub-total-div">
                 <label for="sub-total"> Sub total: ₱
                     <input type="text" id="sub-total" value="0" name="sub-total" class="sub-total" readonly>
                 </label>
             </div>
             <div class="calculator-buttons-container">
                 <div class="calculator">
-                    <input type="text" class="calculator-display" id="display" readonly placeholder="0.00" />
+                    <input type="text" class="calculator-display" id="display" value="" placeholder="0.00" readonly>
                 </div>
                 <div class="calculator-buttons">
                     <button class="calcbutton" onclick="appendToDisplay('')">7</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">8</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">9</button>
-                    <button class="calcbutton clear-button" onclick="clearDisplay"> Clear</button>
-                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow('{{ $transaction->id }}')">Void</button>
-                    <button class="calcbutton special-button">Preset</button>
+                    <button class="calcbutton clear-button btn" onclick="clearDisplay" style="background-color:lightcoral"> Clear</button>
+                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow('{{ $transaction->id }}')" style="background-color:#FFD580">Void</button>
+                    <button class="calcbutton special-button" style="background-color:violet">Preset</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">4</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">5</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">6</button>
-                    <button class="calcbutton special-button">Open Drawer</button>
+                    <button class="calcbutton special-button" style="background-color: lightblue">Open Drawer</button>
                     <button class="calcbutton special-button">Sub Total</button>
-                    <button class="calcbutton special-button" id="voidAll">Void All</button>
+                    <button class="calcbutton special-button" id="voidAll" style="background-color: orange">Void All</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">1</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">2</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">3</button>
@@ -59,7 +59,7 @@
                     <button class="calcbutton" onclick="appendToDisplay('')">0</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">00</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">.</button>
-                    <button class="calcbutton special-button" id="calculateButton">Enter</button>
+                    <button class="calcbutton special-button" id="calculateButton" style="background-color: lightgreen">Enter</button>
                     <button class="calcbutton special-button">All Stop</button>
                     <button class="calcbutton special-button">All Auth</button>
                 </div>
@@ -213,16 +213,17 @@
                                     <tr id="transaction-row-{{ $transaction->id }}">
                                         <td>{{ $transaction->nozzle }}</td>
                                         <td>{{ $transaction->price }}</td>
-                                        <td>{{ $transaction->volume }}</td>
+                                        <td>{{ number_format($transaction->volume) }}</td>
                                         <td>{{ $transaction->amount }}</td>
                                         <td>
                                             @if ($transaction->status == 0)
-                                            <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }})">
+                                            <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }}
+                                            ,{{ $transaction->price }})">
                                                 <img src="img/payment.png" alt="Pay Now">
                                             </button>
                                             @else
                                             <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" disabled>
-                                                <img src="img/pos.gif" alt="Pay Now">
+                                                <img src="img/payment.png" alt="Pay Now">
                                             </button>
                                             @endif
                                         </td>
@@ -277,6 +278,17 @@
     </div>
     </div>
     </div>
+    <form action="" method="POST">
+
+        <input type="hidden" name="item-no" id = "item-no">
+        <input type="hidden" name="nozzle-data" id="nozzle-data">
+        <input type="hidden" name="price-data" id="price-data">
+        <input type="hidden" name="amount-data" id="amount-data">
+        <input type="hidden" name="transactionid-data" id = "transactionid-data">
+
+    </form>
+    <input type="hidden" name="vat-amount" id="vat-amount">
+    <input type="hidden" name="vat-sale" id="vat-sale">
     <script>
         function showTable(pumpId) {
             const tableContent = document.getElementById('pending-table-' + pumpId).innerHTML;
@@ -375,10 +387,7 @@
         var manualdiv = document.getElementById("manual-column");
         var configdiv = document.getElementById("config-column");
 
-        function addmop(id, name) {
-            alert(id);
-            console.log(name);
-        }
+
 
         function mop() {
             reportsdiv.style.display = "none";
@@ -519,6 +528,10 @@
             console.log("Sub total:" + sum);
             console.log("vat sale:" + vatsale);
             console.log("vat amount:" + vat);
+            var vatainput = document.getElementById('vat-amount');
+           var vatsinput = document.getElementById('vat-sale');
+           vatainput.value = vat;
+           vatsinput = vatsale;
             var subttl = document.getElementById("sub-total");
             subttl.value = sum;
         }
@@ -536,45 +549,7 @@
             console.log("sub total is now" + clear);
         });
 
-        function addmop(id, pt, cd) {
 
-            // alert(id);
-            // console.log(name);
-            var subttl = document.getElementById("sub-total");
-            var total = parseFloat(subttl.value);
-            var money = document.getElementById("display");
-            var moneyb = parseFloat(money.value);
-            var vatsale = total / 1.12;
-            var vat = total - vatsale;
-            console.log(total);
-            if (total == 0 || total == NaN) {
-                Swal.fire({
-                    title: "Please select transaction",
-                    icon: "error",
-                    scrollbarPadding: false
-                });
-
-
-            } else {
-                if (moneyb == NaN || moneyb == 0 || moneyb == null) {
-                    Swal.fire({
-                        title: "payment successful",
-                        icon: "success",
-                        scrollbarPadding: false
-                    })
-                } else {
-                    var change = moneyb - total;
-                    Swal.fire({
-                        title: "Change",
-                        text: "Php " + change,
-                        icon: "success",
-                        scrollbarPadding: false
-                    })
-                }
-
-            }
-
-        }
     </script>
     <script>
         const table = document.querySelector('.item-table');
@@ -615,8 +590,68 @@
         }
     </script>
     <script>
-        function payTransaction(transactionId, amount) {
-            // Send an AJAX request to fetch transaction details
+        //    var transactiondata = [];
+        //    let itemno = 1;
+
+        function payTransaction(transactionId, amount,price,nozzle) {
+        //     var vata = document.getElementById('vat-amount');
+        //    var vats = document.getElementById('vat-sale');
+        //    var vatamount = vata.value;
+        //    var vatsale = vats.value;
+        //     var nozz = nozzle;
+        //     var itemdata = {
+        //         itemNumber: itemno,
+        //         itemType:2,
+        //         itemDesc:'Diesel',
+        //         itemPrice: price,
+        //         itemQTY: 50,
+        //         itemValue:amount,
+        //         itemID:transactionId,
+        //         itemTaxAmount:vatamount,
+        //         deliveryID:transactionId,
+        //         itemTaxId: transactionId,
+        //         gcNumber:null,
+        //         gcAmount:null,
+        //         originalItemValuePreTaxChange:amount,
+        //         isTaxExemptItem:null,
+        //         isZeroRatedTaxItem:null,
+        //         itemDiscTotal:null,
+        //         departmentID:null,
+        //         itemDiscCodeType:null,
+        //         itemDBPrice:price,
+
+
+
+
+
+        //     }
+        //     transactiondata.push(itemdata);
+        //     console.log(transactiondata);
+
+
+
+
+// Convert the object array to JSON string
+// var jsonData = JSON.stringify(transactiondata);
+
+// // Send the AJAX request
+// $.ajax({
+//   url: '/getitems',
+//   type: 'POST',
+//   data: {
+//     '_token': '{{ csrf_token() }}',
+//     'objectArray': jsonData
+//   },
+//   success: function(response) {
+//     // Handle the response from the controller
+//     console.log("request sent!");
+//   },
+//   error: function() {
+//     alert('Failed to send object array.');
+//   }
+// });
+
+
             $.ajax({
                 url: '/payTransaction',
                 type: 'POST',
@@ -640,7 +675,204 @@
                     alert('Failed to fetch transaction details.');
                 }
             });
+
         }
+        var tabledata = document.getElementById("items-table");
+        var data = [];
+        var itemno = 1;
+ function addmop(id, pt, cd,name) {
+
+        // alert(id);
+        // console.log(name);
+        var subttl = document.getElementById("sub-total");
+        var total = parseFloat(subttl.value);
+        var money = document.getElementById("display");
+        var moneyb = parseFloat(money.value);
+        var vatsale = total / 1.12;
+        var vat = total - vatsale;
+        var tabledata = document.getElementById("items-table");
+        console.log(total);
+
+        for (var i = 1; i < tabledata.rows.length; i++){
+            var row = tabledata.rows[i];
+
+
+            var itemdata = {
+                itemNumber: itemno,
+                itemType:2,
+                itemDesc:row.cells[2].innerText,
+                itemPrice: row.cells[3].innerText,
+                itemQTY: row.cells[4].innerText,
+                itemValue:row.cells[5].innerText,
+                itemID:row.cells[0].innerText,
+                itemTaxAmount:vat,
+                deliveryID:1,
+                itemTaxId: 1,
+                gcNumber:null,
+                gcAmount:null,
+                originalItemValuePreTaxChange:vatsale,
+                isTaxExemptItem:null,
+                isZeroRatedTaxItem:null,
+                itemDiscTotal:null,
+                departmentID:null,
+                itemDiscCodeType:null,
+                itemDBPrice:row.cells[3].innerText,
+            }
+            data.push(itemdata);
+            itemno++;
+
+        }
+
+        var paymentdata = {
+                itemNumber: itemno,
+                itemType:2,
+                itemDesc:'CASH',
+                itemPrice:total,
+                itemQTY: 1,
+                itemValue:moneyb,
+                itemID:1,
+                itemTaxAmount:0,
+                deliveryID:1,
+                itemTaxId: 1,
+                gcNumber:null,
+                gcAmount:null,
+                originalItemValuePreTaxChange:0,
+                isTaxExemptItem:null,
+                isZeroRatedTaxItem:null,
+                itemDiscTotal:null,
+                departmentID:null,
+                itemDiscCodeType:null,
+                itemDBPrice:0,
+            }
+        data.push(paymentdata)
+        console.log(data);
+        var datab = JSON.stringify(data);
+            var transactiondata = {
+            cashierID:1,
+            subAccID:null,
+            accountID:null,
+            posID:1,
+            taxTotal:vat,
+            saleTotal:vatsale,
+            isManual:0,
+            isZeroRated:0,
+            customerName:null,
+            address:null,
+            TIN:null,
+            businessStyle:null,
+            cardNumber:null,
+            approvalCode:null,
+            bankCode:null,
+            type:null,
+            isRefund:0,
+            transaction_type:1,
+            isRefundOrigTransNum:null,
+            transaction_resetter:null,
+            birReceiptType:null,
+            poNum:null,
+            plateNum:null,
+            odometer:null,
+            transRefund:0,
+            grossRefund:0,
+            subAccPmt:null,
+            vehicleTypeID:6,
+            isNormalTrans:1,
+            items:data
+            }
+            console.log(transactiondata);
+      var jsonData = JSON.stringify(transactiondata);
+     $.ajax({
+  url: '/getitems',
+  type: 'POST',
+  data: {
+    '_token': '{{ csrf_token() }}',
+    'objectArray': transactiondata
+  },
+  success: function(response) {
+    // Handle the response from the controller
+    console.log("request sent!");
+  },
+  error: function() {
+    alert('Failed to send object array.');
+
+  }
+});
+
+if (total == 0 ||isNaN(total)) {
+    Swal.fire({
+        title: "Please select transaction",
+        icon: "error",
+        scrollbarPadding: false
+    });
+    const data = {};
+    let
+
+} else {
+    if(id == 1){
+
+
+    if (moneyb == 0 || moneyb == null || isNaN(moneyb)) {
+        subttl.value = 0;
+        Swal.fire({
+            title: "payment successful",
+            icon: "success",
+            scrollbarPadding: false
+        })
+
+    }
+    else{
+        if(moneyb > total){
+            var change = moneyb - total;
+            subttl.value = 0;
+            Swal.fire({
+            title: "Change",
+            text: "Php " + change,
+            icon: "success",
+            scrollbarPadding: false
+        })
+        }
+        else{
+            var remaining = total - moneyb;
+            subttl.value = remaining;
+            Swal.fire({
+            title: "Successfully paid cash Php" + moneyb,
+            text: "Remaining balance: Php " + remaining,
+            icon: "success",
+            scrollbarPadding: false
+        })
+        }
+        }
+
+}
+
+else if(id > 1 && pt ==1){
+
+ if(moneyb < total){
+            var remaining = total - moneyb;
+            subttl.value = remaining;
+            Swal.fire({
+            title:"Successfuly paid  Php " + moneyb,
+            text: "Remaining balance: Php" + remaining,
+            icon: "success",
+            scrollbarPadding: false
+        })
+        }
+        else{
+            Swal.fire({
+            title: "Invalid",
+            text: "This mode of payment is  inelligible for giving change please enter exact amount or lesser amount.",
+            icon: "error",
+            scrollbarPadding: false
+        })
+        }
+
+}
+
+    }
+
+
+
+}
     </script>
     <script>
         // Get the display element
@@ -678,6 +910,7 @@
 
         // Function to select a row and highlight it
         function selectRow(row) {
+
             // Remove highlighting from any previously selected row
             const selectedRow = document.querySelector('.selected-row');
             if (selectedRow) {
@@ -691,6 +924,7 @@
         // Function to void the selected row
         function voidSelectedRow() {
             // Find the selected row
+location.reload();
             const selectedRow = document.querySelector('.selected-row');
 
             if (selectedRow) {
@@ -730,6 +964,8 @@
     <script>
         // Function to void all transactions
         function voidAllTransactions() {
+            var subttl = document.getElementById("sub-total");
+            subttl.value = 0;
 
             // Clear transactions from local storage
             localStorage.removeItem('transactions');

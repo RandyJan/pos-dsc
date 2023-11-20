@@ -32,4 +32,5 @@ Route::get('/mop',[mopController::class, 'mop'] );
 Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->middleware(['auth'])->name('payTransaction');
 Route::post('/voidTransaction', [pumpController::class, 'voidTransaction'])->middleware(['auth'])->name('voidTransaction');
 Route::post('/voidAllTransactions', [pumpController::class, 'voidAllTransactions'])->middleware(['auth'])->name('voidAllTransactions');
+Route::post('/getitems', [pumpController::class,'getItems'])->middleware(['auth']);
 require __DIR__.'/auth.php';
