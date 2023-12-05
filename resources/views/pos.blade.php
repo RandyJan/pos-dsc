@@ -22,7 +22,7 @@
                                 <td id="nozzle"></td>
                                 <td id="price"></td>
                                 <td id="volume"></td>
-                                <td id="amount"></td>
+                                <td id="amount">0</td>
                             </tr>
                         </tbody>
                     </table>
@@ -42,7 +42,7 @@
                     <button class="calcbutton" onclick="appendToDisplay('')">8</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">9</button>
                     <button class="calcbutton clear-button btn" onclick="clearDisplay" style="background-color:lightcoral"> Clear</button>
-                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow('{{ $transaction->id }}')" style="background-color:#FFD580">Void</button>
+                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow('{{ $transaction->id }}')" style="background-color:lightpink">Void</button>
                     <button class="calcbutton special-button" style="background-color:violet">Preset</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">4</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">5</button>
@@ -248,7 +248,10 @@
         {{-- Mode of payment --}}
         <div id="mop-div" class="mop-column">
             @foreach($mopData as $mop)
+            {{-- <form action="/getitems" method="POST">
+                @csrf --}}
             <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
+        {{-- </form> --}}
             @endforeach
         </div>
         <div id="reports-column">
@@ -278,14 +281,15 @@
     </div>
     </div>
     </div>
-    <form action="" method="POST">
+
+    <form action="/getitems" method="POST">
 
         <input type="hidden" name="item-no" id = "item-no">
         <input type="hidden" name="nozzle-data" id="nozzle-data">
         <input type="hidden" name="price-data" id="price-data">
         <input type="hidden" name="amount-data" id="amount-data">
         <input type="hidden" name="transactionid-data" id = "transactionid-data">
-
+        {{-- <button type="submit">test button</button> --}}
     </form>
     <input type="hidden" name="vat-amount" id="vat-amount">
     <input type="hidden" name="vat-sale" id="vat-sale">
@@ -696,6 +700,7 @@
         for (var i = 1; i < tabledata.rows.length; i++){
             var row = tabledata.rows[i];
 
+            var itemvalue = isNaN(parseFloat(row.cells[5].innerText)) ? moneyb : parseFloat(row.cells[5].innerText);
 
             var itemdata = {
                 itemNumber: itemno,
@@ -703,7 +708,7 @@
                 itemDesc:row.cells[2].innerText,
                 itemPrice: row.cells[3].innerText,
                 itemQTY: row.cells[4].innerText,
-                itemValue:row.cells[5].innerText,
+                itemValue:itemvalue,
                 itemID:row.cells[0].innerText,
                 itemTaxAmount:vat,
                 deliveryID:1,
@@ -745,7 +750,7 @@
                 itemDBPrice:0,
             }
         data.push(paymentdata)
-        console.log(data);
+        // console.log(data);
         var datab = JSON.stringify(data);
             var transactiondata = {
             cashierID:1,
@@ -784,16 +789,18 @@
      $.ajax({
   url: '/getitems',
   type: 'POST',
-  data: {
+  data:{
     '_token': '{{ csrf_token() }}',
-    'objectArray': transactiondata
-  },
+    'data':transactiondata},
   success: function(response) {
     // Handle the response from the controller
+
+    console.log(response);
     console.log("request sent!");
   },
-  error: function() {
-    alert('Failed to send object array.');
+  error: function(response) {
+    console.log(response);
+    console.log("request failed")
 
   }
 });

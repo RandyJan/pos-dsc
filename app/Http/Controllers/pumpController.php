@@ -97,7 +97,7 @@ class pumpController extends Controller
         // $pendingtrans = transaction::where('state', 0)->get();
         // Fetch all pending transactions from the database
         $pendingTransactions = Transaction::get();
-
+        $transaction = Transaction::get();
         // Group pending transactions by pump id
         $pendingTransactionsByPump = [];
         foreach ($pendingTransactions as $transaction) {
@@ -242,21 +242,21 @@ class pumpController extends Controller
     }
     public function getItems(Request $request){
 
-        $data = $request['objectArray'];
-
-        $formattedData = http_build_query($data);
-        parse_str($formattedData, $dataArray);
+        $data = $request['data'];
+        // $datab = json_decode($data, true);
+        // $formattedData = http_build_query($data);
+        // parse_str($formattedData, $dataArray);
         $response = Http::withHeaders([
-            'Content-Type' => 'application/x-www-form-urlencoded',
-        ])->post('http://97.74.86.26:8083/TransactionCtrl/addNewTransaction',[
-    'cashierID' => 1,
+            'Content-Type' => 'application/json',
+        ])->post('http://172.16.12.128:88/api/addnewTransaction',[
+    'cashierID' => $data['cashierID'],
   'subAccID' => '',
   'accountID' => '',
-  'posID' => '1',
-  'taxTotal' => '0',
-  'saleTotal' => '0',
-  'isManual' => '0',
-  'isZeroRated' => '0',
+  'posID' => $data['posID'],
+  'taxTotal' => $data['taxTotal'],
+  'saleTotal' => $data['saleTotal'],
+  'isManual' => $data['isManual'],
+  'isZeroRated' => $data['isZeroRated'],
   'customerName' => '',
   'address' => '',
   'TIN' => '',
@@ -265,90 +265,28 @@ class pumpController extends Controller
   'approvalCode' => '',
   'bankCode' => '',
   'type' => '',
-  'isRefund' => '0',
-  'transaction_type' => '1',
+  'isRefund' => $data['isRefund'],
+  'transaction_type' => $data['transaction_type'],
   'isRefundOrigTransNum' => '',
   'transaction_resetter' => '',
   'birReceiptType' => '',
   'poNum' => '',
   'plateNum' =>'',
   'odometer' => '',
-  'transRefund' => '0',
-  'grossRefund' => '0',
+  'transRefund' => $data['transRefund'],
+  'grossRefund' => $data['grossRefund'],
   'subAccPmt' => '',
-  'vehicleTypeID' => '6',
-  'isNormalTrans' => '1',
-  'items' =>[
-    [
-      'itemNumber' => '1',
-      'itemType' => '2',
-      'itemDesc' => 'Premium',
-      'itemPrice' => '50.0',
-      'itemQTY' => '2.8300000000000001',
-      'itemValue' => '141.5',
-      'itemID' => '25390',
-      'itemTaxAmount' => '32.625',
-      'deliveryID' => '1',
-      'itemTaxId' => '1',
-      'gcNumber' => '',
-      'gcAmount' => '',
-      'originalItemValuePreTaxChange' => '271.875',
-      'isTaxExemptItem' => '',
-      'isZeroRatedTaxItem' => '',
-      'itemDiscTotal' => '',
-      'departmentID' => '',
-      'itemDiscCodeType' => '',
-      'itemDBPrice' => '50.0',
-    ],
- [
-      'itemNumber' => '2',
-      'itemType' => '2',
-      'itemDesc' => 'Premium',
-      'itemPrice' => '50.0',
-      'itemQTY' => '3.2599999999999998',
-      'itemValue' => '163.0',
-      'itemID' => '25389',
-      'itemTaxAmount' => '32.625',
-      'deliveryID' => '1',
-      'itemTaxId' => '1',
-      'gcNumber' => '',
-      'gcAmount' => '',
-      'originalItemValuePreTaxChange' => '271.875',
-      'isTaxExemptItem' => '',
-      'isZeroRatedTaxItem' => '',
-      'itemDiscTotal' => '',
-      'departmentID' => '',
-      'itemDiscCodeType' => '',
-      'itemDBPrice' => '50.0',
-    ],
-    [
-      'itemNumber' => '3',
-      'itemType' => '2',
-      'itemDesc' => 'CASH',
-      'itemPrice' => '304.5',
-      'itemQTY' => '1',
-      'itemValue' => '500',
-      'itemID' => '1',
-      'itemTaxAmount' => '0',
-      'deliveryID' => '1',
-      'itemTaxId' => '1',
-      'gcNumber' => '',
-      'gcAmount' => '',
-      'originalItemValuePreTaxChange' => '0',
-      'isTaxExemptItem' => '',
-      'isZeroRatedTaxItem' => '',
-      'itemDiscTotal' => '',
-      'departmentID' => '',
-      'itemDiscCodeType' => '',
-      'itemDBPrice' => '0',
-    ]
-],
+  'vehicleTypeID' => $data['vehicleTypeID'],
+  'isNormalTrans' => $data['isNormalTrans'],
+  'items' => $data['items']
 ]);
 
 
 
         LOG::info($response);
-        return response()->json($response);
+        return response()->json([
+            'data inserted successfully'
+        ]);
 
 
     }
