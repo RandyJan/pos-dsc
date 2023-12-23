@@ -1,12 +1,33 @@
 <x-app-layout>
     <div class="pos-container">
-        <div class="column left-column" id="left-column-div">
-            <!-- Item Display -->
+  <!-- Use any element to open/show the overlay navigation menu -->
+
+        <div class="left-column" id="left-column-div">
+            <div id="mySidenav" class="sidenav">
+                <center>
+                <a href="#">
+               <x-nav-logo style="width: 50px; height: 40px;" class="block h-10 w-auto fill-current text-gray-600" />
+                </a>
+            </center>
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="#">Datalogic System Corp</a>
+                <a href="#">Branch: Shell</a>
+                <a href="#">POS Number: 1</a>
+                <a href="#">Cashier: Sheila Dela Cruz</a>
+                <br><br>
+                <form action="/logout" method="POST">
+                    <center>
+                    <button type="submit">Log out</button>
+                </center>
+                </form>
+            </div>
+
+              <!-- Item Display -->
             <div class="table-container">
                 <div class="item-display-container">
                     <table class="item-table" id="items-table">
                         <thead>
-                            <tr style="position: sticky; top: 0;  z-index: 1;">
+                            <tr style="position                                                                                                                                                 : sticky; top: 0;  z-index: 1;">
                                 <th hidden>Transaction Id</th>
                                 <th>Pump</th>
                                 <th>Nozzle</th>
@@ -76,8 +97,14 @@
                     <li id="nf-nav"><a onclick="nonfuel()">Non-fuel</a></li>
                     <li id="reports-nav"><a onclick="reports()">Reports</a></li>
                     <li id="config-nav"><a onclick="config()">Config</a></li>
+
                 </ul>
+                <a id="settings-nav" style="position:relative;right:5px;top:0px" onclick="openNav()"> <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                  </svg></a>
             </div>
+
             <div id="pump-div" class="pump-items-container">
                 @foreach ($datab as $pump )
                 <div class="pump-items-container" id="pump-column">
@@ -248,9 +275,9 @@
         {{-- Mode of payment --}}
         <div id="mop-div" class="mop-column">
             @foreach($mopData as $mop)
-            {{-- <form action="/getitems" method="POST">
+            {{-- <form action="/receipt" method="POST">
                 @csrf --}}
-            <button type="button" id="mop-btn" style="min-width:190px" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
+            <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:30%" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
         {{-- </form> --}}
             @endforeach
         </div>
@@ -688,6 +715,7 @@
 
         // alert(id);
         // console.log(name);
+
         var subttl = document.getElementById("sub-total");
         var total = parseFloat(subttl.value);
         var money = document.getElementById("display");
@@ -825,7 +853,7 @@ if (total == 0 ||isNaN(total)) {
             icon: "success",
             scrollbarPadding: false
         })
-
+        voidAllTransactions();
     }
     else{
         if(moneyb > total){
@@ -846,7 +874,9 @@ if (total == 0 ||isNaN(total)) {
             text: "Remaining balance: Php " + remaining,
             icon: "success",
             scrollbarPadding: false
-        })
+
+        });
+
         }
         }
 
@@ -1007,5 +1037,15 @@ location.reload();
         document.getElementById('voidAll').addEventListener('click', function() {
             voidAllTransactions();
         });
+        /* Set the width of the side navigation to 250px */
+function openNav() {
+  document.getElementById("mySidenav").style.width = "250px";
+}
+
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+
     </script>
 </x-app-layout>

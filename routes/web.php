@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\mopController;
 use App\Http\Controllers\pumpController;
+use App\Http\Controllers\receiptController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,5 +34,6 @@ Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->middl
 Route::post('/voidTransaction', [pumpController::class, 'voidTransaction'])->middleware(['auth'])->name('voidTransaction');
 Route::post('/voidAllTransactions', [pumpController::class, 'voidAllTransactions'])->middleware(['auth'])->name('voidAllTransactions');
 Route::post('/getitems', [pumpController::class,'getItems']);
+Route::post('/receipt', [receiptController::class,'getReceiptLayout']);
 // ->middleware(['auth']);
 require __DIR__.'/auth.php';

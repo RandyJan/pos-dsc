@@ -97,7 +97,7 @@ class pumpController extends Controller
         // $pendingtrans = transaction::where('state', 0)->get();
         // Fetch all pending transactions from the database
         $pendingTransactions = Transaction::get();
-        $transaction = Transaction::get();
+        $transaction = Transaction::all();
         // Group pending transactions by pump id
         $pendingTransactionsByPump = [];
         foreach ($pendingTransactions as $transaction) {
@@ -107,7 +107,7 @@ class pumpController extends Controller
             }
             $pendingTransactionsByPump[$pumpId][] = $transaction;
         }
-        // LOG::info($pendingtrans);
+        LOG::info($transaction);
 
         // dd($pendingtrans);
         //     $mopresponse = Http::withHeaders([
@@ -119,7 +119,7 @@ class pumpController extends Controller
         {
             $mopresponse = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->get('http://172.16.12.128:88/api/finalisations');
+            ])->get('http://172.16.12.234:8087/api/finalisations');
 
             return $mopresponse['data'];
         }
@@ -248,7 +248,7 @@ class pumpController extends Controller
         // parse_str($formattedData, $dataArray);
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://172.16.12.128:88/api/addnewTransaction',[
+        ])->post('http://172.16.12.234:8087/api/addnewTransaction',[
     'cashierID' => $data['cashierID'],
   'subAccID' => '',
   'accountID' => '',
@@ -257,14 +257,14 @@ class pumpController extends Controller
   'saleTotal' => $data['saleTotal'],
   'isManual' => $data['isManual'],
   'isZeroRated' => $data['isZeroRated'],
-  'customerName' => '',
-  'address' => '',
-  'TIN' => '',
-  'businessStyle' => '',
-  'cardNumber' => '',
-  'approvalCode' => '',
-  'bankCode' => '',
-  'type' => '',
+  'customerName' => 'RandyJan',
+  'address' => 'Camella Annex',
+  'TIN' => '1234',
+  'businessStyle' => '12331',
+  'cardNumber' => '232',
+  'approvalCode' => '2',
+  'bankCode' => '321',
+  'type' => '1',
   'isRefund' => $data['isRefund'],
   'transaction_type' => $data['transaction_type'],
   'isRefundOrigTransNum' => '',
@@ -283,7 +283,7 @@ class pumpController extends Controller
 
 
 
-        LOG::info($response);
+        // LOG::info($response);
         return response()->json([
             'data inserted successfully'
         ]);
