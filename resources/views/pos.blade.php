@@ -1,4 +1,9 @@
 <x-app-layout>
+    {{-- @if(! Auth::user()->activeOrder())
+<div>
+    <p>Please login</p>
+</div>
+@else --}}
     <div class="pos-container">
   <!-- Use any element to open/show the overlay navigation menu -->
 
@@ -17,7 +22,12 @@
                 <br><br>
                 <form action="/logout" method="POST">
                     <center>
-                    <button type="submit">Log out</button>
+                        <x-dropdown-link :href="route('logout')"
+                        onclick="event.preventDefault();
+                                    this.closest('form').submit();">
+                    {{ __('Log Out') }}
+                </x-dropdown-link>
+                    {{-- <button type="submit">Log out</button> --}}
                 </center>
                 </form>
             </div>
@@ -305,6 +315,10 @@
             <button class="calcbutton">Lorem ipsum</button>
             <button class="calcbutton">Lorem ipsum</button>
         </div>
+        {{-- <iframe src="{{ route('transaction') }}" width="100%" height="300" id="reciept" style="display: block"></iframe> --}}
+
+        {{-- <iframe id="os-iframe"src="{{ route('transaction') }}"  class="h-75" width="100%" height="80%" frameborder="0" allowTransparency="true" style="display: none" ></iframe> --}}
+        <div id = "invoicePOS" style="display:none;position:absolute"></div>
     </div>
     </div>
     </div>
@@ -708,6 +722,29 @@
             });
 
         }
+        function printDiv(divId) {
+  var printContents = document.getElementById(divId).innerHTML;
+  var originalContents = document.body.innerHTML;
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+}
+function generateReceipt(){
+    $.ajax({
+  url: '/receipt', // Replace with your server endpoint URL
+  method: 'GET',
+  success: function(htmlContent) {
+    // Display the rendered Blade template on the web page
+    $('#invoicePOS').html(htmlContent);
+    // $('#invoicePOS').contentWindow.print();
+    printDiv('invoicePOS');
+  },
+  error: function() {
+    console.log('Error: Failed to retrieve and render the Blade template');
+  }
+});
+
+}
         var tabledata = document.getElementById("items-table");
         var data = [];
         var itemno = 1;
@@ -823,7 +860,6 @@
   success: function(response) {
     // Handle the response from the controller
 
-    console.log(response);
     console.log("request sent!");
   },
   error: function(response) {
@@ -832,6 +868,7 @@
 
   }
 });
+
 
 if (total == 0 ||isNaN(total)) {
     Swal.fire({
@@ -848,12 +885,17 @@ if (total == 0 ||isNaN(total)) {
 
     if (moneyb == 0 || moneyb == null || isNaN(moneyb)) {
         subttl.value = 0;
-        Swal.fire({
-            title: "payment successful",
-            icon: "success",
-            scrollbarPadding: false
-        })
+        // Swal.fire({
+        //     title: "payment successful",
+        //     icon: "success",
+        //     scrollbarPadding: false
+        // })
+        alertify.success('Transaction Complete');
+        generateReceipt();
         voidAllTransactions();
+
+        // location.reload('/pos');
+    //    $("#os-iframe").get(0).contentWindow.print();
     }
     else{
         if(moneyb > total){
@@ -865,6 +907,7 @@ if (total == 0 ||isNaN(total)) {
             icon: "success",
             scrollbarPadding: false
         })
+    //    $("#os-iframe").get(0).contentWindow.print();
         }
         else{
             var remaining = total - moneyb;
@@ -876,6 +919,7 @@ if (total == 0 ||isNaN(total)) {
             scrollbarPadding: false
 
         });
+      //  $("#os-iframe").get(0).contentWindow.print();
 
         }
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use stdClass;
 use GuzzleHttp\Client;
 use App\Models\transaction;
+use App\Models\receiptItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -83,7 +84,7 @@ class pumpController extends Controller
                 if (empty($existingrecord->count())) {
                     $transaction->save();
                 } else {
-                    LOG::info($existingrecord);
+                    // LOG::info($existingrecord);
                 }
 
                 $pumpId = $packet['Data']['Pump'];
@@ -107,7 +108,7 @@ class pumpController extends Controller
             }
             $pendingTransactionsByPump[$pumpId][] = $transaction;
         }
-        LOG::info($transaction);
+        // LOG::info($transaction);
 
         // dd($pendingtrans);
         //     $mopresponse = Http::withHeaders([
@@ -146,7 +147,7 @@ class pumpController extends Controller
         $price = $request->input('price');
         $nozzle = $request->input('nozzle');
         $amount = $request->input('amount');
-        LOG::info($nozzle);
+        // LOG::info($nozzle);
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
@@ -240,7 +241,7 @@ class pumpController extends Controller
 
         return response('All transactions voided', 200);
     }
-    public function getItems(Request $request){
+    public function sendTransaction(Request $request){
 
         $data = $request['data'];
         // $datab = json_decode($data, true);
@@ -281,12 +282,41 @@ class pumpController extends Controller
   'items' => $data['items']
 ]);
 
+$response = Http::withHeaders([
+    "ContentType"=> "json/application"
+])->post('http://172.16.12.234:8087/api/receipt-sample',([
+    'posID'=>1,
+    'transaction_no'=>$request->transNo
+
+]));
+// $finalLayout = $layout->data;
+$layout = json_decode($response->body(), true);
+Log::info($request->transNo);
+
+$transItems = Http::withHeaders([
+    "ContentType"=> "json/application"
+])->post('http://172.16.12.234:8087/api/getItems',([
+    'posID'=>1,
+    'trans_ID'=>$response
+
+]));
+// $id = 577488;
+// receiptItems::ActiveTransaction($id);
+//$activetrans = new receiptItems;
+// $test = $activetrans->ActiveTransaction($response);
+// $test=577485;
+// $itemsData = receiptItems::ActiveTransaction($test);
+// Log::info($itemsData);
+// $decodedTransItems = json_decode($transItems);
+return view('transaction')
+->with('receipt',$layout);
 
 
-        // LOG::info($response);
-        return response()->json([
-            'data inserted successfully'
-        ]);
+
+
+
+        //LOG::info($response);
+        // return response($response);
 
 
     }

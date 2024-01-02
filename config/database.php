@@ -91,14 +91,14 @@ return [
             'prefix_indexes' => true,
         ],
 
-        'sqlsrv_second' => [
+        'EnablerDB' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_SECOND_HOST', 'localhost'),
+            'host' => env('DB_SECOND_HOST', 'nec5-pc'),
             'port' => env('DB_SECOND_PORT', '1433'),
-            'database' => env('DB_SECOND_DATABASE', 'forge'),
-            'username' => env('DB_SECOND_USERNAME', 'forge'),
-            'password' => env('DB_SECOND_PASSWORD', ''),
+            'database' => env('DB_SECOND_DATABASE', 'EnablerDB-bir'),
+            'username' => env('DB_SECOND_USERNAME', 'sa'),
+            'password' => env('DB_SECOND_PASSWORD', 'p@$$w0rd'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,

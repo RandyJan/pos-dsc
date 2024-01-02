@@ -21,7 +21,7 @@
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 10px;
-
+    padding: 6px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     min-width: 300px;
     display: flex;
@@ -582,7 +582,7 @@ body{
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0;
-    background-color: lightgray; /* Black*/
+    background-color: whitesmoke; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -600,7 +600,7 @@ body{
 
   /* When you mouse over the navigation links, change their color */
   .sidenav a:hover {
-    color: #f1f1f1;
+    color: red;
   }
 
   /* Position and style the close button (top right corner) */

@@ -14,14 +14,14 @@ class receiptController extends Controller
   public function getReceiptLayout(Request $request){
     $response = Http::withHeaders([
         "ContentType"=> "json/application"
-    ])->post('http://172.16.12.234:8088/api/receipt-sample',([
+    ])->post('http://172.16.12.234:8087/api/receipt-sample',([
         'posID'=>1,
         'transaction_no'=>$request->transNo
 
     ]));
     // $finalLayout = $layout->data;
     $layout = json_decode($response->body(), true);
-    Log::info($layout);
+    Log::info($request->transNo);
     return view('transaction')
     ->with('receipt',$layout);
   }

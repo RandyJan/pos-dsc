@@ -6,6 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\receiptItems;
+// use Sofa\Eloquence\Eloquence;
+// use Sofa\Eloquence\Mappable;
+// use Sofa\Eloquence\Mutable;
 
 class User extends Authenticatable
 {
@@ -37,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function activeTransaction(){
+        $filtered = receiptItems::max('Transaction_ID');
+        $data = receiptItems::where('Transaction_ID',$filtered)->get();
+        return $data;
+    }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\mopController;
 use App\Http\Controllers\pumpController;
 use App\Http\Controllers\receiptController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,12 @@ Route::get('/mop',[mopController::class, 'mop'] );
 Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->middleware(['auth'])->name('payTransaction');
 Route::post('/voidTransaction', [pumpController::class, 'voidTransaction'])->middleware(['auth'])->name('voidTransaction');
 Route::post('/voidAllTransactions', [pumpController::class, 'voidAllTransactions'])->middleware(['auth'])->name('voidAllTransactions');
-Route::post('/getitems', [pumpController::class,'getItems']);
-Route::post('/receipt', [receiptController::class,'getReceiptLayout']);
+Route::post('/getitems', [pumpController::class,'sendTransaction']);
+Route::get('/receipt', [receiptController::class,'getReceiptLayout']);
 // ->middleware(['auth']);
+
+Route::get('/transaction', function () {
+    return view('transaction');
+})->name('transaction');
+
 require __DIR__.'/auth.php';
