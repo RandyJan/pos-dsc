@@ -35,7 +35,8 @@ Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->middl
 Route::post('/voidTransaction', [pumpController::class, 'voidTransaction'])->middleware(['auth'])->name('voidTransaction');
 Route::post('/voidAllTransactions', [pumpController::class, 'voidAllTransactions'])->middleware(['auth'])->name('voidAllTransactions');
 Route::post('/getitems', [pumpController::class,'sendTransaction']);
-Route::get('/receipt', [receiptController::class,'getReceiptLayout']);
+Route::post('/receipt', [receiptController::class,'getReceiptLayout']);
+Route::post('/updateTrans', [pumpController::class,'updateTransaction']);
 // ->middleware(['auth']);
 
 Route::get('/transaction', function () {

@@ -11,6 +11,7 @@ class transaction extends Model
     protected $table = 'transaction';
     protected $primaryKey = 'id';
     protected $fillable = [
+        'id',
         'pumpid',
         'pump',
         'transaction',
@@ -24,5 +25,6 @@ class transaction extends Model
         'totalvolume',
         'userid',
         'status',
+        'is_voided'
     ];
 }

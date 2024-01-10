@@ -19,6 +19,10 @@
     <link rel="stylesheet" href="{{asset('themes/default.min.css')}}" />
 
     <link rel='stylesheet' href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <!-- In your HTML template -->
+<link rel="manifest" href="/manifest.json">
+
+
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -32,15 +36,26 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    {{-- <div class="min-h-screen bg-gray-100"> --}}
         {{-- @include('layouts.navigation') --}}
 
         <!-- Page Content -->
-        <main>
+        {{-- <main> --}}
             {{ $slot }}
-        </main>
-    </div>
+        {{-- </main> --}}
+    {{-- </div> --}}
 
 </body>
-
+{{--
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function(err) {
+          console.error('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script> --}}
 </html>

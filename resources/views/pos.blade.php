@@ -15,18 +15,17 @@
                 </a>
             </center>
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                {{-- @foreach (App\Models\User::cashierDetails() as $casDetails) --}}
                 <a href="#">Datalogic System Corp</a>
-                <a href="#">Branch: Shell</a>
+                <a href="#">Company:Shell </a>
                 <a href="#">POS Number: 1</a>
                 <a href="#">Cashier: Sheila Dela Cruz</a>
+                {{-- @endforeach --}}
                 <br><br>
                 <form action="/logout" method="POST">
                     <center>
-                        <x-dropdown-link :href="route('logout')"
-                        onclick="event.preventDefault();
-                                    this.closest('form').submit();">
-                    {{ __('Log Out') }}
-                </x-dropdown-link>
+                    <a href="/">logout</a>
+
                     {{-- <button type="submit">Log out</button> --}}
                 </center>
                 </form>
@@ -43,7 +42,7 @@
                                 <th>Nozzle</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
-                                <th>Total</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -72,8 +71,8 @@
                     <button class="calcbutton" onclick="appendToDisplay('')">7</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">8</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">9</button>
-                    <button class="calcbutton clear-button btn" onclick="clearDisplay" style="background-color:lightcoral"> Clear</button>
-                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow('{{ $transaction->id }}')" style="background-color:lightpink">Void</button>
+                    <button class="calcbutton clear-button btn" onclick=clearbutton() style="background-color:lightcoral"> Clear</button>
+                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow()" style="background-color:lightpink">Void</button>
                     <button class="calcbutton special-button" style="background-color:violet">Preset</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">4</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">5</button>
@@ -117,65 +116,65 @@
 
             <div id="pump-div" class="pump-items-container">
                 @foreach ($datab as $pump )
+                {{-- <div id="pump-div" class="pump-items-container"> --}}
                 <div class="pump-items-container" id="pump-column">
                     <form action="/authorizepump" method="GET" id="{{$pump['Id']}}">
+                        @csrf
+                        <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}" id="nozup">
+                        <input type="hidden" name="id"value = "{{$pump['Id']}}">
                         <div class="pump-item text-dark" onclick="pumpDetails({{$pump['Id']}})" id="pump-column">
 
-                            @if ($pump['Type']==='PumpIdleStatus')
+                            @if ($pump['Type']==='PumpIdleStatus' && $pump['Data']['NozzleUp'] !== 0 )
 
-                            @if ($pump['Data']['NozzleUp'] > 0)
+                                  {{-- @if ($pump['Data']['NozzleUp'] !== 0) --}}
 
-                            <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}" id="nozup">
-                            @if ($pump['Data']['NozzleUp'] === 1)
-                            <h3 style="background-color: lightgreen" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                            <center><img src="img/premium.png" class="img-icon"></center>
-                            <div class="pump-thumb-details">
-                                <p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p>
-                            </div>
-                            @elseif ($pump['Data']['NozzleUp'] === 2)
-                            <h3 style="background-color: lightgreen" class="card-header"> <a class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                            <center><img src="img/diesel.png" class="img-icon"></center>
-                            <div class="pump-thumb-details">
-                                <p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p>
-                            </div>
-                            @elseif ($pump['Data']['NozzleUp'] === 3)
-                            <h3 style="background-color: lightgreen" class="card-header"> <a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
-                            <center><img src="img/regular.png" class="img-icon"></center>
-                            <div class="pump-thumb-details">
-                                <p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p>
-                            </div>
-                            @else
-                            <h3 style="background-color: lightgreen" class="card-header"> <a class="pump-number">{{$pump['Id']}} </a><a class="card-header-title p-0">NOZZLE </a></h3>
+                                         <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}" id="nozup">
+                                                <h3 style="background-color: lightgreen" class="card-header">
+                                                    <a class="pump-number"> {{$pump['Id']}} </a>
+                                                    <a class="card-header-title p-0">NOZZLE </a>
+                                                </h3>
+                                                    <p style="position: fixed;padding-left:5px;">{{$pump['Data']['NozzleUp']}}</p>
+                                                  <center>
+                                                    <img src="img/premium.png" class="img-icon">
+                                                </center>
+                                                  <div class="pump-thumb-details">
+                                                      <p>A: {{ $pump['Data']['LastAmount'] }}
+                                                      L: {{ $pump['Data']['LastVolume'] }}</p>
+                                 {{-- @else --}}
 
-                            @endif
+                                 {{-- @endif --}}
+                      @elseif ($pump['Type']==='PumpOfflineStatus')
 
-                            @else
-                            <h3 style="background-color:#FFD580;" class="card-header"><a class="pump-number">{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
-                            <center><img src="img/idle.png" class="img-icon"></center>
-                            <div class="pump-thumb-details">
-                                <p>A: {{ $pump['Data']['LastAmount'] }}<br>
-                                    L: {{ $pump['Data']['LastVolume'] }}</p>
-                            </div>
-                            @endif
-                            @elseif ($pump['Type']==='PumpOfflineStatus')
-                            <h3 style="background-color: #FFCCCB" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0">OFFLINE</a></h3>
+                            <h3 style="background-color: #FFCCCB" class="card-header">
+                            <a class="pump-number"> {{$pump['Id']}} </a>
+                            <a class="card-header-title p-0">OFFLINE</a>
+                            </h3>
                             <center><img src="img/offline.png"></center>
+
                             @elseif ($pump['Type']==='PumpFillingStatus')
-                            <h3 style="background-color: lightblue" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a> <a class="card-header-title p-0" style="color: red">FILLING</a></h3>
-                            <center><img src="img/refilling-bar.gif" class="img-icon" style="margin-left:25px;opacity:1"> </center>
+
+                            <h3 style="background-color: lightblue" class="card-header">
+                                <a class="pump-number"> {{$pump['Id']}} </a>
+                                <a class="card-header-title p-0" style="color: red">FILLING</a>
+                            </h3>
+                            <center><img src="img/loadingFilling.gif" class="img-icon" style="margin-left:25px;opacity:1"> </center>
                             <div class="pump-thumb-details">
                                 <p>A: {{ $pump['Data']['Amount'] }}<br>
                                     L: {{ $pump['Data']['Volume'] }}</p>
                             </div>
 
                             @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
+
                             <h3 style="background-color:lightgreen" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
                             <center><img src="img/done-filling.gif"></center>
                             @else
-                            <h1>you have no pumps</h1>
+                            <h3 style="background-color:#FFD580;" class="card-header"><a class="pump-number">{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
+                            <center><img src="img/idle.png" class="img-icon"></center>
+                            <div class="pump-thumb-details">
+                                <p>A: {{ $pump['Data']['LastAmount'] }}<br>
+                                    L: {{ $pump['Data']['LastVolume'] }}</p>
+                             </div>
+                        {{-- <h1>you have no pumps</h1> --}}
                             @endif
                         </div>
 
@@ -185,6 +184,7 @@
                                 <label for="price" style="font-size: 20px">Price:</label>
 
                                 @if ($pump['Type']==='PumpIdleStatus')
+
                                 <input readonly type="text" id="price" name="price" value="{{$pump['Data']['LastPrice']}}" />
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
                                 <input readonly type="text" id="price" name="price" value="0" />
@@ -198,6 +198,7 @@
                             <div class="label-input-group">
                                 <label for="volume" style="font-size: 20px">Volume:</label>
                                 @if ($pump['Type']==='PumpIdleStatus')
+
                                 <input readonly type="text" id="volume" name="volume" value="{{$pump['Data']['LastVolume']}}" />
 
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
@@ -211,6 +212,7 @@
                             <div class="label-input-group">
                                 <label for="amount" style="font-size: 20px">Amount:</label>
                                 @if ($pump['Type']==='PumpIdleStatus')
+
                                 <input readonly type="text" id="amount" name="amount" value="{{$pump['Data']['LastAmount']}}" />
 
                                 @elseif ($pump['Type']==='PumpOfflineStatus')
@@ -224,10 +226,12 @@
                             <label for="idpump"></label>
                             <input type="hidden" name="pumpid" value="{{$pump['Id']}}" id="idpump">
                             <div class="btn-group">
-                                <button type="button" class="start-button" style="background-color: #00cc00; color: #fff;" onclick="authorize({{$pump['Id']}})">
+                                <button type="button" class="start-button"
+                                style="background-color: #00cc00; color: #fff;height:8vh;width:18vh;border-radius:50px;font-size:20px" onclick="authorize({{$pump['Id']}})">
                                     Authorize
                                 </button>
-                                <button type="button" class="stop-button " style="background-color: #ff0000; color: #fff;" onclick="stop({{$pump['Id']}})">
+                                <button type="button" class="stop-button "
+                                style="background-color: #ff0000; color: #fff;padding:10px;width:17vh;border-radius:50px;font-size:20px" onclick="stop({{$pump['Id']}})">
                                     Stop
                                 </button>
                             </div>
@@ -247,11 +251,12 @@
                                 <tbody>
                                     @if (isset($pendingTransactionsByPump[$pump['Id']]) && count($pendingTransactionsByPump[$pump['Id']]) > 0)
                                     @foreach ($pendingTransactionsByPump[$pump['Id']] as $transaction)
+                                    {{-- @if(emtpy($tr)) --}}
                                     <tr id="transaction-row-{{ $transaction->id }}">
                                         <td>{{ $transaction->nozzle }}</td>
                                         <td>{{ $transaction->price }}</td>
                                         <td>{{ number_format($transaction->volume) }}</td>
-                                        <td>{{ $transaction->amount }}</td>
+                                        <td>{{ number_format($transaction->amount) }}</td>
                                         <td>
                                             @if ($transaction->status == 0)
                                             <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }}
@@ -275,52 +280,56 @@
                             </table>
                         </div>
                     </div>
-                    <button type="button" class="pt-button" style="background-color: #007bff; color: #fff" onclick="showTable({{ $pump['Id'] }})">
-                        Pending Transaction
+                    <button type="button" class="pt-button" style="background-color: #007bff; color: #fff;height:8vh;padding:5px;border-radius:50px;font-size:20px;width:18vh" onclick="showTable({{ $pump['Id'] }})">
+                        Pending
                     </button>
                 </div>
             </div>
             @endforeach
-        </div>
+    </div>
+        <form action="/receipt" method="POST" id="printform">
+            @csrf
+            <input type="hidden" name="transactionNumber" id = "trn" >
+        </form>
         {{-- Mode of payment --}}
-        <div id="mop-div" class="mop-column">
-            @foreach($mopData as $mop)
-            {{-- <form action="/receipt" method="POST">
-                @csrf --}}
-            <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:30%" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
-        {{-- </form> --}}
-            @endforeach
-        </div>
-        <div id="reports-column">
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-        </div>
-        <div id="nonfuel-column">
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-        </div>
-        <div id="manual-column">
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-        </div>
-        <div id="config-column">
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-        </div>
+
         {{-- <iframe src="{{ route('transaction') }}" width="100%" height="300" id="reciept" style="display: block"></iframe> --}}
 
         {{-- <iframe id="os-iframe"src="{{ route('transaction') }}"  class="h-75" width="100%" height="80%" frameborder="0" allowTransparency="true" style="display: none" ></iframe> --}}
         <div id = "invoicePOS" style="display:none;position:absolute"></div>
-    </div>
-    </div>
+<div id="test">
+            <div id="mop-div" class="mop-column">
+
+                @foreach($mopData as $mop)
+                <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:30%" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
+
+                @endforeach
+            </div>
+            <div id="reports-column">
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+            <div id="nonfuel-column">
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+            <div id="manual-column">
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+            <div id="config-column">
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+                <button class="calcbutton">Lorem ipsum</button>
+            </div>
+        </div>
     </div>
 
     <form action="/getitems" method="POST">
@@ -334,7 +343,9 @@
     </form>
     <input type="hidden" name="vat-amount" id="vat-amount">
     <input type="hidden" name="vat-sale" id="vat-sale">
+</x-app-layout>
     <script>
+
         function showTable(pumpId) {
             const tableContent = document.getElementById('pending-table-' + pumpId).innerHTML;
             Swal.fire({
@@ -391,41 +402,45 @@
         }
 
         function stop(Id) {
-            Swal.fire({
-                title: 'Stop pump',
-                text: 'Are you sure you want to stop this pump?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes',
-                cancelButtonText: 'No',
-                dangerMode: true,
-                scrollbarPadding: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+            // Swal.fire({
+            //     title: 'Stop pump',
+            //     text: 'Are you sure you want to stop this pump?',
+            //     icon: 'warning',
+            //     showCancelButton: true,
+            //     confirmButtonText: 'Yes',
+            //     cancelButtonText: 'No',
+            //     dangerMode: true,
+            //     scrollbarPadding: false
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
                     // Code to execute when "Yes" button is clicked
+
                     document.getElementById(Id).setAttribute('action', '/stoppump');
                     document.getElementById(Id).submit();
+                    // alertify.success('Pump Stopped')
                     Swal.fire({
                         title: 'Pump Stopped',
-                        icon: 'success',
-                        scrollbarPadding: false
+                        icon: 'warning',
+                        scrollbarPadding: false,
+                        showConfirmButton: false
                     });
-                } else {
-                    Swal.fire({
-                        title: 'Pump Continues',
-                        icon: 'info',
-                        scrollbarPadding: false
-                    });
-                    console.log('Pump continues');
-                }
-            });
+            //     } else {
+            //         Swal.fire({
+            //             title: 'Pump Continues',
+            //             icon: 'info',
+            //             scrollbarPadding: false
+            //         });
+            //         console.log('Pump continues');
+            //     }
+            // });
         }
-        const myinterval = setInterval(refresh, 500);
+     const myinterval = setInterval(refresh, 500);
 
         function refresh() {
             $('#pump-div').load(document.URL + " #pump-div");
         }
         var pumpdiv = document.getElementById("pump-div");
+        var pumpcolumn = document.getElementById("pump-column");
         var mopdiv = document.getElementById("mop-div");
         var reportsdiv = document.getElementById("reports-column");
         var nonfueldiv = document.getElementById("nonfuel-column");
@@ -435,100 +450,101 @@
 
 
         function mop() {
-            reportsdiv.style.display = "none";
+            // reportsdiv.style.visibility = "none";
             pumpdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            manualdiv.style.display = "none"
-            configdiv.style.display = "none";
-            mopdiv.setAttribute('style', 'display:block');
+            // nonfueldiv.style.display = "none";
+            // manualdiv.style.display = "none"
+            // configdiv.style.display = "none";
+            mopdiv.style.display = "flex";
+            pumpcolumn.style.display = "none";
             console.log('mop clicked!');
             document.getElementById("mop-nav").setAttribute('class', 'is-active');
             document.getElementById("pump-nav").setAttribute('class', '');
-            document.getElementById("config-nav").setAttribute('class', '');
-            document.getElementById("reports-nav").setAttribute('class', '');
-            document.getElementById("nf-nav").setAttribute('class', '');
-            document.getElementById("manual-nav").setAttribute('class', '');
+            // document.getElementById("config-nav").setAttribute('class', '');
+            // document.getElementById("reports-nav").setAttribute('class', '');
+            // document.getElementById("nf-nav").setAttribute('class', '');
+            // document.getElementById("manual-nav").setAttribute('class', '');
         }
 
-        function reports() {
-            console.log("reports");
-            pumpdiv.style.display = "none";
-            mopdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            manualdiv.style.display = "none"
-            reportsdiv.style.display = "block";
-            configdiv.style.display = "none";
-            document.getElementById("mop-nav").setAttribute('class', '');
-            document.getElementById("pump-nav").setAttribute('class', '');
-            document.getElementById("config-nav").setAttribute('class', '');
-            document.getElementById("reports-nav").setAttribute('class', 'is-active');
-            document.getElementById("nf-nav").setAttribute('class', '');
-            document.getElementById("manual-nav").setAttribute('class', '');
-        }
+        // function reports() {
+        //     console.log("reports");
+        //     pumpdiv.style.display = "none";
+        //     mopdiv.style.display = "none";
+        //     nonfueldiv.style.display = "none";
+        //     manualdiv.style.display = "none"
+        //     reportsdiv.style.display = "block";
+        //     configdiv.style.display = "none";
+        //     document.getElementById("mop-nav").setAttribute('class', '');
+        //     document.getElementById("pump-nav").setAttribute('class', '');
+        //     document.getElementById("config-nav").setAttribute('class', '');
+        //     document.getElementById("reports-nav").setAttribute('class', 'is-active');
+        //     document.getElementById("nf-nav").setAttribute('class', '');
+        //     document.getElementById("manual-nav").setAttribute('class', '');
+        // }
 
-        function nonfuel() {
-            console.log("nonfuel");
-            pumpdiv.style.display = "none";
-            mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            manualdiv.style.display = "none"
-            nonfueldiv.style.display = "block";
-            configdiv.style.display = "none";
-            document.getElementById("mop-nav").setAttribute('class', '');
-            document.getElementById("pump-nav").setAttribute('class', '');
-            document.getElementById("config-nav").setAttribute('class', '');
-            document.getElementById("reports-nav").setAttribute('class', '');
-            document.getElementById("nf-nav").setAttribute('class', 'is-active');
-            document.getElementById("manual-nav").setAttribute('class', '');
-        }
+        // function nonfuel() {
+        //     console.log("nonfuel");
+        //     pumpdiv.style.display = "none";
+        //     mopdiv.style.display = "none";
+        //     reportsdiv.style.display = "none";
+        //     manualdiv.style.display = "none"
+        //     nonfueldiv.style.display = "block";
+        //     configdiv.style.display = "none";
+        //     document.getElementById("mop-nav").setAttribute('class', '');
+        //     document.getElementById("pump-nav").setAttribute('class', '');
+        //     document.getElementById("config-nav").setAttribute('class', '');
+        //     document.getElementById("reports-nav").setAttribute('class', '');
+        //     document.getElementById("nf-nav").setAttribute('class', 'is-active');
+        //     document.getElementById("manual-nav").setAttribute('class', '');
+        // }
 
         function pumps() {
             console.log("pumps")
             mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            manualdiv.style.display = "none";
-            configdiv.style.display = "none";
-            pumpdiv.setAttribute('style', 'display:block');
+            // reportsdiv.style.display = "none";
+            // nonfueldiv.style.display = "none";
+            // manualdiv.style.display = "none";
+            // configdiv.style.display = "none";
+            pumpdiv.style.display = "flex";
             document.getElementById("mop-nav").setAttribute('class', '');
             document.getElementById("pump-nav").setAttribute('class', 'is-active');
-            document.getElementById("config-nav").setAttribute('class', '');
-            document.getElementById("reports-nav").setAttribute('class', '');
-            document.getElementById("nf-nav").setAttribute('class', '');
-            document.getElementById("manual-nav").setAttribute('class', '');
+            // document.getElementById("config-nav").setAttribute('class', '');
+            // document.getElementById("reports-nav").setAttribute('class', '');
+            // document.getElementById("nf-nav").setAttribute('class', '');
+            // document.getElementById("manual-nav").setAttribute('class', '');
         }
 
-        function manual() {
-            mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            pumpdiv.style.display = "none";
-            manualdiv.style.display = "block";
-            configdiv.style.display = "none";
-            console.log("manual");
-            document.getElementById("mop-nav").setAttribute('class', '');
-            document.getElementById("pump-nav").setAttribute('class', '');
-            document.getElementById("config-nav").setAttribute('class', '');
-            document.getElementById("reports-nav").setAttribute('class', '');
-            document.getElementById("nf-nav").setAttribute('class', '');
-            document.getElementById("manual-nav").setAttribute('class', 'is-active');
-        }
+        // function manual() {
+        //     mopdiv.style.display = "none";
+        //     reportsdiv.style.display = "none";
+        //     nonfueldiv.style.display = "none";
+        //     pumpdiv.style.display = "none";
+        //     manualdiv.style.display = "block";
+        //     configdiv.style.display = "none";
+        //     console.log("manual");
+        //     document.getElementById("mop-nav").setAttribute('class', '');
+        //     document.getElementById("pump-nav").setAttribute('class', '');
+        //     document.getElementById("config-nav").setAttribute('class', '');
+        //     document.getElementById("reports-nav").setAttribute('class', '');
+        //     document.getElementById("nf-nav").setAttribute('class', '');
+        //     document.getElementById("manual-nav").setAttribute('class', 'is-active');
+        // }
 
-        function config() {
-            console.log("config");
-            mopdiv.style.display = "none";
-            reportsdiv.style.display = "none";
-            nonfueldiv.style.display = "none";
-            pumpdiv.style.display = "none";
-            manualdiv.style.display = "none";
-            configdiv.style.display = "block";
-            document.getElementById("mop-nav").setAttribute('class', '');
-            document.getElementById("pump-nav").setAttribute('class', '');
-            document.getElementById("config-nav").setAttribute('class', 'is-active');
-            document.getElementById("reports-nav").setAttribute('class', '');
-            document.getElementById("nf-nav").setAttribute('class', '');
-            document.getElementById("manual-nav").setAttribute('class', '');
-        }
+        // function config() {
+        //     console.log("config");
+        //     mopdiv.style.display = "none";
+        //     reportsdiv.style.display = "none";
+        //     nonfueldiv.style.display = "none";
+        //     pumpdiv.style.display = "none";
+        //     manualdiv.style.display = "none";
+        //     configdiv.style.display = "block";
+        //     document.getElementById("mop-nav").setAttribute('class', '');
+        //     document.getElementById("pump-nav").setAttribute('class', '');
+        //     document.getElementById("config-nav").setAttribute('class', 'is-active');
+        //     document.getElementById("reports-nav").setAttribute('class', '');
+        //     document.getElementById("nf-nav").setAttribute('class', '');
+        //     document.getElementById("manual-nav").setAttribute('class', '');
+        // }
     </script>
 
     <!-- Append a transaction to the item display container -->
@@ -558,10 +574,10 @@
 
             rows.forEach((row) => {
                 const cells = row.querySelectorAll('td');
-                const fifthCell = cells[5]; // Get the third cell (index 2)
+                const fifthCell = cells[5];
 
                 if (fifthCell) {
-                    const value = parseFloat(fifthCell.textContent);
+                    const value = parseFloat(fifthCell.textContent.replace(",",""));
                     if (!isNaN(value)) {
                         sum += value;
                     }
@@ -570,9 +586,9 @@
 
             var vatsale = sum / 1.12;
             var vat = sum - vatsale;
-            console.log("Sub total:" + sum);
-            console.log("vat sale:" + vatsale);
-            console.log("vat amount:" + vat);
+            // console.log("Sub total:" + sum);
+            // console.log("vat sale:" + vatsale);
+            // console.log("vat amount:" + vat);
             var vatainput = document.getElementById('vat-amount');
            var vatsinput = document.getElementById('vat-sale');
            vatainput.value = vat;
@@ -587,12 +603,16 @@
         });
 
         // Attach a click event handler to the "Clear" button
-        document.getElementById('clearButton').addEventListener('click', function() {
+        function clearbutton(){
+            // document.getElementById('clearButton').addEventListener('click', function() {
             clearTransactions();
             var subttl = document.getElementById("sub-total");
             var clear = subttl.value = 0;
             console.log("sub total is now" + clear);
-        });
+        // });
+
+        }
+
 
 
     </script>
@@ -714,7 +734,7 @@
                     var payable = total + amount;
                     var final = subttl.value = payable;
 
-                    console.log("hello" + final);
+                    // console.log("hello" + final);
                 },
                 error: function() {
                     alert('Failed to fetch transaction details.');
@@ -745,9 +765,34 @@ function generateReceipt(){
 });
 
 }
+
         var tabledata = document.getElementById("items-table");
         var data = [];
         var itemno = 1;
+function submitToPrint(){
+    var receipt = document.getElementById("printform");
+    receipt.submit();
+}
+function updateTrans(id){
+    $.ajax({
+  url: '/updateTrans',
+  type: 'POST',
+  data:{
+    '_token': '{{ csrf_token() }}',
+    'transaction':id},
+  success: function(response) {
+    // Handle the response from the controller
+
+    console.log("transaction updated!");
+  },
+  error: function(response) {
+
+    console.log("transaction update failed")
+
+  }
+});
+}
+
  function addmop(id, pt, cd,name) {
 
         // alert(id);
@@ -761,11 +806,11 @@ function generateReceipt(){
         var vat = total - vatsale;
         var tabledata = document.getElementById("items-table");
         console.log(total);
-
+        var cellfifth
         for (var i = 1; i < tabledata.rows.length; i++){
             var row = tabledata.rows[i];
 
-            var itemvalue = isNaN(parseFloat(row.cells[5].innerText)) ? moneyb : parseFloat(row.cells[5].innerText);
+            var itemvalue = isNaN(parseFloat(row.cells[5].textContent.replace(",",""))) ? moneyb : parseFloat(row.cells[5].textContent.replace(",",""));
 
             var itemdata = {
                 itemNumber: itemno,
@@ -799,7 +844,7 @@ function generateReceipt(){
                 itemDesc:'CASH',
                 itemPrice:total,
                 itemQTY: 1,
-                itemValue:moneyb,
+                itemValue:0,
                 itemID:1,
                 itemTaxAmount:0,
                 deliveryID:1,
@@ -859,7 +904,11 @@ function generateReceipt(){
     'data':transactiondata},
   success: function(response) {
     // Handle the response from the controller
-
+    var transNo = document.getElementById("trn");
+    transNo.value = response;
+    var test = transNo.value;
+    console.log(response);
+    alert(test);
     console.log("request sent!");
   },
   error: function(response) {
@@ -890,8 +939,10 @@ if (total == 0 ||isNaN(total)) {
         //     icon: "success",
         //     scrollbarPadding: false
         // })
+        updateTrans(id);
         alertify.success('Transaction Complete');
-        generateReceipt();
+       submitToPrint();
+        // generateReceipt();
         voidAllTransactions();
 
         // location.reload('/pos');
@@ -1005,7 +1056,9 @@ else if(id > 1 && pt ==1){
         // Function to void the selected row
         function voidSelectedRow() {
             // Find the selected row
-location.reload();
+// location.reload();
+            var subttl = document.getElementById("sub-total");
+            subttl.value = 0;
             const selectedRow = document.querySelector('.selected-row');
 
             if (selectedRow) {
@@ -1092,4 +1145,4 @@ function closeNav() {
 }
 
     </script>
-</x-app-layout>
+

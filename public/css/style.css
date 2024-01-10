@@ -11,7 +11,10 @@
     justify-content: space-between;
     padding: 10px;
     flex-wrap: wrap;
-    height: 100vh;
+    height: 90vh;
+    overflow: hidden;
+}
+body{
     overflow: hidden;
 }
 
@@ -160,7 +163,7 @@ h1 {
 /* Styles for the container of pump items */
 .pump-items-container {
     display: flex;
-    align-items: start;
+     align-items: start;
     flex-wrap: wrap;
     /* justify-content: space-evenly; */
     /* overflow-y: auto; */
@@ -226,6 +229,7 @@ white-space: nowrap;
     margin: 0 6px;
     font-size: 14px;
     border-radius: 3px;
+
 }
 .stop-button {
     padding: 5px 10px;
@@ -316,7 +320,7 @@ white-space: nowrap;
 }
 button.calcbutton {
     width: 95%;
-    height: 50px;
+    height: 9vh;
     margin: 2px;
     font-size: larger;
 
@@ -363,6 +367,8 @@ margin-left: 0px;
 }
 #mop-div{
    display: none;
+   align-items: start;
+   flex-wrap: wrap;
 }
 #price{
     font-size: 20px;
@@ -390,11 +396,14 @@ display: none;
             }
 .pump-number{
     display: inline-block;
-    padding: 1px;
-    border-radius: 100%;
+    padding: 2px;
+    border-radius:100%;
     background-color: gray;
     color:white;
-    margin-right: 3px;
+    margin-right: 5px;
+    height: 10%;
+    width: 23%;
+    text-align: center;
 }
 #mop-btn{
     /* display: grid;
@@ -416,7 +425,7 @@ display: none;
     align-items: center;
   }
 .pump-thumb-details{
-    margin-top:35px;
+    margin-top:30px;
      position:relative;
      font-size:14px;
      align-items:center;
@@ -425,6 +434,7 @@ display: none;
 }
 .pump-thumb-details p{
     text-align: center;
+
 }
 .sub-total{
     position: relative;
@@ -611,15 +621,28 @@ body{
     font-size: 36px;
     margin-left: 50px;
   }
+  /* .pump-column{
+    display: block;
+  } */
 
   /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
   #main {
     transition: margin-left .5s;
     padding: 20px;
   }
-
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
   @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
   }
+  @viewport {
+    width: device-width;
+    zoom: 1.0;
+}
+/* html {
+    touch-action: none;
+    touch-zooming: none;
+    user-zoom: fixed;
+    -ms-content-zooming: none;
+    -ms-touch-action: none;
+} */

@@ -10,8 +10,8 @@
             body {
             padding: 0;
             margin: 2%;
-            font-size: 10pt;
-            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14pt;
+            font-family: 'Courier New', Courier, monospace;
             background: #eee;
             /* margin-bottom:5%; */
 
@@ -21,16 +21,16 @@
             /* text-align: center; */
         }
         #invoicePOS {
-            width: 85mm;
+            width: 130mm;
             /* margin: 0 auto; */
             background: #FFF;
             /* padding: 0; */
-            /* padding-bottom: 13mm !important; */
-            box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3);
+            padding-bottom: 13mm !important;
+            /* box-shadow: 0 .5mm 2mm rgba(0, 0, 0, .3); */
         }
         #invoicePOS table {
             width: 100%;
-            border-collapse: collapse;
+            /* border-collapse: collapse; */
         }
         .table-borderless tbody+tbody,
         .table-borderless td,
@@ -54,6 +54,9 @@
         }
         .invoiceheader{
             /* text-align:center; */
+        }
+        .Items{
+            padding-left:10px;
         }
         @media print {
 
@@ -94,7 +97,14 @@
 
                 <tr>
                 <th></th>
-
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                    <th></th>
                 <th></th>
                 </tr>
             </thead>
@@ -102,10 +112,14 @@
                 <tr>
                     <td>{{now()->format('Y/m/d H:i:s A')}}</td>
 
-                   <td></td> {{-- <td>{{now()->format('Y-m-d')}}</td> --}}
+                  {{-- <td>{{now()->format('Y-m-d')}}</td> --}}
 
                    <td>POS#1</td>
                 </tr>
+                <tr><td>DATALOGIC</td>
+                <td>SI#01</td></tr>
+                <tr><td></td></tr>
+                <tr><td></td></tr>
                 {{-- @php
 
  $apiUrl = 'http://172.16.12.234:8087/api/getTransId';
@@ -137,14 +151,73 @@ if ($response) {
                 @endphp --}}
                 @foreach ( App\Models\User::activeTransaction() as $items )
           <tr>
-            <td id="body">{{trim($items['Item_Description'])}} </td>
-           <td></td>
+            <td id="body">{{trim($items['Item_Description'])}} <br><div class = "Items">
+             <a id="volume">{{trim($items['Item_Quantity'])}}</a>L x {{number_format(trim($items['Item_Price']))}} P/L VAT</td>
+            </div>
 
-           <td>P{{number_format(trim($items['Item_Value']))}}</td>
+
+           <td id="itemValue">P{{number_format(trim($items['Item_Value']))}}</td>
 
         </tr>
+           @endforeach
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+        @foreach (App\Models\User::transactions() as $tax)
+        <tr>
+            <td>Sale Total</td>
+            <td id="saleTotal"></td>
+            </tr>
+            <tr>
+                <td>CASH</td>
+                <td></td>
+            </tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+          <tr>
+            <tr>
+            <td>TOTAL INVOICE</td>
+            <td id="totalInv"></td>
+            </tr>
+            <tr>
+                <td>TOTAL VOLUME</td>
+                <td id="totalVol"></td>
+            </tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+          <tr>
+        </tr>
+        <tr><td></td></tr>
+        <tr><td></td></tr>
+      <tr>
+    </tr>
+    <tr><td></td></tr>
+    <tr><td></td></tr>
+  <tr>
+            <td>VATable Sale</td>
 
+            <td>P{{number_format(trim($tax['Sale_Total']))}}</td>
+          </tr>
+          <tr><td>VAT Amount</td>
 
+                <td>P{{number_format(trim($tax['Tax_Total']))}}</td>
+            </tr>
+            <tr>
+                <td>VAT-Exempt Sale</td>
+
+                <td>P0.00</td>
+            </tr>
+            <tr>
+                <td>Zero Rated Sale</td>
+
+                <td>P0.00</td>
+            </tr>
            @endforeach
 
             </tbody>
@@ -164,8 +237,9 @@ if ($response) {
         <td></td>
     @endforeach
     </footer>
+
+    <p id="footer" style="margin-left:16px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L1)) !!}</p>
     <center>
-    <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L1)) !!}</p>
     <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L2))!!}</p>
         <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L3)) !!}</p>
             <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L4)) !!}</p>
@@ -174,8 +248,10 @@ if ($response) {
     </div>
 
 @endif
+{{-- <iframe src="{{route('/transaction')}}" frameborder="0" id=""></iframe> --}}
 </body>
 <script type = "text/javascript">
+
      function lineSpacing(textContent) {
         //  var splitText = textContent.split("<br>");
         //  console.log(splitText);
@@ -205,9 +281,103 @@ function footer(){
      console.log(textContent);
     console.log(stringlength);
 }
+function printPageSilently() {
+  if (window.chrome && window.chrome.print) {
+    // Use the silent print option in Chrome
+    window.chrome.print({silent: true});
+  } else {
+    // Fallback to standard print method
+    window.print();
+  }
+}
+var printCanceled = false;
+
+window.onbeforeprint = function() {
+  // The beforeprint event is triggered before the print dialog is displayed
+  // You can use this event to perform any necessary actions before printing
+  // For example, you can set a flag to indicate that the print process has started
+  printCanceled = false;
+};
+
+window.onafterprint = function() {
+  // The afterprint event is triggered after the print dialog is closed
+  // You can use this event to check if the user canceled the print dialog
+  // If the printCanceled flag is still false, it means the user did not cancel the print
+  if (printCanceled) {
+   // console.log("The user canceled the print dialog");
+  } else {
+    //console.log("The user completed the print process");
+  }
+};
+
+// You can also add an event listener to the window to detect if the user cancels the print dialog
+window.addEventListener('beforeprint', function() {
+  // The beforeprint event is triggered before the print dialog is displayed
+  // You can use this event to perform any necessary actions before printing
+  // For example, you can set a flag to indicate that the print process has started
+  printCanceled = false;
+});
+
+window.addEventListener('afterprint', function() {
+    //
+    //  setInterval(function () {window.location.href = "/pos"}, 5000);
+
+});
+
+printPageSilently();
 
 // Example usage
 header(); // Call the header function to execute the logic
 // lineSpacing();
+
+function totalSale(){
+
+var itemValueElements = document.querySelectorAll("#itemValue");
+
+
+var sum = 0;
+
+
+itemValueElements.forEach(function(element) {
+
+  var valueText = element.textContent.replace("P", "").replace(",", "");
+  var numericValue = parseFloat(valueText);
+
+
+  sum += numericValue;
+});
+var salettl = document.getElementById('saleTotal');
+salettl.textContent = "P" + sum.toLocaleString();
+
+var totalInv = document.getElementById('totalInv');
+totalInv.textContent = "P" + sum.toLocaleString();
+
+// Log the sum
+console.log("Sum of itemValue: P" + sum.toLocaleString());
+
+}
+function totalVolume(){ // Get all elements with the id "volume"
+  var volumeElements = document.querySelectorAll("#volume");
+
+  // Initialize the sum
+  var sum = 0;
+
+  // Iterate through the volumeElements and calculate the sum
+  volumeElements.forEach(function(element) {
+    // Extract the quantity from the text content of the element
+    // var valueText = element.textContent;
+    var quantity = parseFloat(element.textContent);
+
+    // Add the quantity to the sum
+    sum += quantity;
+  });
+  var volume = document.getElementById("totalVol");
+volume.textContent = sum.toLocaleString() + "L" ;
+  // Display the sum
+  console.log("The sum of Item_Quantity is: " + sum);
+
+}
+totalSale();
+totalVolume();
 </script>
 </html>

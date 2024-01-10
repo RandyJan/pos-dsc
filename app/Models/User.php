@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\receiptItems;
+use App\Models\transactionBIR;
+use DB;
 // use Sofa\Eloquence\Eloquence;
 // use Sofa\Eloquence\Mappable;
 // use Sofa\Eloquence\Mutable;
@@ -46,4 +48,11 @@ class User extends Authenticatable
         $data = receiptItems::where('Transaction_ID',$filtered)->get();
         return $data;
     }
+    public function transactions(){
+        $filtered = transactionBIR::max('Transaction_ID');
+        $data = transactionBIR::where('Transaction_ID',$filtered)->get();
+        return $data;
+    }
+
 }
+
