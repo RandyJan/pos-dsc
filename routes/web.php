@@ -5,6 +5,7 @@ use App\Http\Controllers\mopController;
 use App\Http\Controllers\pumpController;
 use App\Http\Controllers\receiptController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 */
 
 Route::get('/', function () {
-    return view('auth/login');
+    return view('LoginNew');
 });
 
 // Route::get('/dashboard', function () {
@@ -27,16 +28,18 @@ Route::get('/', function () {
 
 
 
-Route::get('/pos',[pumpController::class, 'pump'])->middleware(['auth'])->name('pos');
-Route::get('/authorizepump',[pumpController::class, 'authorizejson'])->middleware(['auth'])->name('authpump');
-Route::get('/stoppump',[pumpController::class, 'pumpstop'])->middleware(['auth'])->name('stoppump');
+Route::get('/pos',[pumpController::class, 'pump'])->name('pos');
+Route::get('/authorizepump',[pumpController::class, 'authorizejson'])->name('authpump');
+Route::get('/stoppump',[pumpController::class, 'pumpstop'])->name('stoppump');
 Route::get('/mop',[mopController::class, 'mop'] );
-Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->middleware(['auth'])->name('payTransaction');
-Route::post('/voidTransaction', [pumpController::class, 'voidTransaction'])->middleware(['auth'])->name('voidTransaction');
-Route::post('/voidAllTransactions', [pumpController::class, 'voidAllTransactions'])->middleware(['auth'])->name('voidAllTransactions');
+Route::post('/payTransaction', [pumpController::class, 'payTransaction'])->name('payTransaction');
+Route::post('/voidTransaction', [pumpController::class, 'voidTransaction'])->name('voidTransaction');
+Route::post('/voidAllTransactions', [pumpController::class, 'voidAllTransactions'])->name('voidAllTransactions');
 Route::post('/getitems', [pumpController::class,'sendTransaction']);
 Route::post('/receipt', [receiptController::class,'getReceiptLayout']);
 Route::post('/updateTrans', [pumpController::class,'updateTransaction']);
+Route::post('/logins',[LoginController::class, 'LoginJson']);
+Route::get('/logouts',[LoginController::class, 'LogoutJson']);
 // ->middleware(['auth']);
 
 Route::get('/transaction', function () {

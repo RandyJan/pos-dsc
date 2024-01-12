@@ -12,7 +12,12 @@ use App\Models\receiptItems;
 
 class receiptController extends Controller
 {
+
   public function getReceiptLayout(Request $request){
+    $check = Cache::get('Auth');
+    if($check == 0 ){
+        return view('LoginNew');
+    }
     $response = Http::withHeaders([
         "ContentType"=> "json/application"
     ])->post('http://172.16.12.234:8087/api/receipt-sample',([

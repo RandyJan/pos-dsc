@@ -14,19 +14,25 @@
                <x-nav-logo style="width: 50px; height: 40px;" class="block h-10 w-auto fill-current text-gray-600" />
                 </a>
             </center>
+              <a href="#">Datalogic System Corp</a>
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                {{-- @foreach (App\Models\User::cashierDetails() as $casDetails) --}}
-                <a href="#">Datalogic System Corp</a>
-                <a href="#">Company:Shell </a>
-                <a href="#">POS Number: 1</a>
-                <a href="#">Cashier: Sheila Dela Cruz</a>
-                {{-- @endforeach --}}
-                <br><br>
-                <form action="/logout" method="POST">
-                    <center>
-                    <a href="/">logout</a>
+                @foreach($cashier['Cashier'] as $cashierInfo)
+                <a href="#">USER: {{$cashierInfo['Cashier_Name']}}</a>
+                {{-- <a href="#">ID: {{$cashierInfo['Cashier_ID']}}</a> --}}
+                @endforeach
+                @foreach( $cashier['data'] as $cashierData)
 
-                    {{-- <button type="submit">Log out</button> --}}
+                <a href="#">ROLE: {{$cashierData['Role_Name']}} </a>
+
+
+                @endforeach
+
+                <br><br>
+                <form action="/logouts" method="GET">
+                    <center>
+                    {{-- <a href="/">logout</a> --}}
+
+                    <button type="submit">Log out</button>
                 </center>
                 </form>
             </div>
@@ -736,7 +742,8 @@
 
                     // console.log("hello" + final);
                 },
-                error: function() {
+                error: function(response) {
+                    console.log(response);
                     alert('Failed to fetch transaction details.');
                 }
             });

@@ -53,6 +53,8 @@ class User extends Authenticatable
         $data = transactionBIR::where('Transaction_ID',$filtered)->get();
         return $data;
     }
+    public function cashierRoles($id){
 
+    }
 }
 

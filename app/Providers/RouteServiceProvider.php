@@ -24,7 +24,13 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+
+// public function isAuthenticated($isauth){
+//     $authenticated = $isauth;
+
+//     return $authenticated;
+// }
+     public function boot()
     {
         $this->configureRateLimiting();
 

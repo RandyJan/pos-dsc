@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use stdClass;
 use GuzzleHttp\Client;
 use App\Models\transaction;
+use App\Models\transactionBIR;
 use App\Models\receiptItems;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,10 @@ class pumpController extends Controller
 {
     public function pump(Request $request)
     {
+        $check = Cache::get('Auth');
+        if($check == 0 || !Cache::has('Auth')){
+            return view('LoginNew');
+        }
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
@@ -155,6 +160,8 @@ class pumpController extends Controller
         $mop = Cache::remember('mop_data', 60, function () {
             return getMopData();
         });
+        $cashierData = Cache::get('Cashier_data');
+
         // Log::info($testb);
         // Log::info($testb);
         return view('pos')
@@ -162,7 +169,8 @@ class pumpController extends Controller
             // ->with('transaction', $transaction)
             ->with('pending', $pendingTransactions)
             ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
-            ->with('mopData', $mop);
+            ->with('mopData', $mop)
+            ->with('cashier',$cashierData);
 
 
 
@@ -173,6 +181,10 @@ class pumpController extends Controller
 
     public function authorizejson(Request $request)
     {
+        $check = Cache::get('Auth');
+        if($check == 0 ){
+            return view('LoginNew');
+        }
         $pumpid = $request->input('id');
         $price = $request->input('price');
         $nozzle = $request->input('nozzle');
@@ -208,6 +220,10 @@ class pumpController extends Controller
     }
     public function pumpstop(Request $request)
     {
+        $check = Cache::get('Auth');
+        if($check == 0 ){
+            return view('LoginNew');
+        }
         $pumpid =  $request->input('pumpid');
         Log::info($request->all());
         Http::withHeaders([
@@ -232,6 +248,10 @@ class pumpController extends Controller
 
     public function payTransaction(Request $request)
     {
+        $check = Cache::get('Auth');
+        if($check == 0 ){
+            return view('LoginNew');
+        }
         $transactionId = $request->transactionId;
         // Find the transaction and set status to 1
         $transaction = Transaction::find($transactionId);
@@ -270,6 +290,10 @@ class pumpController extends Controller
 
     public function voidTransaction(Request $request)
     {
+        $check = Cache::get('Auth');
+        if($check == 0 ){
+            return view('LoginNew');
+        }
         $transactionId = $request->transactionId;
         // Log::info('Received transactionId: ' . $transactionId);
 
@@ -296,6 +320,10 @@ class pumpController extends Controller
 
     public function voidAllTransactions(Request $request)
     {
+        $check = Cache::get('Auth');
+        if($check == 0 ){
+            return view('LoginNew');
+        }
         // Get all transactions and update their statuses to 0 (voided)
         $transactions = Transaction::all();
         foreach ($transactions as $transaction) {
@@ -306,15 +334,22 @@ class pumpController extends Controller
         return response('All transactions voided', 200);
     }
     public function sendTransaction(Request $request){
+        $check = Cache::get('Auth');
+        if($check == 0 || !Cache::has('Auth') ){
+            return view('LoginNew');
+        }
 
         $data = $request['data'];
         // $datab = json_decode($data, true);
         // $formattedData = http_build_query($data);
         // parse_str($formattedData, $dataArray);
         // Log::info($data);
+        $maxtransid = transactionBIR::max('transaction');
+        $nexttransid = $maxtransid + 1;
         $responseb = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->post('http://172.16.12.234:8087/api/addnewTransaction',[
+    'transNo'=>$nexttransid,
     'cashierID' => $data['cashierID'],
   'subAccID' => '',
   'accountID' => '',
@@ -346,12 +381,13 @@ class pumpController extends Controller
   'isNormalTrans' => $data['isNormalTrans'],
   'items' => $data['items']
 ]);
-
+ Cache::put('transNo',$nexttransid);
+ $transNo = Cache::get('transNo');
 $response = Http::withHeaders([
     "ContentType"=> "json/application"
 ])->post('http://172.16.12.234:8087/api/receipt-sample',([
     'posID'=>1,
-    'transaction_no'=>$request->transNo
+    'transaction_no'=>$nexttransid
 
 ]));
 // $finalLayout = $layout->data;
@@ -362,7 +398,7 @@ $transItems = Http::withHeaders([
     "ContentType"=> "json/application"
 ])->post('http://172.16.12.234:8087/api/getItems',([
     'posID'=>1,
-    'trans_ID'=>$response
+    'trans_ID'=>$transNo,
 
 ]));
 // $id = 577488;
@@ -385,7 +421,10 @@ return response($responseb);
     }
 public function updateTransaction(Request $request){
         // $transaction = Json_decode($request->transaction);
-
+        $check = Cache::get('Auth');
+        if($check == 0 ){
+            return view('LoginNew');
+        }
     $response = transaction::where('transaction',$request->transaction)->update([
         'state'=>2
     ]);
