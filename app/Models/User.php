@@ -43,14 +43,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    public function activeTransaction(){
-        $filtered = receiptItems::max('Transaction_ID');
-        $data = receiptItems::where('Transaction_ID',$filtered)->get();
+    public function activeTransaction($transNo){
+        // $filtered = receiptItems::max('Transaction_ID');
+        $data = receiptItems::where('Transaction_ID',$transNo)->get();
         return $data;
     }
-    public function transactions(){
-        $filtered = transactionBIR::max('Transaction_ID');
-        $data = transactionBIR::where('Transaction_ID',$filtered)->get();
+    public function transactions($transNo){
+        // $filtered = transactionBIR::max('Transaction_ID');
+        $data = transactionBIR::where('Transaction_Number',$transNo)->get();
         return $data;
     }
     public function cashierRoles($id){

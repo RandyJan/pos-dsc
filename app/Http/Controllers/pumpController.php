@@ -195,7 +195,7 @@ class pumpController extends Controller
         $cookie = request()->cookie();
         // $cookie2 = cookie::get();
         // Log::info($request->all());
-         Http::withHeaders([
+        $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
         ])->post('http://172.16.12.200/jsonPTS', [
@@ -214,9 +214,9 @@ class pumpController extends Controller
                 ]
             ]
         ]);
-        // LOG::info($response);
+       LOG::info($response);
 
-        return redirect()->route('pos');
+        return response()->noContent();
     }
     public function pumpstop(Request $request)
     {
@@ -243,7 +243,7 @@ class pumpController extends Controller
                 ]
             ]
         ]);
-        return redirect()->route('pos');
+        return response()->noContent();
     }
 
     public function payTransaction(Request $request)
@@ -265,8 +265,8 @@ class pumpController extends Controller
             'transaction'=> $transaction->transaction,
             'state'=> $transaction->state,
             'nozzle'=> $transaction->nozzle,
-            'amount'=> number_format($transaction->amount),
-            'volume'=> number_format($transaction->volume),
+            'amount' => str_replace(['.', ','], '', number_format($transaction->amount)),
+            'volume'=>str_replace(['.', ','], '', number_format($transaction->volume)),
             'price'=> $transaction->price,
             'tcvolume'=> $transaction->tcvolume,
             'totalamount'=> $transaction->totalamount,
@@ -344,7 +344,7 @@ class pumpController extends Controller
         // $formattedData = http_build_query($data);
         // parse_str($formattedData, $dataArray);
         // Log::info($data);
-        $maxtransid = transactionBIR::max('transaction');
+        $maxtransid = transactionBIR::max('Transaction_Number');
         $nexttransid = $maxtransid + 1;
         $responseb = Http::withHeaders([
             'Content-Type' => 'application/json',
@@ -383,6 +383,7 @@ class pumpController extends Controller
 ]);
  Cache::put('transNo',$nexttransid);
  $transNo = Cache::get('transNo');
+ Log::info($transNo);
 $response = Http::withHeaders([
     "ContentType"=> "json/application"
 ])->post('http://172.16.12.234:8087/api/receipt-sample',([

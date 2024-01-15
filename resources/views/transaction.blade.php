@@ -70,9 +70,9 @@
 </head>
 <body>
 
-    @if(! Auth::user())
+    @if( Cache::get('Auth') == 0 || !Cache::has('Auth'))
 <div>
-    <p>Oops you have no active transaction</p>
+    <p>SORRY YOU ARE NOT AUTHORIZED TO USE THIS SOFTWARE,<br> PLEASE LOGIN IMMEDIATELY.</p>
 </div>
 @else
 <div id="invoicePOS">
@@ -149,14 +149,29 @@ if ($response) {
                     $transactionId = $response;
 
                 @endphp --}}
-                @foreach ( App\Models\User::activeTransaction() as $items )
+
+                @foreach ( App\Models\User::activeTransaction(Cache::get('transNo')) as $items )
           <tr>
-            <td id="body">{{trim($items['Item_Description'])}} <br><div class = "Items">
-             <a id="volume">{{trim($items['Item_Quantity'])}}</a>L x {{number_format(trim($items['Item_Price']))}} P/L VAT</td>
+            @if(trim($items['Item_Type']) == 7)
+            <td id="body">
+                {{ trim($items['Item_Description']) }} <br>
+                <div class="Items">
+                    <!-- Add content for Item_Type equal to 7 here -->
+                </div>
+            </td>
+            <td id="itemValue">P{{number_format(trim($items['Item_Value']))}}</td>
+
+        @else
+        <td id="body">
+            {{ trim($items['Item_Description']) }} <br>
+            <div class="Items">
+                <a id="volume">{{ trim($items['Item_Quantity']) }}</a>L x {{ number_format(trim($items['Item_Price'])) }} P/L VAT
             </div>
+        </td>
+        <td id="itemValue">P{{number_format(trim($items['Item_Value']))}}</td>
 
+        @endif
 
-           <td id="itemValue">P{{number_format(trim($items['Item_Value']))}}</td>
 
         </tr>
            @endforeach
@@ -169,21 +184,22 @@ if ($response) {
         <tr><td></td></tr>
         <tr><td></td></tr>
         <tr><td></td></tr>
-        @foreach (App\Models\User::transactions() as $tax)
+        @foreach (App\Models\User::transactions(Cache::get('transNo')) as $tax)
         <tr>
             <td>Sale Total</td>
-            <td id="saleTotal"></td>
+            <td id="saleTotal">
+
+                   P{{ $tax['Sale_Total'] + $tax['Tax_Total']}}
+
+            </td>
             </tr>
-            <tr>
-                <td>CASH</td>
-                <td></td>
-            </tr>
+
             <tr><td></td></tr>
             <tr><td></td></tr>
           <tr>
             <tr>
             <td>TOTAL INVOICE</td>
-            <td id="totalInv"></td>
+            <td id="totalInv"> {{ $tax['Sale_Total'] + $tax['Tax_Total']}}</td>
             </tr>
             <tr>
                 <td>TOTAL VOLUME</td>
@@ -377,7 +393,7 @@ volume.textContent = sum.toLocaleString() + "L" ;
   console.log("The sum of Item_Quantity is: " + sum);
 
 }
-totalSale();
+// totalSale();
 totalVolume();
 </script>
 </html>

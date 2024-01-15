@@ -4,6 +4,7 @@
     <p>Please login</p>
 </div>
 @else --}}
+
     <div class="pos-container">
   <!-- Use any element to open/show the overlay navigation menu -->
 
@@ -79,7 +80,7 @@
                     <button class="calcbutton" onclick="appendToDisplay('')">9</button>
                     <button class="calcbutton clear-button btn" onclick=clearbutton() style="background-color:lightcoral"> Clear</button>
                     <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow()" style="background-color:lightpink">Void</button>
-                    <button class="calcbutton special-button" style="background-color:violet">Preset</button>
+                    <button class="calcbutton special-button" style="background-color:violet" onclick="refreshb()"> refresh</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">4</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">5</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">6</button>
@@ -90,7 +91,7 @@
                     <button class="calcbutton" onclick="appendToDisplay('')">2</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">3</button>
                     <button class="calcbutton special-button">Print Receipt</button>
-                    <button class="calcbutton special-button">User</button>
+                    <button class="calcbutton special-button" style="background-color: yellow">Zero Rated</button>
                     <button class="calcbutton special-button">PG Disc</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">0</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">00</button>
@@ -139,13 +140,14 @@
                                                     <a class="pump-number"> {{$pump['Id']}} </a>
                                                     <a class="card-header-title p-0">NOZZLE </a>
                                                 </h3>
-                                                    <p style="position: fixed;padding-left:5px;">{{$pump['Data']['NozzleUp']}}</p>
+                                                    <p style="position: absolute;padding-left:5px;">{{$pump['Data']['NozzleUp']}}</p>
                                                   <center>
                                                     <img src="img/premium.png" class="img-icon">
                                                 </center>
                                                   <div class="pump-thumb-details">
-                                                      <p>A: {{ $pump['Data']['LastAmount'] }}
+                                                      <p style="background-color:white">A: {{ $pump['Data']['LastAmount'] }}<br>
                                                       L: {{ $pump['Data']['LastVolume'] }}</p>
+                                                  </div>
                                  {{-- @else --}}
 
                                  {{-- @endif --}}
@@ -153,7 +155,7 @@
 
                             <h3 style="background-color: #FFCCCB" class="card-header">
                             <a class="pump-number"> {{$pump['Id']}} </a>
-                            <a class="card-header-title p-0">OFFLINE</a>
+                            <a class="card-header-title p-0" style="color: #ff0000">OFFLINE</a>
                             </h3>
                             <center><img src="img/offline.png"></center>
 
@@ -303,41 +305,42 @@
 
         {{-- <iframe id="os-iframe"src="{{ route('transaction') }}"  class="h-75" width="100%" height="80%" frameborder="0" allowTransparency="true" style="display: none" ></iframe> --}}
         <div id = "invoicePOS" style="display:none;position:absolute"></div>
-<div id="test">
-            <div id="mop-div" class="mop-column">
 
-                @foreach($mopData as $mop)
-                <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:30%" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
-
-                @endforeach
-            </div>
-            <div id="reports-column">
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-            </div>
-            <div id="nonfuel-column">
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-            </div>
-            <div id="manual-column">
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-            </div>
-            <div id="config-column">
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-                <button class="calcbutton">Lorem ipsum</button>
-            </div>
+    <div id="test">
+        <div id="mop-div" class="mop-column">
+            @foreach($mopData as $mop)
+            <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:30%" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
+            @endforeach
+        </div>
+        <div id="reports-column">
+           {{-- <center> <img src="{{Asset('img/underDevelopment.png')}}" alt="" style = "width: 40vh;">
+           <p style="font-size: 50px">Under Development</p>
+        </center> --}}
+            {{-- <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button> --}}
+        </div>
+        <div id="nonfuel-column">
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+        </div>
+        <div id="manual-column">
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+        </div>
+        <div id="config-column">
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
+            <button class="calcbutton">Lorem ipsum</button>
         </div>
     </div>
-
+    </div>
     <form action="/getitems" method="POST">
 
         <input type="hidden" name="item-no" id = "item-no">
@@ -349,8 +352,14 @@
     </form>
     <input type="hidden" name="vat-amount" id="vat-amount">
     <input type="hidden" name="vat-sale" id="vat-sale">
+
 </x-app-layout>
     <script>
+
+function refreshb() {
+    location.href = '/pos';
+}
+
 
         function showTable(pumpId) {
             const tableContent = document.getElementById('pending-table-' + pumpId).innerHTML;
@@ -400,11 +409,15 @@
                     showConfirmButton: false
                 });
             }
+
             if (document.readyState === 'complete') {
                 isDocumentReady();
+
             } else {
                 document.addEventListener('DOMContentLoaded', isDocumentReady);
+
             }
+           // fullscreenMode();
         }
 
         function stop(Id) {
@@ -440,7 +453,7 @@
             //     }
             // });
         }
-     const myinterval = setInterval(refresh, 500);
+     const myinterval = setInterval(refresh, 1000);
 
         function refresh() {
             $('#pump-div').load(document.URL + " #pump-div");
@@ -456,7 +469,7 @@
 
 
         function mop() {
-            // reportsdiv.style.visibility = "none";
+            reportsdiv.style.visibility = "none";
             pumpdiv.style.display = "none";
             // nonfueldiv.style.display = "none";
             // manualdiv.style.display = "none"
@@ -467,26 +480,26 @@
             document.getElementById("mop-nav").setAttribute('class', 'is-active');
             document.getElementById("pump-nav").setAttribute('class', '');
             // document.getElementById("config-nav").setAttribute('class', '');
-            // document.getElementById("reports-nav").setAttribute('class', '');
+            document.getElementById("reports-nav").setAttribute('class', '');
             // document.getElementById("nf-nav").setAttribute('class', '');
             // document.getElementById("manual-nav").setAttribute('class', '');
         }
 
-        // function reports() {
-        //     console.log("reports");
-        //     pumpdiv.style.display = "none";
-        //     mopdiv.style.display = "none";
-        //     nonfueldiv.style.display = "none";
-        //     manualdiv.style.display = "none"
-        //     reportsdiv.style.display = "block";
-        //     configdiv.style.display = "none";
-        //     document.getElementById("mop-nav").setAttribute('class', '');
-        //     document.getElementById("pump-nav").setAttribute('class', '');
-        //     document.getElementById("config-nav").setAttribute('class', '');
-        //     document.getElementById("reports-nav").setAttribute('class', 'is-active');
-        //     document.getElementById("nf-nav").setAttribute('class', '');
-        //     document.getElementById("manual-nav").setAttribute('class', '');
-        // }
+        function reports() {
+            console.log("reports");
+            pumpdiv.style.display = "none";
+            mopdiv.style.display = "none";
+            nonfueldiv.style.display = "none";
+            manualdiv.style.display = "none"
+            reportsdiv.style.display = "flex";
+            configdiv.style.display = "none";
+            document.getElementById("mop-nav").setAttribute('class', '');
+            document.getElementById("pump-nav").setAttribute('class', '');
+            document.getElementById("config-nav").setAttribute('class', '');
+            document.getElementById("reports-nav").setAttribute('class', 'is-active');
+            document.getElementById("nf-nav").setAttribute('class', '');
+            document.getElementById("manual-nav").setAttribute('class', '');
+        }
 
         // function nonfuel() {
         //     console.log("nonfuel");
@@ -507,7 +520,7 @@
         function pumps() {
             console.log("pumps")
             mopdiv.style.display = "none";
-            // reportsdiv.style.display = "none";
+            reportsdiv.style.display = "none";
             // nonfueldiv.style.display = "none";
             // manualdiv.style.display = "none";
             // configdiv.style.display = "none";
@@ -515,7 +528,7 @@
             document.getElementById("mop-nav").setAttribute('class', '');
             document.getElementById("pump-nav").setAttribute('class', 'is-active');
             // document.getElementById("config-nav").setAttribute('class', '');
-            // document.getElementById("reports-nav").setAttribute('class', '');
+            document.getElementById("reports-nav").setAttribute('class', '');
             // document.getElementById("nf-nav").setAttribute('class', '');
             // document.getElementById("manual-nav").setAttribute('class', '');
         }
@@ -749,6 +762,7 @@
             });
 
         }
+
         function printDiv(divId) {
   var printContents = document.getElementById(divId).innerHTML;
   var originalContents = document.body.innerHTML;
@@ -817,7 +831,7 @@ function updateTrans(id){
         for (var i = 1; i < tabledata.rows.length; i++){
             var row = tabledata.rows[i];
 
-            var itemvalue = isNaN(parseFloat(row.cells[5].textContent.replace(",",""))) ? moneyb : parseFloat(row.cells[5].textContent.replace(",",""));
+            var itemvalue = isNaN(parseInt(row.cells[5].innerText)) ? moneyb : parseInt(row.cells[5].innerText);
 
             var itemdata = {
                 itemNumber: itemno,
@@ -847,11 +861,11 @@ function updateTrans(id){
 
         var paymentdata = {
                 itemNumber: itemno,
-                itemType:2,
+                itemType:7,
                 itemDesc:'CASH',
                 itemPrice:total,
                 itemQTY: 1,
-                itemValue:0,
+                itemValue:moneyb ?? subttl,
                 itemID:1,
                 itemTaxAmount:0,
                 deliveryID:1,
@@ -874,7 +888,7 @@ function updateTrans(id){
             subAccID:null,
             accountID:null,
             posID:1,
-            taxTotal:vat,
+            taxTotal:vat ?? 0,
             saleTotal:vatsale,
             isManual:0,
             isZeroRated:0,
@@ -915,7 +929,7 @@ function updateTrans(id){
     transNo.value = response;
     var test = transNo.value;
     console.log(response);
-    alert(test);
+    // alert(test);
     console.log("request sent!");
   },
   error: function(response) {
@@ -966,6 +980,9 @@ if (total == 0 ||isNaN(total)) {
             scrollbarPadding: false
         })
     //    $("#os-iframe").get(0).contentWindow.print();
+    alertify.success('Transaction Complete');
+    voidAllTransactions();
+     submitToPrint();
         }
         else{
             var remaining = total - moneyb;
@@ -995,6 +1012,7 @@ else if(id > 1 && pt ==1){
             icon: "success",
             scrollbarPadding: false
         })
+        submitToPrint();
         }
         else{
             Swal.fire({

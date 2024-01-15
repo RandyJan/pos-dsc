@@ -11,7 +11,7 @@
     justify-content: space-between;
     padding: 10px;
     flex-wrap: wrap;
-    height: 90vh;
+    height: 100vh;
     overflow: hidden;
 }
 body{
@@ -320,7 +320,7 @@ white-space: nowrap;
 }
 button.calcbutton {
     width: 95%;
-    height: 9vh;
+    height: 12vh;
     margin: 2px;
     font-size: larger;
 
@@ -427,7 +427,7 @@ display: none;
 .pump-thumb-details{
     margin-top:30px;
      position:relative;
-     font-size:14px;
+     font-size:12px;
      align-items:center;
      font-weight:bold;
 
@@ -630,6 +630,48 @@ body{
     transition: margin-left .5s;
     padding: 20px;
   }
+
+ @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .mop-column{
+    animation: fade-in 0.5s ease-in-out;
+  }
+#reports-column{
+    animation: fade-in 0.5s ease-in-out;
+}
+  /* Define the slide-in animation sequence */
+@keyframes slide-in {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  @keyframes slide-inb {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Apply the animation to the div */
+  .left-column{
+    animation: slide-in 1s ease-out;
+  }
+.right-column{
+    animation: slide-inb 1s ease-out;
+}
+
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
   @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
