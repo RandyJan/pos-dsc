@@ -126,7 +126,7 @@ class pumpController extends Controller
         {
             $mopresponse = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->get('http://172.16.12.234:8087/api/finalisations');
+            ])->get('http://172.16.12.90:8087/api/finalisations');
 
             return $mopresponse['data'];
         }
@@ -348,7 +348,7 @@ class pumpController extends Controller
         $nexttransid = $maxtransid + 1;
         $responseb = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://172.16.12.234:8087/api/addnewTransaction',[
+        ])->post('http://172.16.12.90:8087/api/addnewTransaction',[
     'transNo'=>$nexttransid,
     'cashierID' => $data['cashierID'],
   'subAccID' => '',
@@ -386,7 +386,7 @@ class pumpController extends Controller
  Log::info($transNo);
 $response = Http::withHeaders([
     "ContentType"=> "json/application"
-])->post('http://172.16.12.234:8087/api/receipt-sample',([
+])->post('http://172.16.12.90:8087/api/receipt-sample',([
     'posID'=>1,
     'transaction_no'=>$nexttransid
 
@@ -397,7 +397,7 @@ $layout = json_decode($response->body(), true);
 
 $transItems = Http::withHeaders([
     "ContentType"=> "json/application"
-])->post('http://172.16.12.234:8087/api/getItems',([
+])->post('http://172.16.90:8087/api/getItems',([
     'posID'=>1,
     'trans_ID'=>$transNo,
 

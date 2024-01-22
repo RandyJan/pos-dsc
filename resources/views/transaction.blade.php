@@ -58,13 +58,18 @@
         .Items{
             padding-left:10px;
         }
+        .headerInvoice::after{
+            content: '_';
+            color: white;
+        }
         @media print {
 
 @page {
-    width: 58mm;
+    width: 42mm;
     margin: 0;
     padding: 0;
 }
+
 }
     </style>
 </head>
@@ -76,20 +81,25 @@
 </div>
 @else
 <div id="invoicePOS">
-    <div class="invoiceheader">
+    <div class="invoiceheader" id="invoiceheader">
     {{-- <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L1']) !!}</p>
     <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L2']) !!}</p>
     <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L3']) !!}</p>
     <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L4']) !!}</p>
     <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L5']) !!}</p> --}}
     @foreach( App\Models\receiptLayout::getLayout() as $receipt)
-    <center>
-<p id="header" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Header_L1)) !!}</p>
-<p id="header" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Header_L2)) !!}</p>
-<p id="header" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Header_L3)) !!}</p>
-<p id="header" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Header_L4)) !!}</p>
-<p id="header" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Header_L5)) !!}</p><br>
-    </center>
+    {{-- <center> --}}
+<p id="headerA" class = "headerInvoice" style="margin:0px;padding:0px"></p>
+<p id="headerB" class = "headerInvoice" style="margin:0px;padding:0px"></p>
+<p id="headerC" class = "headerInvoice" style="margin:0px;padding:0px"></p>
+<p id="headerD" class = "headerInvoice" style="margin:0px;padding:0px"></p>
+<p id="headerE" class = "headerInvoice" style="margin:0px;padding:0px"></p>
+        <p name="" id="header1"  value="" style="display: none">{{$receipt->Receipt_Header_L1}}</p>
+        <p  name="" id="header2" value="" style="display:none">{{$receipt->Receipt_Header_L2}}</p>
+        <p name="" id="header3" value="" style="display: none">{{$receipt->Receipt_Header_L3}}</p>
+        <p  name="" id="header4" value="" style="display:none">{{$receipt->Receipt_Header_L4}}</p>
+        <p  name="" id="header5" value="" style="display: none" >{{$receipt->Receipt_Header_L5}}</p>
+{{-- </center> --}}
     @endforeach
 </div>
      <table class = "" style="padding:0px;margin:0px;margin-left:15px">
@@ -199,7 +209,7 @@ if ($response) {
           <tr>
             <tr>
             <td>TOTAL INVOICE</td>
-            <td id="totalInv"> {{ $tax['Sale_Total'] + $tax['Tax_Total']}}</td>
+            <td id="totalInv"> P{{ $tax['Sale_Total'] + $tax['Tax_Total']}}</td>
             </tr>
             <tr>
                 <td>TOTAL VOLUME</td>
@@ -254,20 +264,117 @@ if ($response) {
     @endforeach
     </footer>
 
-    <p id="footer" style="margin-left:16px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L1)) !!}</p>
-    <center>
-    <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L2))!!}</p>
-        <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L3)) !!}</p>
-            <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L4)) !!}</p>
-                <p id="footer" style="margin:0px;padding:0px">{!! trim(str_replace('\n', '<br>', $receipt->Receipt_Footer_L5)) !!}</p>
-            </center>
+    <p id="footerA" style="margin-left:0;padding:0"></p>
+    <p id="footerB" style="margin:0px;padding:0px"></p>
+        <p id="footerC" style="margin:0px;padding:0px"></p>
+            <p id="footerD" style="margin:0px;padding:0px"></p>
+                <p id="footerE" style="margin:0px;padding:0px"></p>
+
+
+                <p name="" id="footer1" value="" style="display: none">{{$receipt->Receipt_Footer_L1}}</p>
+                <p  name="" id="footer2" value="" style="display:none">{{$receipt->Receipt_Footer_L2}}</p>
+                <p name="" id="footer3" value="" style="display: none">{{$receipt->Receipt_Footer_L3}}</p>
+                <p  name="" id="footer4" value="" style="display:none">{{$receipt->Receipt_Footer_L4}}</p>
+                <p  name="" id="footer5" value="" style="display: none" >{{$receipt->Receipt_Footer_L5}}</p>
     </div>
 
 @endif
 {{-- <iframe src="{{route('/transaction')}}" frameborder="0" id=""></iframe> --}}
 </body>
 <script type = "text/javascript">
+function  computeSpacing(value){
+    var splitText = value.trim().split('\\n');
+    var spacingData ="";
+    splitText.forEach(function(splitter){
+            var splitting = parseFloat(splitter.length);
+            var output = (42-splitting)/2;
+            let firstFormat = splitter.padStart(splitting + output, "_");
+            let finalFormat = firstFormat.padEnd(firstFormat.length + output, "_");
+                spacingData = spacingData + "\n" + finalFormat;
+    })
+    return spacingData;
+}
+ function forHeader(){
 
+    let h1 = document.getElementById('header1');
+    let h2 = document.getElementById('header2');
+    let h3 = document.getElementById('header3');
+    let h4 = document.getElementById('header4');
+    let h5 = document.getElementById('header5');
+// split variables
+    let hA = document.getElementById('headerA');
+    let hB = document.getElementById('headerB');
+    let hC = document.getElementById('headerC');
+    let hD = document.getElementById('headerD');
+    let hE = document.getElementById('headerE');
+
+
+    var h1f = h1.textContent;
+    var h2f = h2.textContent;
+    var h3f = h3.textContent;
+    var h4f = h4.textContent;
+    var h5f = h5.textContent;
+
+
+            hA.textContent = computeSpacing(h1f) ;
+         hB.textContent = computeSpacing(h2f).replace('_',' ');
+        hC.textContent = computeSpacing(h3f).replace('_',' ');
+        hD.textContent = computeSpacing(h4f).replace('_',' ');
+        hE.textContent = computeSpacing(h5f).replace('_',' ');
+    console.log(computeSpacing(h1f));
+    console.log(computeSpacing(h2f));
+    console.log(computeSpacing(h3f));
+    console.log(computeSpacing(h4f));
+    console.log(computeSpacing(h5f));
+ }
+ forHeader();
+ function forFooter(){
+    let f1 = document.getElementById('footer1');
+    let f2 = document.getElementById('footer2');
+    let f3 = document.getElementById('footer3');
+    let f4 = document.getElementById('footer4');
+    let f5 = document.getElementById('footer5');
+// split variables
+    let fA = document.getElementById('footerA');
+    let fB = document.getElementById('footerB');
+    let fC = document.getElementById('footerC');
+    let fD = document.getElementById('footerD');
+    let fE = document.getElementById('footerE');
+
+
+    var f1f = f1.textContent;
+    var f2f = f2.textContent;
+    var f3f = f3.textContent;
+    var f4f = f4.textContent;
+    var f5f = f5.textContent;
+
+        fA.textContent = computeSpacing(f1f);
+        fB.textContent = computeSpacing(f2f);
+        fC.textContent = computeSpacing(f3f);
+        fD.textContent = computeSpacing(f4f);
+        fE.textContent = computeSpacing(f5f);
+    console.log(computeSpacing(f1f));
+    console.log(computeSpacing(f2f));
+    console.log(computeSpacing(f3f));
+    console.log(computeSpacing(f4f));
+    console.log(computeSpacing(f5f));
+ }
+ forFooter();
+//  function receiptFormatter(){
+//     var paragraphElements = document.querySelectorAll("#header1");
+// var valuesArray = [];
+// var arrayValue = [];
+// paragraphElements.forEach(function(paragraph) {
+//   valuesArray.push(paragraph.textContent.trim());
+// });
+//     valuesArray.forEach(function(value){
+//        arrayValue.push(value.split('\\n'));
+
+//     })
+// console.log(valuesArray);
+// console.log(arrayValue);
+// }
+// receiptFormatter();
      function lineSpacing(textContent) {
         //  var splitText = textContent.split("<br>");
         //  console.log(splitText);
@@ -282,8 +389,8 @@ if ($response) {
     var value = stringlength - maxlength;
      var space = value/2;
      text.style.marginLeft = space + 'px';
-     console.log(textContent);
-    console.log(stringlength);
+    //  console.log(textContent);
+    // console.log(stringlength);
 
  }
 function footer(){
@@ -294,8 +401,8 @@ function footer(){
     var value = stringlength - maxlength;
      var space = value/2;
      text.style.marginLeft = space + 'px';
-     console.log(textContent);
-    console.log(stringlength);
+    //  console.log(textContent);
+    // console.log(stringlength);
 }
 function printPageSilently() {
   if (window.chrome && window.chrome.print) {
@@ -369,7 +476,7 @@ var totalInv = document.getElementById('totalInv');
 totalInv.textContent = "P" + sum.toLocaleString();
 
 // Log the sum
-console.log("Sum of itemValue: P" + sum.toLocaleString());
+// console.log("Sum of itemValue: P" + sum.toLocaleString());
 
 }
 function totalVolume(){ // Get all elements with the id "volume"
@@ -390,7 +497,7 @@ function totalVolume(){ // Get all elements with the id "volume"
   var volume = document.getElementById("totalVol");
 volume.textContent = sum.toLocaleString() + "L" ;
   // Display the sum
-  console.log("The sum of Item_Quantity is: " + sum);
+//   console.log("The sum of Item_Quantity is: " + sum);
 
 }
 // totalSale();

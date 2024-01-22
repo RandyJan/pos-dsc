@@ -3,8 +3,10 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body {font-family: Arial, Helvetica, sans-serif;}
-form {border: 3px solid #f1f1f1;}
+body {font-family: Arial, Helvetica, sans-serif;
+    /* background: linear-gradient(to right, white,#00AAFF); */
+}
+/* form {border: 3px solid #f1f1f1;} */
 
 input[type=text], input[type=password] {
   width: 100%;
@@ -40,6 +42,9 @@ button:hover {
   text-align: center;
   margin: 24px 0 12px 0;
   width: 80vh;
+  /* background-color: black;
+  border-radius: 50%;
+  width: 40%; */
   /* border-style: solid; */
   /* align-items: center;
   align-self: center; */
@@ -47,15 +52,20 @@ button:hover {
 
 img.avatar {
   width: 40%;
-  border-radius: 50%;
+  border-radius: 70%;
 }
+
 
 .container {
   padding: 16px;
   width: 40%;
+
   /* border-style:solid; */
   align-self: center;
 }
+/* .container label{
+    color:darkblue;
+} */
 
 span.psw {
   float: right;
@@ -83,7 +93,7 @@ span.psw {
     <center>
   <div class="imgcontainer">
 
-    <img src="{{asset('img/dsclogo.png')}}" alt="Avatar" class="avatar">
+    <img src="{{asset('img/dsclogo2.png')}}" alt="Avatar" class="avatar">
 
 </div>
 

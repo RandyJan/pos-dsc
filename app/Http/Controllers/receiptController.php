@@ -20,7 +20,7 @@ class receiptController extends Controller
     }
     $response = Http::withHeaders([
         "ContentType"=> "json/application"
-    ])->post('http://172.16.12.234:8087/api/receipt-sample',([
+    ])->post('http://172.16.12.90:8087/api/receipt-sample',([
         'posID'=>1,
         'transaction_no'=>$request->transNo
 

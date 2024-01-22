@@ -33,17 +33,17 @@
                     <center>
                     {{-- <a href="/">logout</a> --}}
 
-                    <button type="submit">Log out</button>
+                    <button type="submit" style="color:white">Log out</button>
                 </center>
                 </form>
             </div>
 
               <!-- Item Display -->
-            <div class="table-container">
+            <div class="table-container" >
                 <div class="item-display-container">
-                    <table class="item-table" id="items-table">
+                    <table class="item-table" id="items-table" style="">
                         <thead>
-                            <tr style="position                                                                                                                                                 : sticky; top: 0;  z-index: 1;">
+                            <tr style="position:sticky;top: 0;z-index: 1;">
                                 <th hidden>Transaction Id</th>
                                 <th>Pump</th>
                                 <th>Nozzle</th>
@@ -66,7 +66,14 @@
                 </div>
             </div>
             <div class="sub-total-div" id="sub-total-div">
-                <label for="sub-total"> Sub total: ₱
+
+                <label for="vatsale-total"> <b>VATSale: ₱</b>
+                    <input type="text" id="vatsale-total" value="0" name="vatsale-total" class="sub-total" readonly>
+                </label>
+                <label for="vat-total"> <b>VAT: ₱</b>
+                    <input type="text" id="vat-total" value="0" name="vat-total" class="sub-total" readonly>
+                </label>
+                <label for="sub-total"> <b>Sub total: ₱</b>
                     <input type="text" id="sub-total" value="0" name="sub-total" class="sub-total" readonly>
                 </label>
             </div>
@@ -78,36 +85,36 @@
                     <button class="calcbutton" onclick="appendToDisplay('')">7</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">8</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">9</button>
-                    <button class="calcbutton clear-button btn" onclick=clearbutton() style="background-color:lightcoral"> Clear</button>
-                    <button class="calcbutton special-button" id="voidButton" onclick="voidSelectedRow()" style="background-color:lightpink">Void</button>
-                    <button class="calcbutton special-button" style="background-color:violet" onclick="refreshb()"> refresh</button>
+                    <button class="special-button" onclick=clearbutton() style="background-color:lightcoral"> Clear</button>
+                    <button class="special-button" id="voidButton" onclick="voidSelectedRow()" style="background-color:lightpink">Void</button>
+                    <button class="special-button" style="background-color:violet" onclick="refreshb()"> refresh</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">4</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">5</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">6</button>
-                    <button class="calcbutton special-button" style="background-color: lightblue">Open Drawer</button>
-                    <button class="calcbutton special-button">Sub Total</button>
-                    <button class="calcbutton special-button" id="voidAll" style="background-color: orange">Void All</button>
+                    <button class="special-button" style="background-color: lightblue">Open Drawer</button>
+                    <button class="special-button">Sub Total</button>
+                    <button class="special-button" id="voidAll" style="background-color: orange">Void All</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">1</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">2</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">3</button>
-                    <button class="calcbutton special-button">Print Receipt</button>
-                    <button class="calcbutton special-button" style="background-color: yellow">Zero Rated</button>
-                    <button class="calcbutton special-button">PG Disc</button>
+                    <button class=" special-button">Print Receipt</button>
+                    <button class="special-button" style="background-color: yellow">Zero Rated</button>
+                    <button class="special-button">PG Disc</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">0</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">00</button>
                     <button class="calcbutton" onclick="appendToDisplay('')">.</button>
-                    <button class="calcbutton special-button" id="calculateButton" style="background-color: lightgreen">Enter</button>
-                    <button class="calcbutton special-button">All Stop</button>
-                    <button class="calcbutton special-button">All Auth</button>
+                    <button class=" special-button" id="calculateButton" style="background-color: lightgreen">Enter</button>
+                    <button class="special-button">All Stop</button>
+                    <button class=" special-button">All Auth</button>
                 </div>
             </div>
         </div>
         <!-- Fuel Pumps -->
-        <div class="right-column column">
+        <div class="right-column column" id= "right-column">
 
             <div class="tabs is-normal">
-                <ul>
-                    <li id="pump-nav" class="is-active"><a onclick="pumps()">Pumps</a></li>
+                <ul >
+                    <li id="pump-nav" class="is-toggled"><a onclick="pumps()">Pumps</a></li>
                     <li id="mop-nav"><a onclick="mop()">MOP</a></li>
                     <li id="manual-nav"><a onclick="manual()">Manual</a></li>
                     <li id="nf-nav"><a onclick="nonfuel()">Non-fuel</a></li>
@@ -173,7 +180,7 @@
 
                             @elseif ($pump['Type']==='PumpEndOfTransactionStatus')
 
-                            <h3 style="background-color:lightgreen" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
+                            <h3 style="background-color:rgb(93, 225, 93)" class="card-header"><a class="pump-number"> {{$pump['Id']}} </a><a class="card-header-title p-0">DONE</a></h3>
                             <center><img src="img/done-filling.gif"></center>
                             @else
                             <h3 style="background-color:#FFD580;" class="card-header"><a class="pump-number">{{$pump['Id']}} </a> <a class="card-header-title p-0">IDLE</a></h3>
@@ -309,7 +316,7 @@
     <div id="test">
         <div id="mop-div" class="mop-column">
             @foreach($mopData as $mop)
-            <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:30%" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
+            <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:25%;height:60px" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
             @endforeach
         </div>
         <div id="reports-column">
@@ -333,11 +340,28 @@
             <button class="calcbutton">Lorem ipsum</button>
             <button class="calcbutton">Lorem ipsum</button>
         </div>
-        <div id="config-column">
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
-            <button class="calcbutton">Lorem ipsum</button>
+        <div id="config-column" class="config">
+            <div class="settingDiv">
+           <p> Pump sound notification sound</p>
+            <label class="switch">
+                <input type="checkbox" id="notifSound" onclick="soundSetting()"  checked>
+                <span class="slider round"></span>
+              </label><br><br>
+            </div>
+            <div class="settingDiv">
+                <p> Toggle auto log out</p>
+                 <label class="switch">
+                     <input type="checkbox" id = "logOut" checked>
+                     <span class="slider round"></span>
+                   </label><br><br>
+                 </div>
+                 <div class="settingDiv">
+                    <p> Darkmode</p>
+                     <label class="switch">
+                         <input type="checkbox" id = "darkMode" checked>
+                         <span class="slider round"></span>
+                       </label><br><br>
+                     </div>
         </div>
     </div>
     </div>
@@ -467,19 +491,64 @@ function refreshb() {
         var configdiv = document.getElementById("config-column");
 
 
+//   if (lightGreenCounta > 0) {
+//     alert('Number of light green divs: ' + lightGreenCounta);
+//   }
+// }
+const parentDiv = document.getElementById('pump-div');
+let previousBlueH1Count = 0;
 
+function countAndPlaySound() {
+    const notifSetting = document.getElementById('notifSound').checked;
+
+if(notifSetting){
+
+    const childDivs = parentDiv.querySelectorAll('#pump-column');
+  let currentBlueH1Count = 0;
+
+  childDivs.forEach((div) => {
+    const h1Elements = div.querySelectorAll('h3');
+    h1Elements.forEach((h3) => {
+      const color = h3.style.backgroundColor;
+      if (color === 'lightgreen') {
+        currentBlueH1Count++;
+      }
+    });
+  });
+
+  if (currentBlueH1Count > previousBlueH1Count) {
+    playSound();
+  }
+
+  // Update the previous count to the current count
+  previousBlueH1Count = currentBlueH1Count;
+}
+else{
+    console.log('sound is turned off')
+}
+}
+
+// Check the count and play the sound every 1 second
+setInterval(countAndPlaySound, 500);
+
+// soundSetting();
+    function playSound(){
+        const audio = new Audio('audio/notif.mp3');
+    audio.play();
+
+    }
         function mop() {
             reportsdiv.style.visibility = "none";
             pumpdiv.style.display = "none";
             // nonfueldiv.style.display = "none";
             // manualdiv.style.display = "none"
-            // configdiv.style.display = "none";
+            configdiv.style.display = "none";
             mopdiv.style.display = "flex";
             pumpcolumn.style.display = "none";
             console.log('mop clicked!');
-            document.getElementById("mop-nav").setAttribute('class', 'is-active');
+            document.getElementById("mop-nav").setAttribute('class', 'is-toggled');
             document.getElementById("pump-nav").setAttribute('class', '');
-            // document.getElementById("config-nav").setAttribute('class', '');
+            document.getElementById("config-nav").setAttribute('class', '');
             document.getElementById("reports-nav").setAttribute('class', '');
             // document.getElementById("nf-nav").setAttribute('class', '');
             // document.getElementById("manual-nav").setAttribute('class', '');
@@ -496,7 +565,7 @@ function refreshb() {
             document.getElementById("mop-nav").setAttribute('class', '');
             document.getElementById("pump-nav").setAttribute('class', '');
             document.getElementById("config-nav").setAttribute('class', '');
-            document.getElementById("reports-nav").setAttribute('class', 'is-active');
+            document.getElementById("reports-nav").setAttribute('class', 'is-toggled');
             document.getElementById("nf-nav").setAttribute('class', '');
             document.getElementById("manual-nav").setAttribute('class', '');
         }
@@ -523,11 +592,11 @@ function refreshb() {
             reportsdiv.style.display = "none";
             // nonfueldiv.style.display = "none";
             // manualdiv.style.display = "none";
-            // configdiv.style.display = "none";
+            configdiv.style.display = "none";
             pumpdiv.style.display = "flex";
             document.getElementById("mop-nav").setAttribute('class', '');
-            document.getElementById("pump-nav").setAttribute('class', 'is-active');
-            // document.getElementById("config-nav").setAttribute('class', '');
+            document.getElementById("pump-nav").setAttribute('class', 'is-toggled');
+            document.getElementById("config-nav").setAttribute('class', '');
             document.getElementById("reports-nav").setAttribute('class', '');
             // document.getElementById("nf-nav").setAttribute('class', '');
             // document.getElementById("manual-nav").setAttribute('class', '');
@@ -549,21 +618,21 @@ function refreshb() {
         //     document.getElementById("manual-nav").setAttribute('class', 'is-active');
         // }
 
-        // function config() {
-        //     console.log("config");
-        //     mopdiv.style.display = "none";
-        //     reportsdiv.style.display = "none";
-        //     nonfueldiv.style.display = "none";
-        //     pumpdiv.style.display = "none";
-        //     manualdiv.style.display = "none";
-        //     configdiv.style.display = "block";
-        //     document.getElementById("mop-nav").setAttribute('class', '');
-        //     document.getElementById("pump-nav").setAttribute('class', '');
-        //     document.getElementById("config-nav").setAttribute('class', 'is-active');
-        //     document.getElementById("reports-nav").setAttribute('class', '');
-        //     document.getElementById("nf-nav").setAttribute('class', '');
-        //     document.getElementById("manual-nav").setAttribute('class', '');
-        // }
+        function config() {
+            console.log("config");
+            mopdiv.style.display = "none";
+            reportsdiv.style.display = "none";
+            nonfueldiv.style.display = "none";
+            pumpdiv.style.display = "none";
+            manualdiv.style.display = "none";
+            configdiv.style.display = "flex";
+            document.getElementById("mop-nav").setAttribute('class', '');
+            document.getElementById("pump-nav").setAttribute('class', '');
+            document.getElementById("config-nav").setAttribute('class', 'is-toggled');
+            document.getElementById("reports-nav").setAttribute('class', '');
+            document.getElementById("nf-nav").setAttribute('class', '');
+            document.getElementById("manual-nav").setAttribute('class', '');
+        }
     </script>
 
     <!-- Append a transaction to the item display container -->
@@ -580,6 +649,13 @@ function refreshb() {
         }
 
         // Function to initialize the item display container with transactions from local storage
+        function taxTotal(vat,vatsale){
+            var vatainputdisp = document.getElementById('vat-total');
+           var vatsinputdisp = document.getElementById('vatsale-total');
+           vatainputdisp.value = vat;
+           vatsinputdisp.value = vatsale;
+
+        }
         function initializeItemDisplayContainer() {
             var transactions = getTransactionsFromLocalStorage();
             transactions.forEach(function(transaction) {
@@ -610,8 +686,10 @@ function refreshb() {
             // console.log("vat amount:" + vat);
             var vatainput = document.getElementById('vat-amount');
            var vatsinput = document.getElementById('vat-sale');
+
+          taxTotal(vat,vatsale);
            vatainput.value = vat;
-           vatsinput = vatsale;
+           vatsinput.value = vatsale;
             var subttl = document.getElementById("sub-total");
             subttl.value = sum;
         }
@@ -624,9 +702,9 @@ function refreshb() {
         // Attach a click event handler to the "Clear" button
         function clearbutton(){
             // document.getElementById('clearButton').addEventListener('click', function() {
-            clearTransactions();
-            var subttl = document.getElementById("sub-total");
-            var clear = subttl.value = 0;
+            // clearTransactions();
+            var display = document.getElementById("display");
+            var clear = display.value = 0;
             console.log("sub total is now" + clear);
         // });
 
@@ -753,6 +831,10 @@ function refreshb() {
                     var payable = total + amount;
                     var final = subttl.value = payable;
 
+
+                      var vatsale = payable / 1.12;
+                     var vat = payable - vatsale;
+                    taxTotal(vat,vatsale);
                     // console.log("hello" + final);
                 },
                 error: function(response) {
@@ -1037,7 +1119,32 @@ else if(id > 1 && pt ==1){
 
         // Function to append the clicked number to the display
         function appendToDisplay(number) {
-            display.value += number;
+            const value = display.value;
+            if( value == 0 && number ==0){
+                display.value = 0;
+
+            }
+            if(value == 0){
+                display.value = number;
+
+
+            }
+            else{
+
+                display.value += number;
+            }
+
+            // if(!value.includes(".") && value > 0){
+            //     display.value += number;
+            // }
+//             else{
+
+// display.value += number;
+// }
+
+                // alert("display equal" + value);
+
+
         }
 
         // Function to clear the display
@@ -1055,8 +1162,15 @@ else if(id > 1 && pt ==1){
         });
 
         // Add event listener to the clear button
-        const clearButton = document.querySelector('.clear-button');
-        clearButton.addEventListener('click', clearDisplay);
+        // const clearButton = document.querySelector('.clear-button');
+        // clearButton.addEventListener('click', clearDisplay);
+        function test(){
+        history.replaceState(null, document.title, location.href);
+window.addEventListener('popstate', function(event) {
+  history.replaceState(null, document.title, location.href);
+});
+}
+test();
     </script>
     <script>
         /// Add an event listener to the "Void" button
@@ -1134,26 +1248,27 @@ else if(id > 1 && pt ==1){
             tableBody.innerHTML = '';
 
             // Make an AJAX POST request to your Laravel route
-            fetch('/voidAllTransactions', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        'Content-Type': 'application/json',
-                    },
-                })
-                .then(response => {
-                    if (response.status === 200) {
-                        // Transactions voided successfully
-                        // alert('All transactions voided successfully.');
-                    } else {
-                        // Handle errors
-                        // alert('Failed to void all transactions.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while voiding transactions.');
-                });
+            // fetch('/voidAllTransactions', {
+            //         method: 'POST',
+            //         headers: {
+            //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            //             'Content-Type': 'application/json',
+            //         },
+            //     })
+            //     .then(response => {
+            //         if (response.status === 200) {
+            //             // Transactions voided successfully
+            //             // alert('All transactions voided successfully.');
+            //         } else {
+            //             // Handle errors
+            //             // alert('Failed to void all transactions.');
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error);
+            //         alert('An error occurred while voiding transactions.');
+            //     });
+
         }
         // Attach a click event handler to the "Void All" button
         document.getElementById('voidAll').addEventListener('click', function() {
@@ -1162,12 +1277,21 @@ else if(id > 1 && pt ==1){
         /* Set the width of the side navigation to 250px */
 function openNav() {
   document.getElementById("mySidenav").style.width = "250px";
+//   document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
+//   document.htmlContent.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
+  document.body.style.backgroundColor = "white";
 }
+// window.addEventListener('popstate', function(event) {
+//   // This event is triggered when the user clicks the "back" button
+//   // You can handle this event by performing the necessary actions
+//   alert('User clicked the "back" button');
+//   // Add your code to handle the "back" button click here
+// });
 
     </script>
 

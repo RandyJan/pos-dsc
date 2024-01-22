@@ -16,6 +16,9 @@
 }
 body{
     overflow: hidden;
+    /* background: linear-gradient(to right, #136289, #017cff); */
+    background: linear-gradient(to top, #000099 0%, #66ccff 100%);
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 /* Styles for left column (Item Display and Calculator) */
@@ -29,7 +32,7 @@ body{
     min-width: 300px;
     display: flex;
     flex-direction: column;
-    margin-right: 5px;
+    margin-right: 0px;
     height:100%;
 
 }
@@ -38,6 +41,7 @@ body{
 .right-column {
     flex: 1;
     background-color: #ffffff;
+
     border: 1px solid #ccc;
     /* margin-bottom: 50%; */
     border-radius: 10px;
@@ -58,7 +62,8 @@ body{
     overflow-y: auto;
     /* max-height: 200px; */
     margin-top: 0px;
-    height: 170px;
+    height: 200px;
+    background-color: whitesmoke;
 }
 
 h1 {
@@ -70,16 +75,16 @@ h1 {
 .item-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .table-container {
-    margin-top: 20px;
+    margin-top: 5px;
 }
 
 .item-table th,
 .item-table td {
-    border: 1px solid #ccc;
+    border:none;
     /* padding: 10px; */
     text-align: center;
 
@@ -88,6 +93,10 @@ h1 {
 .item-table th {
     background-color: lightslategray;
     color: #fff;
+
+}
+.item-table thead{
+    position: sticky;
 }
 
 /* .item-table tbody tr:nth-child(even) {
@@ -114,13 +123,20 @@ h1 {
     padding: 10px 15px;
     background-color: #f9f9f9;
     outline: none;
-    margin-top: 25px;
-    margin-bottom: 0px;
+    /* margin-top: 0;
+    margin-bottom: 0px; */
     font-weight: bold;
 
 
 }
-
+.calculator{
+    width: 100%;
+    justify-content: center;
+    justify-self: center;
+    /* background-color: black; */
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+}
 .calculator-container {
     background-color: #ffffff;
     border: 1px solid #ccc;
@@ -131,45 +147,64 @@ h1 {
 }
 
 .calculator-buttons {
+    /* background-color: black; */
   flex: 1;
   align-items: center;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 3px;
-    margin-top: 20px;
+    gap: 2px;
+    margin-top: 10px;
+    /* background-color: black; */
 
 }
-
+.calculator-buttons-container{
+    /* background-color: pink; */
+    position: relative;
+    /* top: 40%;
+    right:50%;
+    bottom: 0; */
+}
 .calcbutton {
-    padding: 5px;
+    padding: 2px;
+
     background-color:lightslategray;
     color: white;
-    border: 2px solid ;
-    border-radius: 5px;
+    border: 2px solid lightslategray;
+    border-radius: 10px;
     cursor: pointer;
+    /* margin-top: 0px; */
 }
 
 .calcbutton:hover {
     background-color: darkgray;
 }
 
-.calcbutton.clear-button,
-.calcbutton.special-button {
+.clear-button,
+.special-button {
     background-color: #ccc;
     color: #333;
     border: none;
+
+    border: 2px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 2px;
 }
 
 /* Styles for the container of pump items */
 .pump-items-container {
+
     display: flex;
+    flex-direction: row;
      align-items: start;
     flex-wrap: wrap;
     /* justify-content: space-evenly; */
     /* overflow-y: auto; */
     max-height: 100%;
     padding: 0px;
+
 }
+
 
 /* Styles for Fuel Pumps Item */
 .pump-item {
@@ -221,7 +256,7 @@ h1 {
     margin-top: 10px;
     text-align: right;
     background-color: black;
-white-space: nowrap;
+    white-space: nowrap;
   }
 
 .start-button{
@@ -237,7 +272,9 @@ white-space: nowrap;
     font-size: 14px;
     border-radius: 3px;
 }
-
+.settingDiv input{
+  justify-self: center;
+}
 
 .pt-button {
     padding: 5px 10px;
@@ -251,6 +288,66 @@ white-space: nowrap;
 .stop-button:hover {
     background-color: #0056b3;
 }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
 
 /* Styles for the container of bottom buttons */
 .pos-buttons {
@@ -319,22 +416,22 @@ white-space: nowrap;
     cursor: pointer;
 }
 button.calcbutton {
-    width: 95%;
-    height: 12vh;
+    width: 100%;
+    height: 13vh;
     margin: 2px;
     font-size: larger;
 
   }
 
   button.special-button {
-    width: 90%;
-    height: 90%;
+    width: 98%;
+    height: 100%;
     margin: 2px;
     font-size: medium;
   }
   button.clear-button {
-    width: 90%;
-    height: 90%;
+    width: 100%;
+    height: 95%;
     margin: 2%;
   }
   .pos-but{
@@ -368,6 +465,7 @@ margin-left: 0px;
 #mop-div{
    display: none;
    align-items: start;
+   flex-direction: row;
    flex-wrap: wrap;
 }
 #price{
@@ -394,6 +492,13 @@ display: none;
         #config-column{
             display: none;
             }
+            .config{
+                display: flex;
+                flex-direction: column;
+            }
+            .config p{
+                font-size: 20px;
+            }
 .pump-number{
     display: inline-block;
     padding: 2px;
@@ -408,7 +513,8 @@ display: none;
 #mop-btn{
     /* display: grid;
     grid-template-columns: repeat(6, 1fr); */
-    background-color:  #007bff;
+    font-size: 15px;
+    background-color:lightslategrey;
     color: white;
     padding:10px;
     margin: 5px;
@@ -440,29 +546,36 @@ display: none;
     position: relative;
     height: 20px;
     width:80px;
-    text-align:left;
+    margin-right: 5px;
+    /* text-align:left; */
+
     border: none;
 
 
 }
 .sub-total-div{
     width:100%;
-    position:relative;
+    /* position:relative; */
     margin-bottom:0;
     align-content: center;
     font-weight: bold;
-    text-align:right;
+    /* text-align:right; */
+    /* background-color: #0056b3; */
+    display: flex;
+    justify-content: flex-end;
+    padding-right:9px ;
 
 }
 .pos-container {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
 }
 .left-column {
     flex: 1;
     transition: height 0.3s ease;
 }
-.right-column {
+
     /* flex:1}
 
 @media(min-width:1024px) and (max-width:1336px){
@@ -583,8 +696,41 @@ body{
 }
  */
 
- }
+
  /* The side navigation menu */
+ .tabs{
+    position: relative;
+top: -1.8vh;
+left: -1.8vh;
+display: flex;
+flex-direction: row;
+overflow: hidden;
+/* background-color: whitesmoke; */
+/* border-bottom:1px solid lightslategray ; */
+border-top-left-radius: 10px;
+margin-top: 0px;
+
+
+/* border-bottom: none; */
+ }
+ .tabs li{
+    margin-right: 11px;
+    /* border-bottom: none; */
+ }
+ /* .tabs ul{
+
+
+
+ } */
+
+ .is-toggled{
+    /* background: linear-gradient(to right, #136289, #017cff); */
+    background-color: lightslategray;
+    color: white;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    /* border-radius:10px ; */
+ }
 .sidenav {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
@@ -592,7 +738,10 @@ body{
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0;
-    background-color: whitesmoke; /* Black*/
+    background: linear-gradient(to top, #000099 0%, #66ccff 100%);
+
+    /* background-color: whitesmoke;  */
+
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -603,7 +752,7 @@ body{
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 18px;
-    color: black;
+    color: white;
     display: block;
     transition: 0.3s;
   }
@@ -681,6 +830,11 @@ body{
     width: device-width;
     zoom: 1.0;
 }
+/* @media (min-width:300px){
+    body{
+        zoom:80%;
+
+} */
 /* html {
     touch-action: none;
     touch-zooming: none;

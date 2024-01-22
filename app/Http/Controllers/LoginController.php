@@ -26,28 +26,31 @@ class LoginController extends Controller
         //
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('http://172.16.12.234:8087/api/login',[
+        ])->post('http://172.16.12.90:8087/api/login',[
             "number"=>$number,
             "password"=>$pw
         ]);
       //  Log::info($response);
-        if($response['statusCode'] == 0){
+        if($response->successful()){
         //Log::info($response);
         // return response()->noContent();
        // $request->session()->regenerate();
-       return back()->withErrors([
+           // $minutes = 1440;
+    $responseArray = $response->json();
+    Cache::put('Cashier_data',$responseArray);
+    Cache::put('Auth','1');
+   // $test = Cache::get('Cashier_data');
+   // $test2 = json_encode($test);
+   // Log::info($test2);
+   return redirect()->intended(RouteServiceProvider::HOME);}
+
+else{
+ return back()->withErrors([
         'username'=>"Login Failed please enter appropriate credentials for this station"
        ]);
     }
-    // $minutes = 1440;
-    $responseArray = $response->json();
-     Cache::put('Cashier_data',$responseArray);
-     Cache::put('Auth','1');
-    // $test = Cache::get('Cashier_data');
-    // $test2 = json_encode($test);
-    // Log::info($test2);
-    return redirect()->intended(RouteServiceProvider::HOME);
 
+    // $response['statusCode'] == 0 || !
     }
     public function LogoutJson(Request $request){
         // $minutes = 1140;
