@@ -270,8 +270,8 @@
                                     <tr id="transaction-row-{{ $transaction->id }}">
                                         <td>{{ $transaction->nozzle }}</td>
                                         <td>{{ $transaction->price }}</td>
-                                        <td>{{ number_format($transaction->volume) }}</td>
-                                        <td>{{ number_format($transaction->amount) }}</td>
+                                        <td>{{ number_format($transaction->volume,2) }}</td>
+                                        <td>{{ number_format($transaction->amount,2) }}</td>
                                         <td>
                                             @if ($transaction->status == 0)
                                             <button class="btn btn-light pay-button pending-transaction-button" data-transaction-id="{{ $transaction->id }}" onclick="payTransaction({{ $transaction->id}},{{ $transaction->amount }}
@@ -316,7 +316,9 @@
     <div id="test">
         <div id="mop-div" class="mop-column">
             @foreach($mopData as $mop)
-            <button type="submit" class = "mop-btn" id="mop-btn" style="min-width:25%;height:60px" onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['name']}}</button>
+            <button type="submit" class ="mop-btn"id="mop-{{trim($mop['id'])}}"
+             style="min-width:25%;height:60px"
+             onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['keyLabel']}}</button>
             @endforeach
         </div>
         <div id="reports-column">
@@ -752,67 +754,7 @@ setInterval(countAndPlaySound, 500);
         }
     </script>
     <script>
-        //    var transactiondata = [];
-        //    let itemno = 1;
-
         function payTransaction(transactionId, amount,price,nozzle) {
-        //     var vata = document.getElementById('vat-amount');
-        //    var vats = document.getElementById('vat-sale');
-        //    var vatamount = vata.value;
-        //    var vatsale = vats.value;
-        //     var nozz = nozzle;
-        //     var itemdata = {
-        //         itemNumber: itemno,
-        //         itemType:2,
-        //         itemDesc:'Diesel',
-        //         itemPrice: price,
-        //         itemQTY: 50,
-        //         itemValue:amount,
-        //         itemID:transactionId,
-        //         itemTaxAmount:vatamount,
-        //         deliveryID:transactionId,
-        //         itemTaxId: transactionId,
-        //         gcNumber:null,
-        //         gcAmount:null,
-        //         originalItemValuePreTaxChange:amount,
-        //         isTaxExemptItem:null,
-        //         isZeroRatedTaxItem:null,
-        //         itemDiscTotal:null,
-        //         departmentID:null,
-        //         itemDiscCodeType:null,
-        //         itemDBPrice:price,
-
-
-
-
-
-        //     }
-        //     transactiondata.push(itemdata);
-        //     console.log(transactiondata);
-
-
-
-
-// Convert the object array to JSON string
-// var jsonData = JSON.stringify(transactiondata);
-
-// // Send the AJAX request
-// $.ajax({
-//   url: '/getitems',
-//   type: 'POST',
-//   data: {
-//     '_token': '{{ csrf_token() }}',
-//     'objectArray': jsonData
-//   },
-//   success: function(response) {
-//     // Handle the response from the controller
-//     console.log("request sent!");
-//   },
-//   error: function() {
-//     alert('Failed to send object array.');
-//   }
-// });
-
 
             $.ajax({
                 url: '/payTransaction',
@@ -896,11 +838,12 @@ function updateTrans(id){
 });
 }
 
- function addmop(id, pt, cd,name) {
+ function addmop(id, pt, cd) {
 
-        // alert(id);
-        // console.log(name);
-
+        // alert(label);
+        // console.log(label);
+        var key = document.getElementById('mop-' + id);
+        var keyvalue = key.textContent;
         var subttl = document.getElementById("sub-total");
         var total = parseFloat(subttl.value);
         var money = document.getElementById("display");
@@ -910,11 +853,17 @@ function updateTrans(id){
         var tabledata = document.getElementById("items-table");
         console.log(total);
         var cellfifth
+        var change = '0';
+        if(moneyb > total){
+            change = moneyb - total;
+        }
+        if(total != 0){
+
         for (var i = 1; i < tabledata.rows.length; i++){
             var row = tabledata.rows[i];
 
-            var itemvalue = isNaN(parseInt(row.cells[5].innerText)) ? moneyb : parseInt(row.cells[5].innerText);
-
+            var itemvalue = isNaN(parseFloat(row.cells[5].innerText,2)) ? moneyb : parseFloat(row.cells[5].innerText,2);
+            var paymentvalue = (moneyb == null || moneyb == 0 )?
             var itemdata = {
                 itemNumber: itemno,
                 itemType:2,
@@ -929,8 +878,8 @@ function updateTrans(id){
                 gcNumber:null,
                 gcAmount:null,
                 originalItemValuePreTaxChange:vatsale,
-                isTaxExemptItem:null,
-                isZeroRatedTaxItem:null,
+                is_zero_rated_tax_item:0,
+                is_tax_exempt_item:0,
                 itemDiscTotal:null,
                 departmentID:null,
                 itemDiscCodeType:null,
@@ -944,10 +893,10 @@ function updateTrans(id){
         var paymentdata = {
                 itemNumber: itemno,
                 itemType:7,
-                itemDesc:'CASH',
+                itemDesc:keyvalue,
                 itemPrice:total,
                 itemQTY: 1,
-                itemValue:moneyb ?? subttl,
+                itemValue:0,
                 itemID:1,
                 itemTaxAmount:0,
                 deliveryID:1,
@@ -955,14 +904,39 @@ function updateTrans(id){
                 gcNumber:null,
                 gcAmount:null,
                 originalItemValuePreTaxChange:0,
-                isTaxExemptItem:null,
-                isZeroRatedTaxItem:null,
+                is_tax_exempt_item:0,
+                is_zero_rated_tax_item:0,
                 itemDiscTotal:null,
                 departmentID:null,
                 itemDiscCodeType:null,
                 itemDBPrice:0,
             }
+
         data.push(paymentdata)
+        if(change > 0 ){
+            var changedata = {
+                itemNumber: itemno,
+                itemType:10,
+                itemDesc:'Change',
+                itemPrice:change,
+                itemQTY: 1,
+                itemValue:0,
+                itemID:1,
+                itemTaxAmount:0,
+                deliveryID:1,
+                itemTaxId: 1,
+                gcNumber:null,
+                gcAmount:null,
+                originalItemValuePreTaxChange:0,
+                is_tax_exempt_item:0,
+                is_zero_rated_tax_item:0,
+                itemDiscTotal:null,
+                departmentID:null,
+                itemDiscCodeType:null,
+                itemDBPrice:0,
+            }
+            data.push(changedata);
+        }
         // console.log(data);
         var datab = JSON.stringify(data);
             var transactiondata = {
@@ -1020,6 +994,7 @@ function updateTrans(id){
 
   }
 });
+}
 
 
 if (total == 0 ||isNaN(total)) {
@@ -1085,7 +1060,7 @@ if (total == 0 ||isNaN(total)) {
 
 else if(id > 1 && pt ==1){
 
- if(moneyb < total){
+ if(moneyb > total || moneyb == NULL){
             var remaining = total - moneyb;
             subttl.value = remaining;
             Swal.fire({
@@ -1247,28 +1222,6 @@ test();
             var tableBody = document.querySelector('.item-table tbody');
             tableBody.innerHTML = '';
 
-            // Make an AJAX POST request to your Laravel route
-            // fetch('/voidAllTransactions', {
-            //         method: 'POST',
-            //         headers: {
-            //             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            //             'Content-Type': 'application/json',
-            //         },
-            //     })
-            //     .then(response => {
-            //         if (response.status === 200) {
-            //             // Transactions voided successfully
-            //             // alert('All transactions voided successfully.');
-            //         } else {
-            //             // Handle errors
-            //             // alert('Failed to void all transactions.');
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error);
-            //         alert('An error occurred while voiding transactions.');
-            //     });
-
         }
         // Attach a click event handler to the "Void All" button
         document.getElementById('voidAll').addEventListener('click', function() {
@@ -1281,17 +1234,11 @@ function openNav() {
 //   document.htmlContent.style.backgroundColor = "rgba(0,0,0,0.4)";
 }
 
-/* Set the width of the side navigation to 0 */
 function closeNav() {
   document.getElementById("mySidenav").style.width = "0";
   document.body.style.backgroundColor = "white";
 }
-// window.addEventListener('popstate', function(event) {
-//   // This event is triggered when the user clicks the "back" button
-//   // You can handle this event by performing the necessary actions
-//   alert('User clicked the "back" button');
-//   // Add your code to handle the "back" button click here
-// });
+
 
     </script>
 

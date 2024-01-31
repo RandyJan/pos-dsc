@@ -40,6 +40,7 @@ Route::post('/receipt', [receiptController::class,'getReceiptLayout']);
 Route::post('/updateTrans', [pumpController::class,'updateTransaction']);
 Route::post('/logins',[LoginController::class, 'LoginJson']);
 Route::get('/logouts',[LoginController::class, 'LogoutJson']);
+Route::post('/receiptItems', [pumpController::class, 'getReceiptItems']);
 // ->middleware(['auth']);
 
 Route::get('/transaction', function () {

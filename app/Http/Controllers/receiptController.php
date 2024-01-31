@@ -26,7 +26,7 @@ class receiptController extends Controller
 
     ]));
     $transactionData = receiptItems::where('Transaction_ID', $request->transactionNumber)->get();
-    Log::info($request->all());
+    // Log::info($request->all());
     // $finalLayout = $layout->data;
     $layout = json_decode($response->body(), true);
     // Log::info($request->transNo);

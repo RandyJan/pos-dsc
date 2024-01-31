@@ -12,7 +12,7 @@ class mopController extends Controller
         $mopresponse = Http::withHeaders([
             'Content-Type'=>'application/json',
         ])->get('http://172.16.12.178:88/api/finalisations');
-        LOG::info($mopresponse);
+        // LOG::info($mopresponse);
         $mop = $mopresponse['data'];
         return view('pos')->with('mopData', $mop);
 

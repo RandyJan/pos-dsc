@@ -18,8 +18,8 @@ class LoginController extends Controller
         $availableWifi = shell_exec("netsh wlan show networks mode=Bssid");
 
         $serialNumber = str_replace("SerialNumber", "", $serialNumber);
-        Log::info($availableWifi);
-        Log::info($serialNumber);
+        // Log::info($availableWifi);
+        // Log::info($serialNumber);
         $number = $request->input('uname');
         $pw = $request->input('psw');
         // $request->authenticate();

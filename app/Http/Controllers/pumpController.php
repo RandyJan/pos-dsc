@@ -64,16 +64,16 @@ class pumpController extends Controller
         // LOG::info($packets);
         foreach ($packets as $packet) {
             if ($packet['Type'] === 'PumpEndOfTransactionStatus') {
-                // Log::info("EOTTTT");
+
                 $transaction = new Transaction();
                 $transaction->pumpid = $packet['Data']['Pump'];
                 $transaction->pump = $packet['Data']['Pump'];
                 if ($packet['Data']['Nozzle'] === 1) {
-                    $transaction->nozzle = 'Premium';
+                    $transaction->nozzle = 'PREMIUM';
                 } elseif ($packet['Data']['Nozzle'] === 2) {
-                    $transaction->nozzle = 'Diesel';
+                    $transaction->nozzle = 'DIESEL';
                 } else {
-                    $transaction->nozzle = 'Regular';
+                    $transaction->nozzle = 'REGULAR';
                 }
 
                 $transaction->volume = $packet['Data']['Volume'];
@@ -113,14 +113,6 @@ class pumpController extends Controller
             }
             $pendingTransactionsByPump[$pumpId][] = $transaction;
         }
-        // LOG::info($transaction);
-
-        // dd($pendingtrans);
-        //     $mopresponse = Http::withHeaders([
-        //         'Content-Type'=>'application/json',
-        //     ])->get('http://172.16.12.178:88/api/finalisations');
-
-        //    $mop = $mopresponse['data'];
 
         function getMopData()
         {
@@ -156,14 +148,13 @@ class pumpController extends Controller
             ];
         }
 
-         //Log::info($dataToPass);
+
         $mop = Cache::remember('mop_data', 60, function () {
             return getMopData();
         });
         $cashierData = Cache::get('Cashier_data');
+        log::info($mop);
 
-        // Log::info($testb);
-        // Log::info($testb);
         return view('pos')
             ->with('datab', $dataToPass)
             // ->with('transaction', $transaction)
@@ -171,12 +162,6 @@ class pumpController extends Controller
             ->with('pendingTransactionsByPump', $pendingTransactionsByPump)
             ->with('mopData', $mop)
             ->with('cashier',$cashierData);
-
-
-
-        // LOG::info($mop);
-
-
     }
 
     public function authorizejson(Request $request)
@@ -190,11 +175,7 @@ class pumpController extends Controller
         $nozzle = $request->input('nozzle');
         $amount = $request->input('amount');
         $nozzleb = $nozzle == 'PRM'?'1':($nozzle == 'DSL'?'2':($nozzle == '3' ? 'UNL':0)) ;
-        Log::info($nozzleb);
-        // LOG::info($nozzle);
         $cookie = request()->cookie();
-        // $cookie2 = cookie::get();
-        // Log::info($request->all());
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
@@ -214,7 +195,6 @@ class pumpController extends Controller
                 ]
             ]
         ]);
-       LOG::info($response);
 
         return response()->noContent();
     }
@@ -225,7 +205,6 @@ class pumpController extends Controller
             return view('LoginNew');
         }
         $pumpid =  $request->input('pumpid');
-        Log::info($request->all());
         Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Basic ' . base64_encode('admin:admin')
@@ -253,9 +232,7 @@ class pumpController extends Controller
             return view('LoginNew');
         }
         $transactionId = $request->transactionId;
-        // Find the transaction and set status to 1
         $transaction = Transaction::find($transactionId);
-        //Log::info($transactionId);
 
 
         $transactionb = [
@@ -265,8 +242,8 @@ class pumpController extends Controller
             'transaction'=> $transaction->transaction,
             'state'=> $transaction->state,
             'nozzle'=> $transaction->nozzle,
-            'amount' => str_replace(['.', ','], '', number_format($transaction->amount)),
-            'volume'=>str_replace(['.', ','], '', number_format($transaction->volume)),
+            'amount' => str_replace(',', '', number_format($transaction->amount, 2)),
+            'volume' => str_replace(',', '', number_format($transaction->volume, 2)),
             'price'=> $transaction->price,
             'tcvolume'=> $transaction->tcvolume,
             'totalamount'=> $transaction->totalamount,
@@ -295,25 +272,18 @@ class pumpController extends Controller
             return view('LoginNew');
         }
         $transactionId = $request->transactionId;
-        // Log::info('Received transactionId: ' . $transactionId);
 
-        // Attempt to find the transaction by ID
-      // log::info($transactionId);
         $transaction = Transaction::where('transaction', $transactionId)->first();
         Transaction::where('transaction',$transactionId)->update([
             'state' => 0,
             'is_voided'=> 1]);
         if ($transaction) {
-            // Log::info('Found transaction: ' . $transaction->transaction);
-            // Log::info('Current Status: ' . $transaction->status);
 
             $transaction->status = 0;
             $transaction->save();
-            // Log::info('Updated Status: ' . $transaction->status);
 
             return response('Transaction voided', 200);
         } else {
-            // Log::error('Failed to void transaction. Transaction not found.');
             return response('Failed to void transaction. Transaction not found.', 404);
         }
     }
@@ -324,7 +294,6 @@ class pumpController extends Controller
         if($check == 0 ){
             return view('LoginNew');
         }
-        // Get all transactions and update their statuses to 0 (voided)
         $transactions = Transaction::all();
         foreach ($transactions as $transaction) {
             $transaction->status = 0;
@@ -340,10 +309,7 @@ class pumpController extends Controller
         }
 
         $data = $request['data'];
-        // $datab = json_decode($data, true);
-        // $formattedData = http_build_query($data);
-        // parse_str($formattedData, $dataArray);
-        // Log::info($data);
+
         $maxtransid = transactionBIR::max('Transaction_Number');
         $nexttransid = $maxtransid + 1;
         $responseb = Http::withHeaders([
@@ -383,7 +349,6 @@ class pumpController extends Controller
 ]);
  Cache::put('transNo',$nexttransid);
  $transNo = Cache::get('transNo');
- Log::info($transNo);
 $response = Http::withHeaders([
     "ContentType"=> "json/application"
 ])->post('http://172.16.12.90:8087/api/receipt-sample',([
@@ -391,9 +356,7 @@ $response = Http::withHeaders([
     'transaction_no'=>$nexttransid
 
 ]));
-// $finalLayout = $layout->data;
 $layout = json_decode($response->body(), true);
-// Log::info($request->transNo);
 
 $transItems = Http::withHeaders([
     "ContentType"=> "json/application"
@@ -402,26 +365,10 @@ $transItems = Http::withHeaders([
     'trans_ID'=>$transNo,
 
 ]));
-// $id = 577488;
-// receiptItems::ActiveTransaction($id);
-//$activetrans = new receiptItems;
-// $test = $activetrans->ActiveTransaction($response);
-// $test=577485;
-// $itemsData = receiptItems::ActiveTransaction($test);
-// Log::info($itemsData);
-// $decodedTransItems = json_decode($transItems);
+
 return response($responseb);
-
-
-
-
-        //LOG::info($response);
-        // return response($response);
-
-
     }
 public function updateTransaction(Request $request){
-        // $transaction = Json_decode($request->transaction);
         $check = Cache::get('Auth');
         if($check == 0 ){
             return view('LoginNew');
@@ -429,10 +376,26 @@ public function updateTransaction(Request $request){
     $response = transaction::where('transaction',$request->transaction)->update([
         'state'=>2
     ]);
-    // Log::info();
     return redirect('/pos');
 
 }
+    public function getReceiptItems(Request $request){
+        $transNo = $request->data;
+        $transItems = Http::withHeaders([
+            'Content-Type' => 'application/json' // Fixed typo and header name
+        ])->post('http://172.16.12.90:8087/api/receiptItems', [
+            'transNumber' => $transNo,
+        ]);
 
+        $finaltrans = collect($transItems->json())->map(function ($item) {
+            return [$item['Item_Description'],
+            $item['Item_Quantity'],
+            $item['Item_Price'],
+            $item['Item_Value'],
+            $item['Item_Type'],];
+        })->toArray();
+        return $finaltrans;
+
+    }
 
 }

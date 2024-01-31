@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Document</title>
     <style>
             body {
             padding: 0;
             margin: 2%;
             font-size: 14pt;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: monospace;
             background: #eee;
+
             /* margin-bottom:5%; */
 
         }
@@ -21,7 +24,7 @@
             /* text-align: center; */
         }
         #invoicePOS {
-            width: 130mm;
+            width: 120mm;
             /* margin: 0 auto; */
             background: #FFF;
             /* padding: 0; */
@@ -62,6 +65,33 @@
             content: '_';
             color: white;
         }
+        #invoiceBody p{
+            display: none;
+
+
+        }
+        .miniHeader{
+            display: flex;
+            justify-content: space-between;
+            background-color: yellow;
+            width:98%;
+
+        }
+
+        .itemsA{
+            display: flex;
+            justify-content: space-between;
+            background-color: pink;
+            width:98%;
+        }
+        .invoiceheader p{
+            display: none;
+        }
+        /* #invoicefooter{
+
+        } */
+
+
         @media print {
 
 @page {
@@ -82,18 +112,9 @@
 @else
 <div id="invoicePOS">
     <div class="invoiceheader" id="invoiceheader">
-    {{-- <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L1']) !!}</p>
-    <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L2']) !!}</p>
-    <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L3']) !!}</p>
-    <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L4']) !!}</p>
-    <p>{!! str_replace('\n', '<br>', $receipt['Receipt_Header_L5']) !!}</p> --}}
+
     @foreach( App\Models\receiptLayout::getLayout() as $receipt)
-    {{-- <center> --}}
-<p id="headerA" class = "headerInvoice" style="margin:0px;padding:0px"></p>
-<p id="headerB" class = "headerInvoice" style="margin:0px;padding:0px"></p>
-<p id="headerC" class = "headerInvoice" style="margin:0px;padding:0px"></p>
-<p id="headerD" class = "headerInvoice" style="margin:0px;padding:0px"></p>
-<p id="headerE" class = "headerInvoice" style="margin:0px;padding:0px"></p>
+
         <p name="" id="header1"  value="" style="display: none">{{$receipt->Receipt_Header_L1}}</p>
         <p  name="" id="header2" value="" style="display:none">{{$receipt->Receipt_Header_L2}}</p>
         <p name="" id="header3" value="" style="display: none">{{$receipt->Receipt_Header_L3}}</p>
@@ -102,308 +123,277 @@
 {{-- </center> --}}
     @endforeach
 </div>
-     <table class = "" style="padding:0px;margin:0px;margin-left:15px">
-            <thead>
+<div id="otherinfo" style=""></div><br>
+<div id="itemsarray"></div><br>
+<div id="mop"></div><br>
+<div id="alltotal"></div><br>
+<div id="taxdetails"></div> <br>
 
-                <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                    <th></th>
-                <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{now()->format('Y/m/d H:i:s A')}}</td>
+<div id="invoiceBody">
+    {{-- <div style="display: none"> --}}
+         <p id="date">{{now()->format('m/d/Y H:i:s A')}}</p>
+         <p id ="posnumlbl">POS#1<p>
+         <p id="compname">DATALOGIC</p>
+         <p id="unum">SI#0000000001</p>
+         <p id = "transno">{{Cache::get('transNo')}}</p>
+ @foreach ( App\Models\User::activeTransaction(Cache::get('transNo')) as $items )
 
-                  {{-- <td>{{now()->format('Y-m-d')}}</td> --}}
+    @if(trim($items['Item_Type']) == 7)
+         <p id="itemDescA">{{trim($items['Item_Description'])}}</p>
+         <p id="itemtest"> </p>
+         {{-- <p id="itemDetails"></p> --}}
+         <p  id="itemValueA" style="display: none">P{{number_format(trim($items['Item_Value']))}}</p>
+     @else
+         <p id="itemDesc" style="display: none;">{{trim($items['Item_Description'])}}<br></p>
+         <p id="itemTest"> </p>
+         <p id = "itemDetails">{{number_format(trim($items['Item_Quantity']))}}L x {{number_format(trim($items['Item_Price']))}}P/L VAT</p>
+         <p id="itemValue" style="display: none">P{{number_format(trim($items['Item_Value']))}}</p>
+    @endif
+     @endforeach
+     @foreach (App\Models\User::transactions(Cache::get('transNo')) as $tax)
+        <p id="saletotallbl">Sale Total</p>
+        <p id="saleTotal">P{{str_replace( ',','',number_format($tax['Sale_Total'] + $tax['Tax_Total'],2))}}</p>
+        <p id = "totalInvlbl">TOTAL INVOICE</p>
+        <p id="totalInv">P{{ str_replace(',','',number_format($tax['Sale_Total'] + $tax['Tax_Total'],2))}}</p>
+        <p id="totalvollbl">TOTAL VOLUME</p>
+        <p id="totalVol"> </p>
+        <p id="vatsalelbl">VATable Sale</p>
+        <p id="vatsalettl">P{{str_replace(',','',number_format(trim($tax['Sale_Total'],2)))}}</p>
+        <p id="vatamountlbl">VAT Amount</p>
+        <p id="taxttl">P{{number_format(trim($tax['Tax_Total']))}}</p>
+        <p id="vatexemplbl">VAT-Exempt Sale</p>
+        <p id="vatexemp">P0.00</p>
+        <p id="zeroratedlbl">Zero Rated Sale</p>
+        <p id="zerorated">P0.00</p>
+         @endforeach
+        {{-- </div> --}}
+        </div>
 
-                   <td>POS#1</td>
-                </tr>
-                <tr><td>DATALOGIC</td>
-                <td>SI#01</td></tr>
-                <tr><td></td></tr>
-                <tr><td></td></tr>
-                {{-- @php
-
- $apiUrl = 'http://172.16.12.234:8087/api/getTransId';
-
-// Initialize cURL session
-$ch = curl_init();
-
-// Set the cURL options
-curl_setopt($ch, CURLOPT_URL, $apiUrl);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-// Execute the cURL request
-$response = curl_exec($ch);
-
-// Close cURL session
-curl_close($ch);
-
-// Process the API response
-if ($response) {
-    // Process the response data
-    echo $response;
-} else {
-    // Handle the error
-    echo 'Error: Failed to retrieve data from the API';
-}
-
-                    $transactionId = $response;
-
-                @endphp --}}
-
-                @foreach ( App\Models\User::activeTransaction(Cache::get('transNo')) as $items )
-          <tr>
-            @if(trim($items['Item_Type']) == 7)
-            <td id="body">
-                {{ trim($items['Item_Description']) }} <br>
-                <div class="Items">
-                    <!-- Add content for Item_Type equal to 7 here -->
-                </div>
-            </td>
-            <td id="itemValue">P{{number_format(trim($items['Item_Value']))}}</td>
-
-        @else
-        <td id="body">
-            {{ trim($items['Item_Description']) }} <br>
-            <div class="Items">
-                <a id="volume">{{ trim($items['Item_Quantity']) }}</a>L x {{ number_format(trim($items['Item_Price'])) }} P/L VAT
-            </div>
-        </td>
-        <td id="itemValue">P{{number_format(trim($items['Item_Value']))}}</td>
-
-        @endif
-
-
-        </tr>
-           @endforeach
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-        @foreach (App\Models\User::transactions(Cache::get('transNo')) as $tax)
-        <tr>
-            <td>Sale Total</td>
-            <td id="saleTotal">
-
-                   P{{ $tax['Sale_Total'] + $tax['Tax_Total']}}
-
-            </td>
-            </tr>
-
-            <tr><td></td></tr>
-            <tr><td></td></tr>
-          <tr>
-            <tr>
-            <td>TOTAL INVOICE</td>
-            <td id="totalInv"> P{{ $tax['Sale_Total'] + $tax['Tax_Total']}}</td>
-            </tr>
-            <tr>
-                <td>TOTAL VOLUME</td>
-                <td id="totalVol"></td>
-            </tr>
-            <tr><td></td></tr>
-            <tr><td></td></tr>
-          <tr>
-        </tr>
-        <tr><td></td></tr>
-        <tr><td></td></tr>
-      <tr>
-    </tr>
-    <tr><td></td></tr>
-    <tr><td></td></tr>
-  <tr>
-            <td>VATable Sale</td>
-
-            <td>P{{number_format(trim($tax['Sale_Total']))}}</td>
-          </tr>
-          <tr><td>VAT Amount</td>
-
-                <td>P{{number_format(trim($tax['Tax_Total']))}}</td>
-            </tr>
-            <tr>
-                <td>VAT-Exempt Sale</td>
-
-                <td>P0.00</td>
-            </tr>
-            <tr>
-                <td>Zero Rated Sale</td>
-
-                <td>P0.00</td>
-            </tr>
-           @endforeach
-
-            </tbody>
-            <tfoot>
-
-                <tr>
-                    {{-- <td>Total:</td> --}}
-                    {{-- <td>{{ $total }}</td> --}}
-
-
-
-
-                </tr>
-            </tfoot>
-        </table>
-     <footer>   @foreach( App\Models\receiptLayout::getLayout() as $receipt)
+     @foreach( App\Models\receiptLayout::getLayout() as $receipt)
         <td></td>
     @endforeach
     </footer>
-
-    <p id="footerA" style="margin-left:0;padding:0"></p>
-    <p id="footerB" style="margin:0px;padding:0px"></p>
-        <p id="footerC" style="margin:0px;padding:0px"></p>
-            <p id="footerD" style="margin:0px;padding:0px"></p>
-                <p id="footerE" style="margin:0px;padding:0px"></p>
-
-
+    <br>
+    <div id="invoicefooter">
                 <p name="" id="footer1" value="" style="display: none">{{$receipt->Receipt_Footer_L1}}</p>
                 <p  name="" id="footer2" value="" style="display:none">{{$receipt->Receipt_Footer_L2}}</p>
                 <p name="" id="footer3" value="" style="display: none">{{$receipt->Receipt_Footer_L3}}</p>
                 <p  name="" id="footer4" value="" style="display:none">{{$receipt->Receipt_Footer_L4}}</p>
                 <p  name="" id="footer5" value="" style="display: none" >{{$receipt->Receipt_Footer_L5}}</p>
+            </div>
     </div>
-
+</div>
 @endif
 {{-- <iframe src="{{route('/transaction')}}" frameborder="0" id=""></iframe> --}}
 </body>
 <script type = "text/javascript">
-function  computeSpacing(value){
-    var splitText = value.trim().split('\\n');
+var middleformat = [];
+var headerformat = [];
+var footerformat = [];
+var sampleReceipt = [];
+var arrayleftright = [[],[]];
+var combined = [];
+var outputdapat = '';
+var itemsarray = [];
+var otherinfo = [];
+var taxinfo = [];
+var alltotal=[];
+var mop = [];
+
+function dualColumnSpacing(right,left){
+
+    var rightitem = document.getElementById(right);
+    var leftitem = document.getElementById(left);
+    var rightlength = rightitem.textContent.length;
+    var leftlength = leftitem.textContent.length;
+    var totalspace = 42 - (rightlength + leftlength);
+    var data = leftitem.textContent;
+    for(var i = 0;i < totalspace;i++ ){
+     data += "-";
+    }
+    data += rightitem.textContent;
+    if(right == 'posnumlbl' || right == 'unum'){
+        otherinfo.push(data);
+    }
+
+    else if(right == 'saleTotal'){
+        mop.push(data);
+    }
+    else if(right == 'totalVol' || right =='totalInv'){
+        alltotal.push(data);
+    }
+
+    else{
+        console.log("data inserted");
+        taxinfo.push(data);
+            }
+
+
+}
+
+
+
+function spacingMiddle(arraytoform,parentdiv){
+arraytoform.forEach(function(itemdata){
+var paragraph = document.createElement('a');
+var br = document.createElement('br');
+var brb = document.createElement('br');
+
+var text = document.createTextNode(itemdata);
+paragraph.appendChild(text);
+var div = document.getElementById(parentdiv);
+paragraph.innerHTML = paragraph.innerHTML.replace(/-/g, "&nbsp;");
+
+div.appendChild(paragraph);
+div.appendChild(br);
+// div.appendChild(brb);
+
+});
+}
+
+
+
+
+function middlespacingformat(){
+var trans = document.getElementById('transno');
+var transno = trans.textContent;
+console.log(transno);
+$.ajax({
+  url: '/receiptItems',
+  type: 'POST',
+  contentType: 'application/json',
+  data: JSON.stringify({
+    '_token': '{{ csrf_token() }}',
+    'data': transno
+  }),
+  success: function(response) {
+
+
+dualColumnSpacing('posnumlbl', 'date');
+dualColumnSpacing('unum', 'compname');
+
+dualColumnSpacing('saleTotal','saletotallbl');
+
+console.log(response);
+var literdisplay = 0;
+response.forEach(function(items){
+    if(items[4] == '2'){
+        var space = 42 - items[0].trim().length;
+
+        var format = items[0].trim();
+
+        for(var g = 0; g < space;g++){
+                        format += '-';
+                    }
+                    itemsarray.push(format);
+                    let liter = items[1];
+                    let litervalue =new Number(liter).toFixed(3) + 'L';
+                    let price = items[2];
+                    let pricevalue = new Number(price).toFixed(2);
+                    let total = items[3];
+                    let totalvalue = new Number(total).toFixed(2);
+                     literdisplay = literdisplay + parseFloat(litervalue.replace('L',''));
+
+            var space2 = 42-(litervalue.length + pricevalue.length + totalvalue.length + 10);
+            var formattedData = litervalue + '-x-' + pricevalue + '-P/L-';
+            for(var g = 0; g < space2;g++){
+                        formattedData += '-';
+                    }
+                itemsarray.push('-'+formattedData+ 'P' + totalvalue);
+
+    }
+else{
+    var left = items[0].trim().length;
+    let leftvalue = new Number(items[0]).toFixed(2);
+    var right = items[2].trim().length;
+    var rightvalue = new Number(items[2]).toFixed(2);
+    var formatdata = items[0].trim();
+    var spacing = 42 - ( left + rightvalue.length + 1);
+
+    for(var i = 0;i < spacing;i++){
+        formatdata += '-';
+
+    }
+    formatdata+= 'P' + rightvalue;
+    mop.push(formatdata);
+}
+});
+    var totalliters = document.getElementById('totalVol');
+    totalliters.textContent = literdisplay.toFixed(3) + 'L';
+dualColumnSpacing('totalInv', 'totalInvlbl');
+dualColumnSpacing('totalVol', 'totalvollbl');
+dualColumnSpacing('vatsalettl', 'vatsalelbl');
+dualColumnSpacing('taxttl','vatamountlbl');
+dualColumnSpacing('vatexemp','vatexemplbl');
+dualColumnSpacing('zerorated','zeroratedlbl');
+
+spacingMiddle(otherinfo,'otherinfo');
+spacingMiddle(itemsarray,'itemsarray');
+spacingMiddle(mop,'mop');
+console.log(mop);
+spacingMiddle(taxinfo,'taxdetails');
+spacingMiddle(alltotal,'alltotal');
+
+window.print();
+
+  },
+  error: function(response) {
+    console.log("request failed");
+  }
+
+
+
+});
+};
+middlespacingformat();
+
+function  computeSpacing(header){
+        var headerelement = document.getElementById(header);
+        var headervalue = headerelement.textContent;
+    var splitText = headervalue.trim().split('\\n');
     var spacingData ="";
     splitText.forEach(function(splitter){
             var splitting = parseFloat(splitter.length);
             var output = (42-splitting)/2;
-            let firstFormat = splitter.padStart(splitting + output, "_");
-            let finalFormat = firstFormat.padEnd(firstFormat.length + output, "_");
+            let firstFormat = splitter  .padStart(splitting + output, "-");
+            let finalFormat = firstFormat.padEnd(firstFormat.length + output, "-");
                 spacingData = spacingData + "\n" + finalFormat;
     })
     return spacingData;
 }
- function forHeader(){
 
-    let h1 = document.getElementById('header1');
-    let h2 = document.getElementById('header2');
-    let h3 = document.getElementById('header3');
-    let h4 = document.getElementById('header4');
-    let h5 = document.getElementById('header5');
-// split variables
-    let hA = document.getElementById('headerA');
-    let hB = document.getElementById('headerB');
-    let hC = document.getElementById('headerC');
-    let hD = document.getElementById('headerD');
-    let hE = document.getElementById('headerE');
-
-
-    var h1f = h1.textContent;
-    var h2f = h2.textContent;
-    var h3f = h3.textContent;
-    var h4f = h4.textContent;
-    var h5f = h5.textContent;
-
-
-            hA.textContent = computeSpacing(h1f) ;
-         hB.textContent = computeSpacing(h2f).replace('_',' ');
-        hC.textContent = computeSpacing(h3f).replace('_',' ');
-        hD.textContent = computeSpacing(h4f).replace('_',' ');
-        hE.textContent = computeSpacing(h5f).replace('_',' ');
-    console.log(computeSpacing(h1f));
-    console.log(computeSpacing(h2f));
-    console.log(computeSpacing(h3f));
-    console.log(computeSpacing(h4f));
-    console.log(computeSpacing(h5f));
- }
- forHeader();
- function forFooter(){
-    let f1 = document.getElementById('footer1');
-    let f2 = document.getElementById('footer2');
-    let f3 = document.getElementById('footer3');
-    let f4 = document.getElementById('footer4');
-    let f5 = document.getElementById('footer5');
-// split variables
-    let fA = document.getElementById('footerA');
-    let fB = document.getElementById('footerB');
-    let fC = document.getElementById('footerC');
-    let fD = document.getElementById('footerD');
-    let fE = document.getElementById('footerE');
-
-
-    var f1f = f1.textContent;
-    var f2f = f2.textContent;
-    var f3f = f3.textContent;
-    var f4f = f4.textContent;
-    var f5f = f5.textContent;
-
-        fA.textContent = computeSpacing(f1f);
-        fB.textContent = computeSpacing(f2f);
-        fC.textContent = computeSpacing(f3f);
-        fD.textContent = computeSpacing(f4f);
-        fE.textContent = computeSpacing(f5f);
-    console.log(computeSpacing(f1f));
-    console.log(computeSpacing(f2f));
-    console.log(computeSpacing(f3f));
-    console.log(computeSpacing(f4f));
-    console.log(computeSpacing(f5f));
- }
- forFooter();
-//  function receiptFormatter(){
-//     var paragraphElements = document.querySelectorAll("#header1");
-// var valuesArray = [];
-// var arrayValue = [];
-// paragraphElements.forEach(function(paragraph) {
-//   valuesArray.push(paragraph.textContent.trim());
-// });
-//     valuesArray.forEach(function(value){
-//        arrayValue.push(value.split('\\n'));
-
-//     })
-// console.log(valuesArray);
-// console.log(arrayValue);
-// }
-// receiptFormatter();
-     function lineSpacing(textContent) {
-        //  var splitText = textContent.split("<br>");
-        //  console.log(splitText);
-//  return splitText[0].length;
-        return textContent.textContent;
+ function headerSpacingformat(header,arrayformat){
+        arrayformat.push(header);
 }
- function header() {
-    var text = document.getElementById('header');
-     var textContent = text.textContent;
-    var maxlength = 42;
-     var stringlength = lineSpacing(textContent);
-    var value = stringlength - maxlength;
-     var space = value/2;
-     text.style.marginLeft = space + 'px';
-    //  console.log(textContent);
-    // console.log(stringlength);
+headerSpacingformat(computeSpacing('header1'),headerformat);
+headerSpacingformat(computeSpacing('header2'),headerformat);
+headerSpacingformat(computeSpacing('header3'),headerformat);
+headerSpacingformat(computeSpacing('header4'),headerformat);
+headerSpacingformat(computeSpacing('header5'),headerformat);
 
- }
-function footer(){
-    var text = document.getElementById('footer');
-     var textContent = text.textContent;
-    var maxlength = 42;
-     var stringlength = lineSpacing(textContent);
-    var value = stringlength - maxlength;
-     var space = value/2;
-     text.style.marginLeft = space + 'px';
-    //  console.log(textContent);
-    // console.log(stringlength);
+headerSpacingformat(computeSpacing('footer1'),footerformat);
+headerSpacingformat(computeSpacing('footer2'),footerformat);
+headerSpacingformat(computeSpacing('footer3'),footerformat);
+headerSpacingformat(computeSpacing('footer4'),footerformat);
+headerSpacingformat(computeSpacing('header5'),footerformat);
+console.log(itemsarray);
+
+ function spacingHeader(parentdiv,arrayformat){
+
+ arrayformat.forEach(function(itemdata){
+var paragraph = document.createElement('a');
+var br = document.createElement('br');
+var text = document.createTextNode(itemdata);
+paragraph.appendChild(text);
+var div = document.getElementById(parentdiv);
+paragraph.innerHTML = paragraph.innerHTML.replace(/-/g, "&nbsp;");
+
+div.appendChild(paragraph);
+div.appendChild(br);
+});
 }
+spacingHeader('invoiceheader',headerformat);
+spacingHeader('invoicefooter',footerformat);
 function printPageSilently() {
   if (window.chrome && window.chrome.print) {
     // Use the silent print option in Chrome
@@ -447,11 +437,9 @@ window.addEventListener('afterprint', function() {
 
 });
 
-printPageSilently();
+// printPageSilently();
 
-// Example usage
-header(); // Call the header function to execute the logic
-// lineSpacing();
+
 
 function totalSale(){
 
@@ -464,16 +452,16 @@ var sum = 0;
 itemValueElements.forEach(function(element) {
 
   var valueText = element.textContent.replace("P", "").replace(",", "");
-  var numericValue = parseFloat(valueText);
+  var numericValue = valueText.toFixed(2);
 
 
-  sum += numericValue;
+  sum += numericValue.toFixed(2);
 });
 var salettl = document.getElementById('saleTotal');
-salettl.textContent = "P" + sum.toLocaleString();
+salettl.textContent = sum.toFixed(2);
 
 var totalInv = document.getElementById('totalInv');
-totalInv.textContent = "P" + sum.toLocaleString();
+totalInv.textContent = parseFloat(sum,2).toLocaleString();
 
 // Log the sum
 // console.log("Sum of itemValue: P" + sum.toLocaleString());

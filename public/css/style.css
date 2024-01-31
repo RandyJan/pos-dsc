@@ -510,9 +510,17 @@ display: none;
     width: 23%;
     text-align: center;
 }
-#mop-btn{
+/* .mop-btn{ */
     /* display: grid;
     grid-template-columns: repeat(6, 1fr); */
+    /* font-size: 15px;
+    background-color:lightslategrey;
+    color: white;
+    padding:10px;
+    margin: 5px;
+    border-radius: 10px;
+} */
+.mop-column button{
     font-size: 15px;
     background-color:lightslategrey;
     color: white;
