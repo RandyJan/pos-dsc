@@ -175,7 +175,7 @@
     </footer>
     <br>
     <div id="invoicefooter">
-                <p name="" id="footer1" value="" style="display: none">{{$receipt->Receipt_Footer_L1}}</p>
+                <p name="" id="footer1" value="" style="display: none">{{$receipt->Receipt_Footer_L1}}\n</p>
                 <p  name="" id="footer2" value="" style="display:none">{{$receipt->Receipt_Footer_L2}}</p>
                 <p name="" id="footer3" value="" style="display: none">{{$receipt->Receipt_Footer_L3}}</p>
                 <p  name="" id="footer4" value="" style="display:none">{{$receipt->Receipt_Footer_L4}}</p>
@@ -301,6 +301,21 @@ response.forEach(function(items){
                     }
                 itemsarray.push('-'+formattedData+ 'P' + totalvalue);
 
+    }
+    else if(items[4] == 10){
+        var left = items[0].trim().length;
+    let leftvalue = new Number(items[0]).toFixed(2);
+    var right = items[2].trim().length;
+    var rightvalue = new Number(items[2]).toFixed(2);
+    var formatdata = items[0].trim();
+    var spacing = 42 - ( left + rightvalue.length + 3);
+
+    for(var i = 0;i < spacing;i++){
+        formatdata += '-';
+
+    }
+    formatdata+= '(' +  'P' + rightvalue + ')';
+    mop.push(formatdata);
     }
 else{
     var left = items[0].trim().length;

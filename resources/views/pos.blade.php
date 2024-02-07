@@ -119,7 +119,7 @@
                     <li id="manual-nav"><a onclick="manual()">Manual</a></li>
                     <li id="nf-nav"><a onclick="nonfuel()">Non-fuel</a></li>
                     <li id="reports-nav"><a onclick="reports()">Reports</a></li>
-                    <li id="config-nav"><a onclick="config()">Config</a></li>
+                    <li id="config-nav"><a onclick="config()">Settings</a></li>
 
                 </ul>
                 <a id="settings-nav" style="position:relative;right:5px;top:0px" onclick="openNav()"> <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -341,8 +341,8 @@
             <button class="calcbutton">Lorem ipsum</button>
             <button class="calcbutton">Lorem ipsum</button>
             <button class="calcbutton">Lorem ipsum</button>
-        </div>
-        <div id="config-column" class="config">
+        </div><center>
+        <div id="config-column" class="config" style="">
             <div class="settingDiv">
            <p> Pump sound notification sound</p>
             <label class="switch">
@@ -364,7 +364,11 @@
                          <span class="slider round"></span>
                        </label><br><br>
                      </div>
+                     <div>
+                        <button class="btn btn-primary">Save</button>
+                     </div>
         </div>
+    </center>
     </div>
     </div>
     <form action="/getitems" method="POST">
@@ -837,11 +841,14 @@ function updateTrans(id){
   }
 });
 }
+function partialpayment(){
+
+}
 
  function addmop(id, pt, cd) {
 
-        // alert(label);
-        // console.log(label);
+
+
         var key = document.getElementById('mop-' + id);
         var keyvalue = key.textContent;
         var subttl = document.getElementById("sub-total");
@@ -854,6 +861,7 @@ function updateTrans(id){
         console.log(total);
         var cellfifth
         var change = '0';
+
         if(moneyb > total){
             change = moneyb - total;
         }
@@ -863,7 +871,8 @@ function updateTrans(id){
             var row = tabledata.rows[i];
 
             var itemvalue = isNaN(parseFloat(row.cells[5].innerText,2)) ? moneyb : parseFloat(row.cells[5].innerText,2);
-            var paymentvalue = (moneyb == null || moneyb == 0 )?
+            var paymentvalue = (moneyb == null || moneyb == 0 || isNaN(moneyb) )? total : moneyb;
+            // alert(paymentvalue);
             var itemdata = {
                 itemNumber: itemno,
                 itemType:2,
@@ -885,8 +894,10 @@ function updateTrans(id){
                 itemDiscCodeType:null,
                 itemDBPrice:row.cells[3].innerText,
             }
+            if(total == 0){
             data.push(itemdata);
-            itemno++;
+                itemno++;
+            }
 
         }
 
@@ -894,7 +905,7 @@ function updateTrans(id){
                 itemNumber: itemno,
                 itemType:7,
                 itemDesc:keyvalue,
-                itemPrice:total,
+                itemPrice:paymentvalue,
                 itemQTY: 1,
                 itemValue:0,
                 itemID:1,
@@ -973,6 +984,7 @@ function updateTrans(id){
             }
             console.log(transactiondata);
       var jsonData = JSON.stringify(transactiondata);
+      if( moneyb == 0){
      $.ajax({
   url: '/getitems',
   type: 'POST',
@@ -994,6 +1006,7 @@ function updateTrans(id){
 
   }
 });
+}
 }
 
 
@@ -1109,17 +1122,6 @@ else if(id > 1 && pt ==1){
                 display.value += number;
             }
 
-            // if(!value.includes(".") && value > 0){
-            //     display.value += number;
-            // }
-//             else{
-
-// display.value += number;
-// }
-
-                // alert("display equal" + value);
-
-
         }
 
         // Function to clear the display
@@ -1135,17 +1137,13 @@ else if(id > 1 && pt ==1){
                 appendToDisplay(number);
             });
         });
-
-        // Add event listener to the clear button
-        // const clearButton = document.querySelector('.clear-button');
-        // clearButton.addEventListener('click', clearDisplay);
-        function test(){
-        history.replaceState(null, document.title, location.href);
-window.addEventListener('popstate', function(event) {
-  history.replaceState(null, document.title, location.href);
-});
-}
-test();
+//         function test(){
+//         history.replaceState(null, document.title, location.href);
+// window.addEventListener('popstate', function(event) {
+//   history.replaceState(null, document.title, location.href);
+// });
+// }
+// test();
     </script>
     <script>
         /// Add an event listener to the "Void" button
