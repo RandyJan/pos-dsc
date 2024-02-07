@@ -119,7 +119,7 @@
                     <li id="manual-nav"><a onclick="manual()">Manual</a></li>
                     <li id="nf-nav"><a onclick="nonfuel()">Non-fuel</a></li>
                     <li id="reports-nav"><a onclick="reports()">Reports</a></li>
-                    <li id="config-nav"><a onclick="config()">Settings</a></li>
+                    <li id="config-nav"><a onclick="config()">Config</a></li>
 
                 </ul>
                 <a id="settings-nav" style="position:relative;right:5px;top:0px" onclick="openNav()"> <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -140,7 +140,7 @@
 
                             @if ($pump['Type']==='PumpIdleStatus' && $pump['Data']['NozzleUp'] !== 0 )
 
-                                  {{-- @if ($pump['Data']['NozzleUp'] !== 0) --}}
+                                  
 
                                          <input type="hidden" name="nozzle" value="{{$pump['Data']['NozzleUp']}}" id="nozup">
                                                 <h3 style="background-color: lightgreen" class="card-header">
@@ -155,9 +155,7 @@
                                                       <p style="background-color:white">A: {{ $pump['Data']['LastAmount'] }}<br>
                                                       L: {{ $pump['Data']['LastVolume'] }}</p>
                                                   </div>
-                                 {{-- @else --}}
-
-                                 {{-- @endif --}}
+                              
                       @elseif ($pump['Type']==='PumpOfflineStatus')
 
                             <h3 style="background-color: #FFCCCB" class="card-header">
@@ -266,7 +264,7 @@
                                 <tbody>
                                     @if (isset($pendingTransactionsByPump[$pump['Id']]) && count($pendingTransactionsByPump[$pump['Id']]) > 0)
                                     @foreach ($pendingTransactionsByPump[$pump['Id']] as $transaction)
-                                    {{-- @if(emtpy($tr)) --}}
+                                   
                                     <tr id="transaction-row-{{ $transaction->id }}">
                                         <td>{{ $transaction->nozzle }}</td>
                                         <td>{{ $transaction->price }}</td>
@@ -341,8 +339,8 @@
             <button class="calcbutton">Lorem ipsum</button>
             <button class="calcbutton">Lorem ipsum</button>
             <button class="calcbutton">Lorem ipsum</button>
-        </div><center>
-        <div id="config-column" class="config" style="">
+        </div>
+        <div id="config-column" class="config">
             <div class="settingDiv">
            <p> Pump sound notification sound</p>
             <label class="switch">
@@ -364,11 +362,7 @@
                          <span class="slider round"></span>
                        </label><br><br>
                      </div>
-                     <div>
-                        <button class="btn btn-primary">Save</button>
-                     </div>
         </div>
-    </center>
     </div>
     </div>
     <form action="/getitems" method="POST">
@@ -758,8 +752,8 @@ setInterval(countAndPlaySound, 500);
         }
     </script>
     <script>
-        function payTransaction(transactionId, amount,price,nozzle) {
-
+        function payTransaction(transactionId, amount,price) {
+            console.log(transactionId + '-'+amount+'-'+price+'-');
             $.ajax({
                 url: '/payTransaction',
                 type: 'POST',
@@ -788,10 +782,10 @@ setInterval(countAndPlaySound, 500);
                     alert('Failed to fetch transaction details.');
                 }
             });
-
+           
         }
 
-        function printDiv(divId) {
+  function printDiv(divId) {
   var printContents = document.getElementById(divId).innerHTML;
   var originalContents = document.body.innerHTML;
   document.body.innerHTML = printContents;
@@ -841,14 +835,11 @@ function updateTrans(id){
   }
 });
 }
-function partialpayment(){
-
-}
 
  function addmop(id, pt, cd) {
 
-
-
+        // alert(label);
+        // console.log(label);
         var key = document.getElementById('mop-' + id);
         var keyvalue = key.textContent;
         var subttl = document.getElementById("sub-total");
@@ -861,18 +852,17 @@ function partialpayment(){
         console.log(total);
         var cellfifth
         var change = '0';
-
         if(moneyb > total){
             change = moneyb - total;
         }
+        
         if(total != 0){
 
         for (var i = 1; i < tabledata.rows.length; i++){
             var row = tabledata.rows[i];
 
             var itemvalue = isNaN(parseFloat(row.cells[5].innerText,2)) ? moneyb : parseFloat(row.cells[5].innerText,2);
-            var paymentvalue = (moneyb == null || moneyb == 0 || isNaN(moneyb) )? total : moneyb;
-            // alert(paymentvalue);
+            var paymentvalue = (moneyb == null || moneyb == 0 )? total: moneyb;
             var itemdata = {
                 itemNumber: itemno,
                 itemType:2,
@@ -894,10 +884,8 @@ function partialpayment(){
                 itemDiscCodeType:null,
                 itemDBPrice:row.cells[3].innerText,
             }
-            if(total == 0){
             data.push(itemdata);
-                itemno++;
-            }
+            itemno++;
 
         }
 
@@ -905,7 +893,7 @@ function partialpayment(){
                 itemNumber: itemno,
                 itemType:7,
                 itemDesc:keyvalue,
-                itemPrice:paymentvalue,
+                itemPrice:total,
                 itemQTY: 1,
                 itemValue:0,
                 itemID:1,
@@ -923,7 +911,7 @@ function partialpayment(){
                 itemDBPrice:0,
             }
 
-        data.push(paymentdata)
+        data.push(paymentdata);
         if(change > 0 ){
             var changedata = {
                 itemNumber: itemno,
@@ -984,7 +972,6 @@ function partialpayment(){
             }
             console.log(transactiondata);
       var jsonData = JSON.stringify(transactiondata);
-      if( moneyb == 0){
      $.ajax({
   url: '/getitems',
   type: 'POST',
@@ -1006,7 +993,6 @@ function partialpayment(){
 
   }
 });
-}
 }
 
 
@@ -1122,6 +1108,17 @@ else if(id > 1 && pt ==1){
                 display.value += number;
             }
 
+            // if(!value.includes(".") && value > 0){
+            //     display.value += number;
+            // }
+//             else{
+
+// display.value += number;
+// }
+
+                // alert("display equal" + value);
+
+
         }
 
         // Function to clear the display
@@ -1137,13 +1134,16 @@ else if(id > 1 && pt ==1){
                 appendToDisplay(number);
             });
         });
-//         function test(){
-//         history.replaceState(null, document.title, location.href);
-// window.addEventListener('popstate', function(event) {
-//   history.replaceState(null, document.title, location.href);
-// });
-// }
-// test();
+
+        // Add event listener to the clear button
+      
+        function test(){
+        history.replaceState(null, document.title, location.href);
+window.addEventListener('popstate', function(event) {
+  history.replaceState(null, document.title, location.href);
+});
+}
+test();
     </script>
     <script>
         /// Add an event listener to the "Void" button

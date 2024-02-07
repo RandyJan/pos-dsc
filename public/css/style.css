@@ -495,21 +495,9 @@ display: none;
             .config{
                 display: flex;
                 flex-direction: column;
-              align-items: flex-start;
-              padding-left: 10px;
-              background-color:slategray;
-               min-width:70%;
-               height: 40%;
-               border-radius: 10px;
-               color: white;
             }
             .config p{
                 font-size: 20px;
-            }
-            .config div{
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
             }
 .pump-number{
     display: inline-block;

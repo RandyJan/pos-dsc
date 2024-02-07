@@ -32,9 +32,16 @@ class LoginController extends Controller
         ]);
       //  Log::info($response);
         if($response->successful()){
+        //Log::info($response);
+        // return response()->noContent();
+       // $request->session()->regenerate();
+           // $minutes = 1440;
     $responseArray = $response->json();
     Cache::put('Cashier_data',$responseArray);
     Cache::put('Auth','1');
+   // $test = Cache::get('Cashier_data');
+   // $test2 = json_encode($test);
+   // Log::info($test2);
    return redirect()->intended(RouteServiceProvider::HOME);}
 
 else{
@@ -42,6 +49,8 @@ else{
         'username'=>"Login Failed please enter appropriate credentials for this station"
        ]);
     }
+
+    // $response['statusCode'] == 0 || !
     }
     public function LogoutJson(Request $request){
         // $minutes = 1140;
