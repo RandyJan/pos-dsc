@@ -316,7 +316,7 @@
             @foreach($mopData as $mop)
             <button type="submit" class ="mop-btn"id="mop-{{trim($mop['id'])}}"
              style="min-width:25%;height:60px"
-             onclick="addmop({{$mop['id']}},{{$mop['partialTender']}},{{$mop['cashDraw']}})">{{$mop['keyLabel']}}</button>
+             onclick="modeOfPayment({{$mop['id']}},{{$mop['partialTender']}},{{$mop['change']}})">{{$mop['keyLabel']}}</button>
             @endforeach
         </div>
         <div id="reports-column">
@@ -656,12 +656,7 @@ setInterval(countAndPlaySound, 500);
            vatsinputdisp.value = vatsale;
 
         }
-        function initializeItemDisplayContainer() {
-            var transactions = getTransactionsFromLocalStorage();
-            transactions.forEach(function(transaction) {
-                appendTransactionToDisplay(transaction);
-            });
-
+        function itemsTotal(){
             const table = document.getElementById('items-table');
             const rows = table.querySelectorAll('tr');
 
@@ -678,6 +673,15 @@ setInterval(countAndPlaySound, 500);
                     }
                 }
             });
+            return sum;
+        }
+        function initializeItemDisplayContainer() {
+            var transactions = getTransactionsFromLocalStorage();
+            transactions.forEach(function(transaction) {
+                appendTransactionToDisplay(transaction);
+            });
+
+           var sum = itemsTotal();
 
             var vatsale = sum / 1.12;
             var vat = sum - vatsale;
@@ -716,6 +720,10 @@ setInterval(countAndPlaySound, 500);
     <script>
         const table = document.querySelector('.item-table');
         const lastRowIndex = table.rows.length - 1;
+        var itemdata = []
+        var itemno = 1;
+   
+
         table.deleteRow(lastRowIndex);
 
         // Function to add a transaction to local storage and the item display container
@@ -728,6 +736,12 @@ setInterval(countAndPlaySound, 500);
 
         // Function to append a transaction to the item display container
         function appendTransactionToDisplay(transaction, callback) {
+            var subttl = document.getElementById("sub-total");
+        var total = parseFloat(subttl.value);
+        var money = document.getElementById("display");
+        var moneyb = parseFloat(money.value);
+        var vatsale = total / 1.12;
+        var vat = total - vatsale;
             var tableBody = document.querySelector('.item-table tbody');
             var newRow = tableBody.insertRow(0);
 
@@ -749,9 +763,34 @@ setInterval(countAndPlaySound, 500);
             volumeCell.textContent = transaction.volume;
             amountCell.textContent = transaction.amount;
             transactionCell.style.display = 'none';
+
+            // ................
+
+            var items = {
+                itemNumber: itemno,
+                itemType:2,
+                itemDesc: transaction.nozzle,
+                itemPrice: transaction.price,
+                itemQTY: transaction.volume,
+                itemValue: transaction.amount,
+                itemID: transaction.transaction,
+                itemTaxAmount:vat,
+                deliveryID:1,
+                itemTaxId: 1,
+                gcNumber:null,
+                gcAmount:null,
+                originalItemValuePreTaxChange:vatsale,
+                isZeroRatedTaxItem:0,
+                isTaxExemptItem:0,
+                itemDiscTotal:null,
+                departmentID:null,
+                itemDiscCodeType:null,
+                itemDBPrice: transaction.price,
+            }
+            itemno++;
+            itemdata.push(items);
         }
-    </script>
-    <script>
+        console.log(itemdata);
         function payTransaction(transactionId, amount,price) {
             console.log(transactionId + '-'+amount+'-'+price+'-');
             $.ajax({
@@ -813,8 +852,11 @@ function generateReceipt(){
         var data = [];
         var itemno = 1;
 function submitToPrint(){
+   
+
     var receipt = document.getElementById("printform");
     receipt.submit();
+    itemdata = [];
 }
 function updateTrans(id){
     $.ajax({
@@ -835,67 +877,48 @@ function updateTrans(id){
   }
 });
 }
+function sendPayload(transactiondata){
+    console.log(transactiondata);
+    console.log("above me");
+    $.ajax({
+  url: '/getitems',
+  type: 'POST',
+  data:{
+    '_token': '{{ csrf_token() }}',
+    'data':transactiondata},
+  success: function(response) {
+    // Handle the response from the controller
+    var transNo = document.getElementById("trn");
+    transNo.value = response;
+    var test = transNo.value;
+    console.log(response);
+    // alert(test);
+    console.log("request sent!");
+  },
+  error: function(response) {
+    console.log(response);
+    console.log("request failed")
 
- function addmop(id, pt, cd) {
+  }
+});
+}
 
-        // alert(label);
-        // console.log(label);
-        var key = document.getElementById('mop-' + id);
-        var keyvalue = key.textContent;
-        var subttl = document.getElementById("sub-total");
-        var total = parseFloat(subttl.value);
-        var money = document.getElementById("display");
-        var moneyb = parseFloat(money.value);
-        var vatsale = total / 1.12;
-        var vat = total - vatsale;
-        var tabledata = document.getElementById("items-table");
-        console.log(total);
-        var cellfifth
-        var change = '0';
-        if(moneyb > total){
-            change = moneyb - total;
-        }
-        
-        if(total != 0){
 
-        for (var i = 1; i < tabledata.rows.length; i++){
-            var row = tabledata.rows[i];
-
-            var itemvalue = isNaN(parseFloat(row.cells[5].innerText,2)) ? moneyb : parseFloat(row.cells[5].innerText,2);
-            var paymentvalue = (moneyb == null || moneyb == 0 )? total: moneyb;
-            var itemdata = {
-                itemNumber: itemno,
-                itemType:2,
-                itemDesc:row.cells[2].innerText,
-                itemPrice: row.cells[3].innerText,
-                itemQTY: row.cells[4].innerText,
-                itemValue:itemvalue,
-                itemID:row.cells[0].innerText,
-                itemTaxAmount:vat,
-                deliveryID:1,
-                itemTaxId: 1,
-                gcNumber:null,
-                gcAmount:null,
-                originalItemValuePreTaxChange:vatsale,
-                is_zero_rated_tax_item:0,
-                is_tax_exempt_item:0,
-                itemDiscTotal:null,
-                departmentID:null,
-                itemDiscCodeType:null,
-                itemDBPrice:row.cells[3].innerText,
-            }
-            data.push(itemdata);
-            itemno++;
-
-        }
-
-        var paymentdata = {
+function addItemData(keyvalue,totalv){
+  
+    var subttl = document.getElementById("sub-total");
+    var total = parseFloat(subttl.value);
+    var money = document.getElementById("display");
+    var moneyb = parseFloat(money.value);
+    var vatsale = total / 1.12;
+    var vat = total - vatsale;
+    var paymentdata = {
                 itemNumber: itemno,
                 itemType:7,
                 itemDesc:keyvalue,
-                itemPrice:total,
+                itemPrice:(moneyb == null || isNaN(moneyb) || moneyb == 0) ? total: moneyb,
                 itemQTY: 1,
-                itemValue:0,
+                itemValue:(moneyb == null || isNaN(moneyb) || moneyb == 0) ? total: moneyb,
                 itemID:1,
                 itemTaxAmount:0,
                 deliveryID:1,
@@ -903,41 +926,65 @@ function updateTrans(id){
                 gcNumber:null,
                 gcAmount:null,
                 originalItemValuePreTaxChange:0,
-                is_tax_exempt_item:0,
-                is_zero_rated_tax_item:0,
+                isTaxExemptItem:0,
+                isZeroRatedTaxItem:0,
                 itemDiscTotal:null,
                 departmentID:null,
                 itemDiscCodeType:null,
                 itemDBPrice:0,
             }
+            itemno++;
+            itemdata.push(paymentdata);
+            console.log(itemdata);
+}
 
-        data.push(paymentdata);
-        if(change > 0 ){
-            var changedata = {
-                itemNumber: itemno,
-                itemType:10,
-                itemDesc:'Change',
-                itemPrice:change,
-                itemQTY: 1,
-                itemValue:0,
-                itemID:1,
-                itemTaxAmount:0,
-                deliveryID:1,
-                itemTaxId: 1,
-                gcNumber:null,
-                gcAmount:null,
-                originalItemValuePreTaxChange:0,
-                is_tax_exempt_item:0,
-                is_zero_rated_tax_item:0,
-                itemDiscTotal:null,
-                departmentID:null,
-                itemDiscCodeType:null,
-                itemDBPrice:0,
-            }
-            data.push(changedata);
-        }
-        // console.log(data);
-        var datab = JSON.stringify(data);
+
+function addChange(){
+  
+  var subttl = document.getElementById("sub-total");
+  var total = parseFloat(subttl.value);
+  var money = document.getElementById("display");
+  var moneyb = parseFloat(money.value);
+  var vatsale = total / 1.12;
+  var vat = total - vatsale;
+  var change = moneyb - total;
+  var paymentdata = {
+              itemNumber: itemno,
+              itemType:10,
+              itemDesc:"Change",
+              itemPrice:change,
+              itemQTY: 1,
+              itemValue:change,
+              itemID:1,
+              itemTaxAmount:0,
+              deliveryID:1,
+              itemTaxId: 1,
+              gcNumber:null,
+              gcAmount:null,
+              originalItemValuePreTaxChange:0,
+              isTaxExemptItem:0,
+              isZeroRatedTaxItem:0,
+              itemDiscTotal:null,
+              departmentID:null,
+              itemDiscCodeType:null,
+              itemDBPrice:0,
+          }
+          itemno++;
+          itemdata.push(paymentdata);
+          console.log(itemdata);
+          console.log("this is the moneyb:"+moneyb);
+          console.log("this is the total:"+total);
+}
+
+
+function transactionDataPayload(){
+    var subttl = document.getElementById("sub-total");
+        var total = parseFloat(subttl.value);
+        var money = document.getElementById("display");
+        var moneyb = parseFloat(money.value);
+        var vatsale = itemsTotal() / 1.12;
+        var vat =  itemsTotal() - vatsale;
+    var datab = JSON.stringify(data);
             var transactiondata = {
             cashierID:1,
             subAccID:null,
@@ -965,127 +1012,310 @@ function updateTrans(id){
             odometer:null,
             transRefund:0,
             grossRefund:0,
-            subAccPmt:null,
+            subAccAmt:null,
             vehicleTypeID:6,
             isNormalTrans:1,
-            items:data
+            items:itemdata
             }
             console.log(transactiondata);
       var jsonData = JSON.stringify(transactiondata);
-     $.ajax({
-  url: '/getitems',
-  type: 'POST',
-  data:{
-    '_token': '{{ csrf_token() }}',
-    'data':transactiondata},
-  success: function(response) {
-    // Handle the response from the controller
-    var transNo = document.getElementById("trn");
-    transNo.value = response;
-    var test = transNo.value;
-    console.log(response);
-    // alert(test);
-    console.log("request sent!");
-  },
-  error: function(response) {
-    console.log(response);
-    console.log("request failed")
-
-  }
-});
+            return transactiondata;
 }
+function modeOfPayment(id,pt,ct){
+    var subttl = document.getElementById("sub-total");
+        var total = parseFloat(subttl.value);
+        var money = document.getElementById("display");
+        var moneyb = parseFloat(money.value);
+        var vatsale = itemsTotal() / 1.12;
+        var vat = total - vatsale;
 
 
-if (total == 0 ||isNaN(total)) {
-    Swal.fire({
-        title: "Please select transaction",
-        icon: "error",
-        scrollbarPadding: false
-    });
-    const data = {};
-    let
+         var key = document.getElementById('mop-' + id);
+        var keyvalue = key.textContent;
+        var tabledata = document.getElementById("items-table");
+        console.log("this is the ct:" +ct);
+        var cellfifth
+        var change = '0';
 
-} else {
-    if(id == 1){
+        
 
-
-    if (moneyb == 0 || moneyb == null || isNaN(moneyb)) {
-        subttl.value = 0;
-        // Swal.fire({
-        //     title: "payment successful",
-        //     icon: "success",
-        //     scrollbarPadding: false
-        // })
-        updateTrans(id);
+        if( moneyb == 0 || moneyb == null || isNaN(moneyb)){
+            alertify.success('Transaction Complete');
+            // updateTrans(id);
+            addItemData(keyvalue,total);
+            sendPayload(transactionDataPayload());
+            voidAllTransactions();
+            submitToPrint();
+        }
+        else if( moneyb > total){ 
+            if(ct == 0){
+                alertify.error('This is not eligible for giving change');
+            }
+            else{
+                
+                var change = moneyb - total;
+                // subttl.value = 0;
+                Swal.fire({
+                title: "Change",
+                text: "Php " + change,
+                icon: "success",
+                scrollbarPadding: false
+            })
+            updateTrans(id);
+            addItemData(keyvalue);
+            addChange();
+            sendPayload(transactionDataPayload());
+            submitToPrint();
+            voidAllTransactions();
         alertify.success('Transaction Complete');
-       submitToPrint();
-        // generateReceipt();
-        voidAllTransactions();
-
-        // location.reload('/pos');
-    //    $("#os-iframe").get(0).contentWindow.print();
-    }
-    else{
-        if(moneyb > total){
-            var change = moneyb - total;
-            subttl.value = 0;
-            Swal.fire({
-            title: "Change",
-            text: "Php " + change,
-            icon: "success",
-            scrollbarPadding: false
-        })
-    //    $("#os-iframe").get(0).contentWindow.print();
-    alertify.success('Transaction Complete');
-    voidAllTransactions();
-     submitToPrint();
+            }
         }
         else{
-            var remaining = total - moneyb;
-            subttl.value = remaining;
-            Swal.fire({
-            title: "Successfully paid cash Php" + moneyb,
-            text: "Remaining balance: Php " + remaining,
-            icon: "success",
-            scrollbarPadding: false
+           subttl.value = total - moneyb;
+        addItemData(keyvalue);
 
-        });
-      //  $("#os-iframe").get(0).contentWindow.print();
+    alertify.success('Partial payment successful');
 
         }
-        }
+    
+      
 
 }
 
-else if(id > 1 && pt ==1){
+//  function addmop(id, pt, cd) {
 
- if(moneyb > total || moneyb == NULL){
-            var remaining = total - moneyb;
-            subttl.value = remaining;
-            Swal.fire({
-            title:"Successfuly paid  Php " + moneyb,
-            text: "Remaining balance: Php" + remaining,
-            icon: "success",
-            scrollbarPadding: false
-        })
-        submitToPrint();
-        }
-        else{
-            Swal.fire({
-            title: "Invalid",
-            text: "This mode of payment is  inelligible for giving change please enter exact amount or lesser amount.",
-            icon: "error",
-            scrollbarPadding: false
-        })
-        }
+//         // alert(label);
+//         // console.log(label);
+//         var key = document.getElementById('mop-' + id);
+//         var keyvalue = key.textContent;
+//         var subttl = document.getElementById("sub-total");
+//         var total = parseFloat(subttl.value);
+//         var money = document.getElementById("display");
+//         var moneyb = parseFloat(money.value);
+//         var vatsale = total / 1.12;
+//         var vat = total - vatsale;
+//         var tabledata = document.getElementById("items-table");
+//         console.log(total);
+//         var cellfifth
+//         var change = '0';
+//         if(moneyb > total){
+//             change = moneyb - total;
+//         }
+        
+//         if(total != 0){
 
-}
+//         for (var i = 1; i < tabledata.rows.length; i++){
+//             var row = tabledata.rows[i];
 
-    }
+//             var itemvalue = isNaN(parseFloat(row.cells[5].innerText,2)) ? moneyb : parseFloat(row.cells[5].innerText,2);
+//             var paymentvalue = (moneyb == null || moneyb == 0 )? total: moneyb;
+//             var itemdata = {
+//                 itemNumber: itemno,
+//                 itemType:2,
+//                 itemDesc:row.cells[2].innerText,
+//                 itemPrice: row.cells[3].innerText,
+//                 itemQTY: row.cells[4].innerText,
+//                 itemValue:itemvalue,
+//                 itemID:row.cells[0].innerText,
+//                 itemTaxAmount:vat,
+//                 deliveryID:1,
+//                 itemTaxId: 1,
+//                 gcNumber:null,
+//                 gcAmount:null,
+//                 originalItemValuePreTaxChange:vatsale,
+//                 is_zero_rated_tax_item:0,
+//                 is_tax_exempt_item:0,
+//                 itemDiscTotal:null,
+//                 departmentID:null,
+//                 itemDiscCodeType:null,
+//                 itemDBPrice:row.cells[3].innerText,
+//             }
+//             data.push(itemdata);
+//             itemno++;
+
+//         }
+
+//         var paymentdata = {
+//                 itemNumber: itemno,
+//                 itemType:7,
+//                 itemDesc:keyvalue,
+//                 itemPrice:total,
+//                 itemQTY: 1,
+//                 itemValue:0,
+//                 itemID:1,
+//                 itemTaxAmount:0,
+//                 deliveryID:1,
+//                 itemTaxId: 1,
+//                 gcNumber:null,
+//                 gcAmount:null,
+//                 originalItemValuePreTaxChange:0,
+//                 is_tax_exempt_item:0,
+//                 is_zero_rated_tax_item:0,
+//                 itemDiscTotal:null,
+//                 departmentID:null,
+//                 itemDiscCodeType:null,
+//                 itemDBPrice:0,
+//             }
+
+//         data.push(paymentdata);
+//         if(change > 0 ){
+//             var changedata = {
+//                 itemNumber: itemno,
+//                 itemType:10,
+//                 itemDesc:'Change',
+//                 itemPrice:change,
+//                 itemQTY: 1,
+//                 itemValue:0,
+//                 itemID:1,
+//                 itemTaxAmount:0,
+//                 deliveryID:1,
+//                 itemTaxId: 1,
+//                 gcNumber:null,
+//                 gcAmount:null,
+//                 originalItemValuePreTaxChange:0,
+//                 is_tax_exempt_item:0,
+//                 is_zero_rated_tax_item:0,
+//                 itemDiscTotal:null,
+//                 departmentID:null,
+//                 itemDiscCodeType:null,
+//                 itemDBPrice:0,
+//             }
+//             data.push(changedata);
+//         }
+//         // console.log(data);
+//         var datab = JSON.stringify(data);
+//             var transactiondata = {
+//             cashierID:1,
+//             subAccID:null,
+//             accountID:null,
+//             posID:1,
+//             taxTotal:vat ?? 0,
+//             saleTotal:vatsale,
+//             isManual:0,
+//             isZeroRated:0,
+//             customerName:null,
+//             address:null,
+//             TIN:null,
+//             businessStyle:null,
+//             cardNumber:null,
+//             approvalCode:null,
+//             bankCode:null,
+//             type:null,
+//             isRefund:0,
+//             transaction_type:1,
+//             isRefundOrigTransNum:null,
+//             transaction_resetter:null,
+//             birReceiptType:null,
+//             poNum:null,
+//             plateNum:null,
+//             odometer:null,
+//             transRefund:0,
+//             grossRefund:0,
+//             subAccPmt:null,
+//             vehicleTypeID:6,
+//             isNormalTrans:1,
+//             items:data
+//             }
+//             console.log(transactiondata);
+//       var jsonData = JSON.stringify(transactiondata);
+     
+// }
+
+// sendPayload(transactiondata);
+
+// if (total == 0 ||isNaN(total)) {
+//     Swal.fire({
+//         title: "Please select transaction",
+//         icon: "error",
+//         scrollbarPadding: false
+//     });
+//     const data = {};
+//     let
+
+// } else {
+//     if(id == 1){
+
+
+//     if (moneyb == 0 || moneyb == null || isNaN(moneyb)) {
+//         subttl.value = 0;
+//         // Swal.fire({
+//         //     title: "payment successful",
+//         //     icon: "success",
+//         //     scrollbarPadding: false
+//         // })
+//         updateTrans(id);
+//         alertify.success('Transaction Complete');
+//        submitToPrint();
+//         // generateReceipt();
+//         voidAllTransactions();
+
+//         // location.reload('/pos');
+//     //    $("#os-iframe").get(0).contentWindow.print();
+//     }
+//     else{
+//         if(moneyb > total){
+//             var change = moneyb - total;
+//             subttl.value = 0;
+//             Swal.fire({
+//             title: "Change",
+//             text: "Php " + change,
+//             icon: "success",
+//             scrollbarPadding: false
+//         })
+//     //    $("#os-iframe").get(0).contentWindow.print();
+//     alertify.success('Transaction Complete');
+//     voidAllTransactions();
+//      submitToPrint();
+//         }
+//         else{
+//             var remaining = total - moneyb;
+//             subttl.value = remaining;
+//             Swal.fire({
+//             title: "Successfully paid cash Php" + moneyb,
+//             text: "Remaining balance: Php " + remaining,
+//             icon: "success",
+//             scrollbarPadding: false
+
+//         });
+//       //  $("#os-iframe").get(0).contentWindow.print();
+
+//         }
+//         }
+
+// }
+
+// else if(id > 1 && pt ==1){
+ 
+//  if(moneyb == total || moneyb == NULL){
+//             var remaining = total - moneyb;
+//             subttl.value = remaining;
+//             Swal.fire({
+//             title:"Successfuly paid  Php " + moneyb,
+//             text: "Remaining balance: Php" + remaining,
+//             icon: "success",
+//             scrollbarPadding: false
+//         })
+//         submitToPrint();
+//         }
+//         else{
+//             Swal.fire({
+//             title: "Invalid",
+//             text: "This mode of payment is  inelligible for giving change please enter exact amount or lesser amount.",
+//             icon: "error",
+//             scrollbarPadding: false
+//         })
+//         }
+
+// }
+// else{
+//     alert("this payment mode is not elligible for partial tender");
+// }
+
+//     }
 
 
 
-}
+// }
     </script>
     <script>
         // Get the display element
@@ -1211,7 +1441,11 @@ test();
         // Function to void all transactions
         function voidAllTransactions() {
             var subttl = document.getElementById("sub-total");
+            var vatttl = document.getElementById("vat-total");
+            var vatsalettl = document.getElementById("vatsale-total");
             subttl.value = 0;
+            vatttl.value = 0;
+            vatsalettl.value = 0;
 
             // Clear transactions from local storage
             localStorage.removeItem('transactions');

@@ -305,8 +305,8 @@ response.forEach(function(items){
 else{
     var left = items[0].trim().length;
     let leftvalue = new Number(items[0]).toFixed(2);
-    var right = items[2].trim().length;
-    var rightvalue = new Number(items[2]).toFixed(2);
+    var right = items[3].trim().length;
+    var rightvalue = new Number(items[3]).toFixed(2);
     var formatdata = items[0].trim();
     var spacing = 42 - ( left + rightvalue.length + 1);
 

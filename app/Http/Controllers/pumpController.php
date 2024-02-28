@@ -153,7 +153,7 @@ class pumpController extends Controller
             return getMopData();
         });
         $cashierData = Cache::get('Cashier_data');
-        log::info($mop);
+        // log::info($mop);
 
         return view('pos')
             ->with('datab', $dataToPass)
@@ -309,13 +309,13 @@ class pumpController extends Controller
         }
 
         $data = $request['data'];
-
+        // Log::info($data);
         $maxtransid = transactionBIR::max('Transaction_Number');
         $nexttransid = $maxtransid + 1;
         $responseb = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->post('http://172.16.12.90:8087/api/addnewTransaction',[
-    'transNo'=>$nexttransid,
+
     'cashierID' => $data['cashierID'],
   'subAccID' => '',
   'accountID' => '',
@@ -342,30 +342,32 @@ class pumpController extends Controller
   'odometer' => '',
   'transRefund' => $data['transRefund'],
   'grossRefund' => $data['grossRefund'],
-  'subAccPmt' => '',
+  'subAccAmt' => '',
   'vehicleTypeID' => $data['vehicleTypeID'],
   'isNormalTrans' => $data['isNormalTrans'],
   'items' => $data['items']
 ]);
- Cache::put('transNo',$nexttransid);
+$transID = $responseb['transID'];
+Log::info($transID);
+Cache::put('transNo',$transID);
  $transNo = Cache::get('transNo');
 $response = Http::withHeaders([
     "ContentType"=> "json/application"
 ])->post('http://172.16.12.90:8087/api/receipt-sample',([
     'posID'=>1,
-    'transaction_no'=>$nexttransid
+    'transaction_no'=>$transNo
 
 ]));
 $layout = json_decode($response->body(), true);
 
 $transItems = Http::withHeaders([
     "ContentType"=> "json/application"
-])->post('http://172.16.90:8087/api/getItems',([
+])->post('http://172.16.12.90:8087/api/getItems',([
     'posID'=>1,
     'trans_ID'=>$transNo,
 
 ]));
-
+// Log::info($responseb);
 return response($responseb);
     }
 public function updateTransaction(Request $request){

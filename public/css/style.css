@@ -806,27 +806,27 @@ margin-top: 0px;
   /* Define the slide-in animation sequence */
 @keyframes slide-in {
     from {
-      transform: translateX(-100%);
+      transform: translateY(-100%);
     }
     to {
-      transform: translateX(0);
+      transform: translateY(0);
     }
   }
   @keyframes slide-inb {
     from {
-      transform: translateX(100%);
+      transform: translateY(100%);
     }
     to {
-      transform: translateX(0);
+      transform: translateY(0);
     }
   }
 
   /* Apply the animation to the div */
   .left-column{
-    animation: slide-in 1s ease-out;
+    animation: slide-in 1s ease-in;
   }
 .right-column{
-    animation: slide-inb 1s ease-out;
+    animation: slide-inb 1s ease-in;
 }
 
   /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */

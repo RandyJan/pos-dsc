@@ -50,7 +50,7 @@ class User extends Authenticatable
     }
     public function transactions($transNo){
         // $filtered = transactionBIR::max('Transaction_ID');
-        $data = transactionBIR::where('Transaction_Number',$transNo)->get();
+        $data = transactionBIR::where('Transaction_ID',$transNo)->get();
         return $data;
     }
     public function cashierRoles($id){
