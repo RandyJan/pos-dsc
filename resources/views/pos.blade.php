@@ -783,7 +783,7 @@ setInterval(countAndPlaySound, 500);
                 isZeroRatedTaxItem:0,
                 isTaxExemptItem:0,
                 itemDiscTotal:null,
-                departmentID:null,
+                departmentID:1,
                 itemDiscCodeType:null,
                 itemDBPrice: transaction.price,
             }

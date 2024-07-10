@@ -17,7 +17,7 @@
 body{
     overflow: hidden;
     /* background: linear-gradient(to right, #136289, #017cff); */
-    background: linear-gradient(to top, #000099 0%, #66ccff 100%);
+    background: linear-gradient(to top,black 0%, black 100%);
     font-family:Arial, Helvetica, sans-serif;
 }
 
@@ -746,7 +746,7 @@ margin-top: 0px;
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0;
-    background: linear-gradient(to top, #000099 0%, #66ccff 100%);
+    background: linear-gradient(to top, black 0%, #66ccff 100%);
 
     /* background-color: whitesmoke;  */
 

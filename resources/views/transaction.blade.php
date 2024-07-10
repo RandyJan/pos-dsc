@@ -25,6 +25,7 @@
         }
         #invoicePOS {
             width: 120mm;
+            position: relative;
             /* margin: 0 auto; */
             background: #FFF;
             /* padding: 0; */
